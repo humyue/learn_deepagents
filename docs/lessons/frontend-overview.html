@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>前端架构：coordinator-worker · Deep Agents 教学站</title>
+<meta name="description" content="深入理解 Deep Agents agent harness 原理的中文教学站">
+<link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+<div class="sidebar-brand"><a href="../index.html">Deep Agents 教学站</a><span class="sub">Agent Harness 原理 · 中文</span></div>
+<div class="nav-group"><div class="nav-group-title">模块 A · 心智模型</div><ul>
+<li><a href="../lessons/agent-harness-mental-model.html" data-slug="agent-harness-mental-model"><span class="num">01</span><span>Agent Harness 的心智模型</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/three-layers-langchain-langgraph-deepagents.html" data-slug="three-layers-langchain-langgraph-deepagents"><span class="num">02</span><span>三层分工：LangChain / LangGraph / Deep Agents</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/create-deep-agent-anatomy.html" data-slug="create-deep-agent-anatomy"><span class="num">03</span><span>create_deep_agent 全景解剖</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/middleware-stack.html" data-slug="middleware-stack"><span class="num">04</span><span>Middleware 栈：harness 的骨架</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 B · 执行环境</div><ul>
+<li><a href="../lessons/tools-and-mcp.html" data-slug="tools-and-mcp"><span class="num">05</span><span>工具与 MCP：agent 的手</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/virtual-filesystem.html" data-slug="virtual-filesystem"><span class="num">06</span><span>虚拟文件系统：harness 的地基</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/backend-family.html" data-slug="backend-family"><span class="num">07</span><span>六个内建 Backend 的取舍</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/filesystem-permissions.html" data-slug="filesystem-permissions"><span class="num">08</span><span>声明式权限：像防火墙一样配文件访问</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/sandboxes.html" data-slug="sandboxes"><span class="num">09</span><span>沙箱：让 agent 跑代码而不伤到宿主机</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/interpreters-programmatic-tool-calling.html" data-slug="interpreters-programmatic-tool-calling"><span class="num">10</span><span>解释器与程序化工具调用</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 C · 上下文工程</div><ul>
+<li><a href="../lessons/four-context-layers.html" data-slug="four-context-layers"><span class="num">11</span><span>上下文的四个层次</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/input-context.html" data-slug="input-context"><span class="num">12</span><span>输入上下文：prompt 是怎么被拼出来的</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/skills-progressive-disclosure.html" data-slug="skills-progressive-disclosure"><span class="num">13</span><span>Skills：渐进式披露</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/memory-long-term.html" data-slug="memory-long-term"><span class="num">14</span><span>Memory：长期记忆的四个维度</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/context-compression.html" data-slug="context-compression"><span class="num">15</span><span>压缩：Offloading 与 Summarization</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/prompt-caching.html" data-slug="prompt-caching"><span class="num">16</span><span>Prompt Caching：为什么它决定了栈的顺序</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/state-and-runtime-context.html" data-slug="state-and-runtime-context"><span class="num">17</span><span>State Schema 与 Runtime Context</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/multimodal.html" data-slug="multimodal"><span class="num">18</span><span>多模态输入与输出</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 D · 委派</div><ul>
+<li><a href="../lessons/subagents-fundamentals.html" data-slug="subagents-fundamentals"><span class="num">19</span><span>Subagent 原理</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/custom-subagents.html" data-slug="custom-subagents"><span class="num">20</span><span>自定义 Subagent 的字段设计</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/forked-subagents.html" data-slug="forked-subagents"><span class="num">21</span><span>Forked Subagents：继承父级上下文</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/dynamic-subagents.html" data-slug="dynamic-subagents"><span class="num">22</span><span>Dynamic Subagents：让代码决定开多少个子任务</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/async-subagents.html" data-slug="async-subagents"><span class="num">23</span><span>Async Subagents：跨请求长跑的子任务</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/task-planning-todos.html" data-slug="task-planning-todos"><span class="num">24</span><span>任务规划与 write_todos</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 E · 运行时管控</div><ul>
+<li><a href="../lessons/human-in-the-loop.html" data-slug="human-in-the-loop"><span class="num">25</span><span>Human-in-the-loop：在关键点按下暂停</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/fault-tolerance.html" data-slug="fault-tolerance"><span class="num">26</span><span>容错：不是所有错误都该被同样对待</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/profiles.html" data-slug="profiles"><span class="num">27</span><span>Profiles：让同一份代码适配不同模型</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 F · 流式与前端</div><ul>
+<li><a href="../lessons/streaming.html" data-slug="streaming"><span class="num">28</span><span>流式：把一棵树投影成几条流</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/event-streaming-subagents.html" data-slug="event-streaming-subagents"><span class="num">29</span><span>stream.subagents：每个子任务一个句柄</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/frontend-overview.html" data-slug="frontend-overview" class="active"><span class="num">30</span><span>前端架构：coordinator-worker</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-todo-list.html" data-slug="frontend-todo-list"><span class="num">31</span><span>前端模式一：Todo List</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-subagent-streaming.html" data-slug="frontend-subagent-streaming"><span class="num">32</span><span>前端模式二：Subagent 卡片</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-sandbox.html" data-slug="frontend-sandbox"><span class="num">33</span><span>前端模式三：IDE 式的沙箱界面</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 G · 应用与生产</div><ul>
+<li><a href="../lessons/retrieval-and-rag.html" data-slug="retrieval-and-rag"><span class="num">34</span><span>检索与 RAG：三种架构</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/deep-research-agent.html" data-slug="deep-research-agent"><span class="num">35</span><span>成品模式一：Deep Research Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/data-analysis-agent.html" data-slug="data-analysis-agent"><span class="num">36</span><span>成品模式二：Data Analysis Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/content-builder-agent.html" data-slug="content-builder-agent"><span class="num">37</span><span>成品模式三：Content Builder Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/grading-rubrics.html" data-slug="grading-rubrics"><span class="num">38</span><span>评分量表：让 agent 自己迭代到达标</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/going-to-production.html" data-slug="going-to-production"><span class="num">39</span><span>走向生产</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/acp-and-ag-ui.html" data-slug="acp-and-ag-ui"><span class="num">40</span><span>对外协议：ACP 与 AG-UI</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">速查手册</div><ul>
+<li><a href="../reference/glossary.html" data-slug="glossary"><span class="num">▸</span><span>术语表</span></a></li>
+<li><a href="../reference/stack-order.html" data-slug="stack-order"><span class="num">▸</span><span>中间件栈速查</span></a></li>
+<li><a href="../reference/api-cheatsheet.html" data-slug="api-cheatsheet"><span class="num">▸</span><span>API 速查</span></a></li>
+<li><a href="../reference/decision-map.html" data-slug="decision-map"><span class="num">▸</span><span>选型决策图</span></a></li>
+</ul></div>
+</aside>
+<div class="main">
+  <div class="topbar"><div class="wrap">
+    <button class="menu-btn" aria-label="切换目录">☰</button>
+    <span class="crumbs"><a href="../index.html">课程地图</a> / <b>模块 F · 流式与前端</b> / <b>第 30 课</b></span>
+    <span class="progress-pill">
+      <span class="txt">0%</span>
+      <span class="bar"><i></i></span>
+    </span>
+  </div></div>
+  <div class="wrap">
+<header class="lesson-head">
+  <div class="lesson-kicker">
+    <span>第 30 课</span>
+    <span class="dot">·</span>
+    <span>模块 F · 流式与前端</span>
+    <span class="dot">·</span>
+    <span>10 分钟</span>
+    <span class="tier-badge b">Tier B · 集成速览</span>
+  </div>
+  <h1>前端架构：coordinator-worker</h1>
+  <p class="lede">Deep Agents 的前端不是"聊天框加个加载动画"。官方给的判断标准很直接：<b>当一个 agent 会委派时，把委派过程隐藏起来是浪费。</b>这一课讲前端该暴露什么。</p>
+</header>
+<article>
+<details class="toc-box"><summary>本页目录</summary>
+<ul>
+<li><a href="#coordinator-worker">架构：coordinator-worker</a></li>
+<li><a href="#_1">接上前端</a></li>
+<li><a href="#_2">五类投影</a></li>
+<li><a href="#_3">三个模式</a></li>
+<li><a href="#_4">版本提示</a></li>
+<li><a href="#_5">下一课</a></li>
+</ul>
+
+</details>
+<h2 id="coordinator-worker">架构：coordinator-worker</h2>
+<p>Deep Agents 用的是<strong>协调者—工作者（coordinator-worker）</strong>架构：</p>
+<div class="flow">
+  <div class="node hi"><span class="k">Coordinator</span><span class="v">主 agent：规划、委派、综合</span></div>
+  <div class="arrow">→</div>
+  <div class="node"><span class="k">Subagent A</span><span class="v">隔离运行</span></div>
+  <div class="arrow">·</div>
+  <div class="node"><span class="k">Subagent B</span><span class="v">隔离运行</span></div>
+  <div class="arrow">→</div>
+  <div class="node"><span class="k">结果回到 coordinator</span><span class="v">单次交接</span></div>
+</div>
+
+<p>前端对应的结构：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>根流（root stream）</strong></td>
+<td>coordinator 的消息</td>
+</tr>
+<tr>
+<td><strong>subagent 发现快照</strong></td>
+<td>有哪些工作者、状态如何</td>
+</tr>
+<tr>
+<td><strong>按 subagent 作用域的视图</strong></td>
+<td>每个工作者的独立内容</td>
+</tr>
+</tbody>
+</table>
+<div class="callout">
+<p class="callout-title">官方的一句话点出了全部动机</p>
+<blockquote>
+<p>Deep agents are most useful when the UI makes delegation visible.
+Instead of showing a single opaque assistant bubble, the LangChain SDKs expose
+the coordinator, subagent discovery, custom state, and sandbox-backed artifacts
+so users can inspect <strong>how a long-running task is being decomposed and completed</strong>.</p>
+</blockquote>
+<p>注意最后半句：让用户看到<strong>任务是怎么被拆解和完成的</strong>。
+这不只是"好看"，它是<strong>长任务的可信度来源</strong>。
+一个跑了五分钟的黑盒和一份五分钟的进度报告，用户的心理体验完全不同。</p>
+</div>
+<h2 id="_1">接上前端</h2>
+<div class="code-label">typescript</div><div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useStream</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@langchain/react"</span><span class="p">;</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">App</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useStream</span><span class="o">&lt;</span><span class="ow">typeof</span><span class="w"> </span><span class="nx">agent</span><span class="o">&gt;</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">apiUrl</span><span class="o">:</span><span class="w"> </span><span class="s2">"http://localhost:2024"</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">assistantId</span><span class="o">:</span><span class="w"> </span><span class="s2">"agent"</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="c1">// Deep agent 的状态不止 messages</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">todos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">stream</span><span class="p">.</span><span class="nx">values</span><span class="o">?</span><span class="p">.</span><span class="nx">todos</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">subagents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[...</span><span class="nx">stream</span><span class="p">.</span><span class="nx">subagents</span><span class="p">.</span><span class="nx">values</span><span class="p">()];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>三个要点：</p>
+<ol>
+<li><strong><code>useStream</code> 与 <code>createAgent</code> 的用法一致</strong>——Deep Agents 没有另起一套前端协议。</li>
+<li><strong>传类型参数</strong>（<code>useStream&lt;typeof agent&gt;</code>）以获得类型安全的流状态。</li>
+<li><strong><code>stream.values</code> 能拿到自定义状态</strong>——比如 <code>todos</code>，就是第 24 课那个
+   <code>write_todos</code> 的结果。</li>
+</ol>
+<h2 id="_2">五类投影</h2>
+<p>官方表格列了前端 SDK 暴露的五类结构化投影：</p>
+<table>
+<thead>
+<tr>
+<th>投影</th>
+<th>用来做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stream.messages</code></td>
+<td>coordinator 的对话与最终综合结果</td>
+</tr>
+<tr>
+<td><code>stream.subagents</code></td>
+<td>专门工作者的实时发现，含状态与任务元数据</td>
+</tr>
+<tr>
+<td><code>stream.values</code></td>
+<td>共享状态：todos、计划、报告章节、沙箱元数据、任何自定义键</td>
+</tr>
+<tr>
+<td><strong>工具调用状态</strong></td>
+<td>把文件系统、搜索、浏览器、领域工具渲染成带进度与结果的卡片</td>
+</tr>
+<tr>
+<td><strong>中断（Interrupts）</strong></td>
+<td>暂停被委派的工作等待批准或补充信息，且不丢失运行状态</td>
+</tr>
+</tbody>
+</table>
+<div class="callout key">
+<p class="callout-title">最后两行是"聊天框"和"工作台"的分界线</p>
+<ul>
+<li><strong>工具调用渲染成卡片</strong>：用户能看到"读了哪个文件、搜了什么、结果是什么"，
+  而不是只看到一句"正在思考…"</li>
+<li><strong>中断渲染成待办</strong>：用户能直接批准/修改/拒绝，而运行状态被保住</li>
+</ul>
+<p>官方对最终形态的描述是：<strong>"feels closer to an IDE, task board, or workflow monitor
+than a plain chat transcript."</strong></p>
+</div>
+<h2 id="_3">三个模式</h2>
+<p>官方给的三个前端模式，正好对应前面三块后端能力：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>对应后端能力</th>
+<th>形态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Subagent streaming</strong></td>
+<td>委派（第 19–23 课）</td>
+<td>可折叠的工作者卡片，带流式内容与进度</td>
+</tr>
+<tr>
+<td><strong>Todo list</strong></td>
+<td>任务规划（第 24 课）</td>
+<td>实时进度列表</td>
+</tr>
+<tr>
+<td><strong>Sandbox</strong></td>
+<td>沙箱（第 09 课）</td>
+<td>IDE 式文件浏览器 + 代码查看 + diff 面板</td>
+</tr>
+</tbody>
+</table>
+<div class="flow">
+  <div class="node"><span class="k">委派</span><span class="v">→ SubagentCard</span></div>
+  <div class="arrow">·</div>
+  <div class="node"><span class="k">规划</span><span class="v">→ TodoList</span></div>
+  <div class="arrow">·</div>
+  <div class="node"><span class="k">沙箱</span><span class="v">→ 文件浏览器 + diff</span></div>
+</div>
+
+<div class="callout">
+<p class="callout-title">注意这三个模式的共同点</p>
+<p>它们都<strong>直接消费第 24、29 课讲过的结构化状态</strong>，
+而不是去解析 LLM 的自然语言输出。</p>
+<p><strong>这是 harness 给前端的最大礼物</strong>：因为状态是结构化的、被持久化的、
+被投影出来的，前端不需要"猜"模型在干什么。这就是为什么官方能给出
+组件级的模式文档，而不是"如何解析模型输出"的提示词技巧。</p>
+</div>
+<h2 id="_4">版本提示</h2>
+<p>官方注明这些模式使用 <strong>v1 前端 SDK 包</strong>。
+如果你用的是更早的版本，需要看 React / Vue / Svelte / Angular 各自的迁移指南。</p>
+<h2 id="_5">下一课</h2>
+<p>三个前端模式逐个拆开。先讲最简单的那个：
+<strong>一个 todo 列表组件，如何从 agent state 变成实时进度条。</strong></p>
+</article>
+<section class="quiz" data-slug="frontend-overview">
+<div class="quiz-head"><span>检索练习 · 不要回看上文，先试着回忆</span><span class="score">0 / 3 正确</span></div>
+<div class="quiz-body">
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">01</span>官方对 Deep Agents 前端的核心主张是什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>尽量把 agent 执行细节隐藏起来</span></li>
+<li><span class="mk">B</span><span>用自然语言摘要代替结构化状态</span></li>
+<li><span class="mk">C</span><span>让委派过程可见，而不是只显示一个不透明的对话气泡</span></li>
+<li><span class="mk">D</span><span>前端只需渲染最终答案以降低复杂度</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方原话是 "Deep agents are most useful when the UI makes delegation visible"，并强调让用户能检查长任务是如何被拆解和完成的。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">02</span>stream.values 在前端的主要用途是什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>存储用户界面的本地配置</span></li>
+<li><span class="mk">B</span><span>缓存 LLM 的输出 token</span></li>
+<li><span class="mk">C</span><span>读取 todos、计划、沙箱元数据等自定义状态</span></li>
+<li><span class="mk">D</span><span>计算 token 使用量与费用</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方把 stream.values 描述为共享状态投影，用于 todos、plans、report sections、sandbox metadata 以及 agent 写入的任何自定义键。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">03</span>为什么前端模式可以做成组件级文档，而不需要提示词技巧？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>因为前端 SDK 内置了一个更强的模型</span></li>
+<li><span class="mk">B</span><span>因为 LangGraph 会自动生成 UI 组件</span></li>
+<li><span class="mk">C</span><span>因为状态是结构化、被持久化并被投影出来的，前端无需猜测模型在做什么</span></li>
+<li><span class="mk">D</span><span>因为前端只处理最终消息，不处理中间状态</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>todos、subagent 发现、工具调用状态都是结构化投影，可直接绑定到组件，因此官方能给出组件级模式而非解析自然语言的技巧。</div>
+</div>
+</div>
+<div class="quiz-foot"><span class="result"></span><br><button class="reset">重做</button><button class="reveal">显示全部解析</button></div>
+</section>
+<div class="mastery">
+  <label><input type="checkbox" data-slug="frontend-overview">
+  <span>本课已掌握
+  <span class="hint">勾选后，左侧目录和首页会标记完成，进度保存在本机浏览器里。
+  能通过上面的自测、并且能不看笔记复述本课的核心机制，再勾。</span></span></label>
+</div>
+<footer class="lesson-foot">
+  <div class="source-box"><span class="lbl">本课事实来源 · 建议通读原文</span><a href="https://docs.langchain.com/oss/python/deepagents/frontend/overview" target="_blank" rel="noopener">Frontend · Overview（官方）</a><br><span style="color:#8b909c;font-size:11.5px">https://docs.langchain.com/oss/python/deepagents/frontend/overview</span></div>
+  <div class="ask-teacher">有讲不清楚的地方，直接把问题抛给我——我是这门课的老师，
+  可以就任何一节、任何一行代码展开，也可以按你的问题临时加一课。</div>
+  <div class="prevnext"><a class="prev" href="event-streaming-subagents.html"><span class="dir">← 上一课</span><span class="ttl">stream.subagents：每个子任务一个句柄</span></a><a class="next" href="frontend-todo-list.html"><span class="dir">下一课 →</span><span class="ttl">前端模式一：Todo List</span></a></div>
+</footer>
+  </div>
+</div>
+</div>
+<script>window.SITE = {"lessons": [{"slug": "agent-harness-mental-model", "num": 1, "title": "Agent Harness 的心智模型", "module": "W1", "tier": "A"}, {"slug": "three-layers-langchain-langgraph-deepagents", "num": 2, "title": "三层分工：LangChain / LangGraph / Deep Agents", "module": "W1", "tier": "A"}, {"slug": "create-deep-agent-anatomy", "num": 3, "title": "create_deep_agent 全景解剖", "module": "W1", "tier": "A"}, {"slug": "middleware-stack", "num": 4, "title": "Middleware 栈：harness 的骨架", "module": "W1", "tier": "A"}, {"slug": "tools-and-mcp", "num": 5, "title": "工具与 MCP：agent 的手", "module": "W2", "tier": "B"}, {"slug": "virtual-filesystem", "num": 6, "title": "虚拟文件系统：harness 的地基", "module": "W2", "tier": "A"}, {"slug": "backend-family", "num": 7, "title": "六个内建 Backend 的取舍", "module": "W2", "tier": "A"}, {"slug": "filesystem-permissions", "num": 8, "title": "声明式权限：像防火墙一样配文件访问", "module": "W2", "tier": "B"}, {"slug": "sandboxes", "num": 9, "title": "沙箱：让 agent 跑代码而不伤到宿主机", "module": "W2", "tier": "B"}, {"slug": "interpreters-programmatic-tool-calling", "num": 10, "title": "解释器与程序化工具调用", "module": "W2", "tier": "A"}, {"slug": "four-context-layers", "num": 11, "title": "上下文的四个层次", "module": "W3", "tier": "A"}, {"slug": "input-context", "num": 12, "title": "输入上下文：prompt 是怎么被拼出来的", "module": "W3", "tier": "B"}, {"slug": "skills-progressive-disclosure", "num": 13, "title": "Skills：渐进式披露", "module": "W3", "tier": "A"}, {"slug": "memory-long-term", "num": 14, "title": "Memory：长期记忆的四个维度", "module": "W3", "tier": "A"}, {"slug": "context-compression", "num": 15, "title": "压缩：Offloading 与 Summarization", "module": "W3", "tier": "A"}, {"slug": "prompt-caching", "num": 16, "title": "Prompt Caching：为什么它决定了栈的顺序", "module": "W3", "tier": "B"}, {"slug": "state-and-runtime-context", "num": 17, "title": "State Schema 与 Runtime Context", "module": "W3", "tier": "A"}, {"slug": "multimodal", "num": 18, "title": "多模态输入与输出", "module": "W3", "tier": "B"}, {"slug": "subagents-fundamentals", "num": 19, "title": "Subagent 原理", "module": "W4", "tier": "A"}, {"slug": "custom-subagents", "num": 20, "title": "自定义 Subagent 的字段设计", "module": "W4", "tier": "B"}, {"slug": "forked-subagents", "num": 21, "title": "Forked Subagents：继承父级上下文", "module": "W4", "tier": "B"}, {"slug": "dynamic-subagents", "num": 22, "title": "Dynamic Subagents：让代码决定开多少个子任务", "module": "W4", "tier": "A"}, {"slug": "async-subagents", "num": 23, "title": "Async Subagents：跨请求长跑的子任务", "module": "W4", "tier": "B"}, {"slug": "task-planning-todos", "num": 24, "title": "任务规划与 write_todos", "module": "W4", "tier": "B"}, {"slug": "human-in-the-loop", "num": 25, "title": "Human-in-the-loop：在关键点按下暂停", "module": "W5", "tier": "A"}, {"slug": "fault-tolerance", "num": 26, "title": "容错：不是所有错误都该被同样对待", "module": "W5", "tier": "B"}, {"slug": "profiles", "num": 27, "title": "Profiles：让同一份代码适配不同模型", "module": "W5", "tier": "A"}, {"slug": "streaming", "num": 28, "title": "流式：把一棵树投影成几条流", "module": "W6", "tier": "B"}, {"slug": "event-streaming-subagents", "num": 29, "title": "stream.subagents：每个子任务一个句柄", "module": "W6", "tier": "A"}, {"slug": "frontend-overview", "num": 30, "title": "前端架构：coordinator-worker", "module": "W6", "tier": "B"}, {"slug": "frontend-todo-list", "num": 31, "title": "前端模式一：Todo List", "module": "W6", "tier": "B"}, {"slug": "frontend-subagent-streaming", "num": 32, "title": "前端模式二：Subagent 卡片", "module": "W6", "tier": "B"}, {"slug": "frontend-sandbox", "num": 33, "title": "前端模式三：IDE 式的沙箱界面", "module": "W6", "tier": "B"}, {"slug": "retrieval-and-rag", "num": 34, "title": "检索与 RAG：三种架构", "module": "W7", "tier": "B"}, {"slug": "deep-research-agent", "num": 35, "title": "成品模式一：Deep Research Agent", "module": "W7", "tier": "B"}, {"slug": "data-analysis-agent", "num": 36, "title": "成品模式二：Data Analysis Agent", "module": "W7", "tier": "B"}, {"slug": "content-builder-agent", "num": 37, "title": "成品模式三：Content Builder Agent", "module": "W7", "tier": "B"}, {"slug": "grading-rubrics", "num": 38, "title": "评分量表：让 agent 自己迭代到达标", "module": "W7", "tier": "B"}, {"slug": "going-to-production", "num": 39, "title": "走向生产", "module": "W7", "tier": "A"}, {"slug": "acp-and-ag-ui", "num": 40, "title": "对外协议：ACP 与 AG-UI", "module": "W7", "tier": "B"}], "refs": [{"slug": "glossary", "title": "术语表"}, {"slug": "stack-order", "title": "中间件栈速查"}, {"slug": "api-cheatsheet", "title": "API 速查"}, {"slug": "decision-map", "title": "选型决策图"}]};</script>
+<script src="../assets/course.js"></script>
+</body>
+</html>

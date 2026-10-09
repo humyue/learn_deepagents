@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>声明式权限：像防火墙一样配文件访问 · Deep Agents 教学站</title>
+<meta name="description" content="深入理解 Deep Agents agent harness 原理的中文教学站">
+<link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+<div class="sidebar-brand"><a href="../index.html">Deep Agents 教学站</a><span class="sub">Agent Harness 原理 · 中文</span></div>
+<div class="nav-group"><div class="nav-group-title">模块 A · 心智模型</div><ul>
+<li><a href="../lessons/agent-harness-mental-model.html" data-slug="agent-harness-mental-model"><span class="num">01</span><span>Agent Harness 的心智模型</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/three-layers-langchain-langgraph-deepagents.html" data-slug="three-layers-langchain-langgraph-deepagents"><span class="num">02</span><span>三层分工：LangChain / LangGraph / Deep Agents</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/create-deep-agent-anatomy.html" data-slug="create-deep-agent-anatomy"><span class="num">03</span><span>create_deep_agent 全景解剖</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/middleware-stack.html" data-slug="middleware-stack"><span class="num">04</span><span>Middleware 栈：harness 的骨架</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 B · 执行环境</div><ul>
+<li><a href="../lessons/tools-and-mcp.html" data-slug="tools-and-mcp"><span class="num">05</span><span>工具与 MCP：agent 的手</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/virtual-filesystem.html" data-slug="virtual-filesystem"><span class="num">06</span><span>虚拟文件系统：harness 的地基</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/backend-family.html" data-slug="backend-family"><span class="num">07</span><span>六个内建 Backend 的取舍</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/filesystem-permissions.html" data-slug="filesystem-permissions" class="active"><span class="num">08</span><span>声明式权限：像防火墙一样配文件访问</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/sandboxes.html" data-slug="sandboxes"><span class="num">09</span><span>沙箱：让 agent 跑代码而不伤到宿主机</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/interpreters-programmatic-tool-calling.html" data-slug="interpreters-programmatic-tool-calling"><span class="num">10</span><span>解释器与程序化工具调用</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 C · 上下文工程</div><ul>
+<li><a href="../lessons/four-context-layers.html" data-slug="four-context-layers"><span class="num">11</span><span>上下文的四个层次</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/input-context.html" data-slug="input-context"><span class="num">12</span><span>输入上下文：prompt 是怎么被拼出来的</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/skills-progressive-disclosure.html" data-slug="skills-progressive-disclosure"><span class="num">13</span><span>Skills：渐进式披露</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/memory-long-term.html" data-slug="memory-long-term"><span class="num">14</span><span>Memory：长期记忆的四个维度</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/context-compression.html" data-slug="context-compression"><span class="num">15</span><span>压缩：Offloading 与 Summarization</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/prompt-caching.html" data-slug="prompt-caching"><span class="num">16</span><span>Prompt Caching：为什么它决定了栈的顺序</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/state-and-runtime-context.html" data-slug="state-and-runtime-context"><span class="num">17</span><span>State Schema 与 Runtime Context</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/multimodal.html" data-slug="multimodal"><span class="num">18</span><span>多模态输入与输出</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 D · 委派</div><ul>
+<li><a href="../lessons/subagents-fundamentals.html" data-slug="subagents-fundamentals"><span class="num">19</span><span>Subagent 原理</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/custom-subagents.html" data-slug="custom-subagents"><span class="num">20</span><span>自定义 Subagent 的字段设计</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/forked-subagents.html" data-slug="forked-subagents"><span class="num">21</span><span>Forked Subagents：继承父级上下文</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/dynamic-subagents.html" data-slug="dynamic-subagents"><span class="num">22</span><span>Dynamic Subagents：让代码决定开多少个子任务</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/async-subagents.html" data-slug="async-subagents"><span class="num">23</span><span>Async Subagents：跨请求长跑的子任务</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/task-planning-todos.html" data-slug="task-planning-todos"><span class="num">24</span><span>任务规划与 write_todos</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 E · 运行时管控</div><ul>
+<li><a href="../lessons/human-in-the-loop.html" data-slug="human-in-the-loop"><span class="num">25</span><span>Human-in-the-loop：在关键点按下暂停</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/fault-tolerance.html" data-slug="fault-tolerance"><span class="num">26</span><span>容错：不是所有错误都该被同样对待</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/profiles.html" data-slug="profiles"><span class="num">27</span><span>Profiles：让同一份代码适配不同模型</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 F · 流式与前端</div><ul>
+<li><a href="../lessons/streaming.html" data-slug="streaming"><span class="num">28</span><span>流式：把一棵树投影成几条流</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/event-streaming-subagents.html" data-slug="event-streaming-subagents"><span class="num">29</span><span>stream.subagents：每个子任务一个句柄</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/frontend-overview.html" data-slug="frontend-overview"><span class="num">30</span><span>前端架构：coordinator-worker</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-todo-list.html" data-slug="frontend-todo-list"><span class="num">31</span><span>前端模式一：Todo List</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-subagent-streaming.html" data-slug="frontend-subagent-streaming"><span class="num">32</span><span>前端模式二：Subagent 卡片</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-sandbox.html" data-slug="frontend-sandbox"><span class="num">33</span><span>前端模式三：IDE 式的沙箱界面</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 G · 应用与生产</div><ul>
+<li><a href="../lessons/retrieval-and-rag.html" data-slug="retrieval-and-rag"><span class="num">34</span><span>检索与 RAG：三种架构</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/deep-research-agent.html" data-slug="deep-research-agent"><span class="num">35</span><span>成品模式一：Deep Research Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/data-analysis-agent.html" data-slug="data-analysis-agent"><span class="num">36</span><span>成品模式二：Data Analysis Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/content-builder-agent.html" data-slug="content-builder-agent"><span class="num">37</span><span>成品模式三：Content Builder Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/grading-rubrics.html" data-slug="grading-rubrics"><span class="num">38</span><span>评分量表：让 agent 自己迭代到达标</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/going-to-production.html" data-slug="going-to-production"><span class="num">39</span><span>走向生产</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/acp-and-ag-ui.html" data-slug="acp-and-ag-ui"><span class="num">40</span><span>对外协议：ACP 与 AG-UI</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">速查手册</div><ul>
+<li><a href="../reference/glossary.html" data-slug="glossary"><span class="num">▸</span><span>术语表</span></a></li>
+<li><a href="../reference/stack-order.html" data-slug="stack-order"><span class="num">▸</span><span>中间件栈速查</span></a></li>
+<li><a href="../reference/api-cheatsheet.html" data-slug="api-cheatsheet"><span class="num">▸</span><span>API 速查</span></a></li>
+<li><a href="../reference/decision-map.html" data-slug="decision-map"><span class="num">▸</span><span>选型决策图</span></a></li>
+</ul></div>
+</aside>
+<div class="main">
+  <div class="topbar"><div class="wrap">
+    <button class="menu-btn" aria-label="切换目录">☰</button>
+    <span class="crumbs"><a href="../index.html">课程地图</a> / <b>模块 B · 执行环境</b> / <b>第 08 课</b></span>
+    <span class="progress-pill">
+      <span class="txt">0%</span>
+      <span class="bar"><i></i></span>
+    </span>
+  </div></div>
+  <div class="wrap">
+<header class="lesson-head">
+  <div class="lesson-kicker">
+    <span>第 08 课</span>
+    <span class="dot">·</span>
+    <span>模块 B · 执行环境</span>
+    <span class="dot">·</span>
+    <span>9 分钟</span>
+    <span class="tier-badge b">Tier B · 集成速览</span>
+  </div>
+  <h1>声明式权限：像防火墙一样配文件访问</h1>
+  <p class="lede">权限不是"给 agent 一个提示让它别乱写"，而是一张<b>声明式规则表</b>，在工具执行前强制生效。这一课讲清规则结构与它管不到的地方。</p>
+</header>
+<article>
+<details class="toc-box"><summary>本页目录</summary>
+<ul>
+<li><a href="#_1">基本形态</a></li>
+<li><a href="#_2">两条必须记住的求值规则</a></li>
+<li><a href="#bug">顺序错误的经典 bug</a></li>
+<li><a href="#_3">常见配方</a></li>
+<li><a href="#_4">暂停而不是拒绝</a></li>
+<li><a href="#_5">它管不到的地方</a></li>
+<li><a href="#_6">作用域</a></li>
+<li><a href="#_7">下一课</a></li>
+</ul>
+
+</details>
+<h2 id="_1">基本形态</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">deepagents</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_deep_agent</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">create_deep_agent</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">"openai:gpt-5.5"</span><span class="p">,</span>
+    <span class="n">permissions</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">"operations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"write"</span><span class="p">],</span> <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"/**"</span><span class="p">],</span> <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"deny"</span><span class="p">},</span>   <span class="c1"># 只读 agent</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>每条规则三个字段：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>取值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>operations</code></td>
+<td><code>"read"</code> / <code>"write"</code>（可同时给）</td>
+<td>管哪类操作</td>
+</tr>
+<tr>
+<td><code>paths</code></td>
+<td>glob 模式</td>
+<td>管哪些路径</td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td><code>"allow"</code> / <code>"deny"</code></td>
+<td>允许还是拒绝</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">两条必须记住的求值规则</h2>
+<div class="callout">
+<p class="callout-title">第一匹配胜出 + 无匹配则允许</p>
+<p>规则<strong>从上往下</strong>求值，<strong>第一条匹配的规则决定结果</strong>（first-match-wins）。
+如果<strong>没有任何规则匹配</strong>，操作<strong>被允许</strong>。</p>
+<p>第二点是安全上最容易被忽略的：<strong>权限系统默认是开放式的</strong>。
+想做到"除了 X 都能用"，你必须在最后补一条兜底的 deny。</p>
+</div>
+<div class="flow">
+  <div class="node"><span class="k">工具请求</span><span class="v">write /workspace/a.md</span></div>
+  <div class="arrow">→</div>
+  <div class="node"><span class="k">逐条匹配</span><span class="v">从上往下，第一条命中即判定</span></div>
+  <div class="arrow">→</div>
+  <div class="node hi"><span class="k">结果</span><span class="v">allow / deny</span></div>
+  <div class="arrow">→</div>
+  <div class="node dim"><span class="k">未命中任何规则</span><span class="v">默认 allow</span></div>
+</div>
+
+<h2 id="bug">顺序错误的经典 bug</h2>
+<p>官方文档专门用了一组对比来强调这件事：</p>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="c1"># ✅ 正确顺序：先精确 deny，再放开目录，最后兜底 deny</span>
+<span class="n">permissions</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">{</span><span class="s2">"operations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"read"</span><span class="p">,</span> <span class="s2">"write"</span><span class="p">],</span> <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"/workspace/.env"</span><span class="p">],</span> <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"deny"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"operations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"read"</span><span class="p">,</span> <span class="s2">"write"</span><span class="p">],</span> <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"/workspace/**"</span><span class="p">],</span>   <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"allow"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"operations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"read"</span><span class="p">,</span> <span class="s2">"write"</span><span class="p">],</span> <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"/**"</span><span class="p">],</span>             <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"deny"</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="c1"># ❌ 有 bug：/workspace/** 先命中了 .env，那条 deny 永远不会生效</span>
+<span class="n">permissions</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">{</span><span class="s2">"operations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"read"</span><span class="p">,</span> <span class="s2">"write"</span><span class="p">],</span> <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"/workspace/**"</span><span class="p">],</span>   <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"allow"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"operations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"read"</span><span class="p">,</span> <span class="s2">"write"</span><span class="p">],</span> <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"/workspace/.env"</span><span class="p">],</span> <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"deny"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"operations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"read"</span><span class="p">,</span> <span class="s2">"write"</span><span class="p">],</span> <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"/**"</span><span class="p">],</span>             <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"deny"</span><span class="p">},</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p>规律是：<strong>精确的规则写前面，宽泛的规则写后面。</strong>
+这和 iptables、和 nginx location 是同一套心智模型。</p>
+<h2 id="_3">常见配方</h2>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>把 agent 圈在某个目录</td>
+<td>允许 <code>/workspace/**</code>，其余 <code>/**</code> deny</td>
+</tr>
+<tr>
+<td>保护敏感文件</td>
+<td>最前面加 <code>/workspace/.env</code>、<code>credentials</code> 的 deny</td>
+</tr>
+<tr>
+<td>记忆只读</td>
+<td>允许读 <code>/memories/**</code>，禁止写</td>
+</tr>
+<tr>
+<td>完全禁止访问</td>
+<td>单条 <code>/**</code> deny</td>
+</tr>
+<tr>
+<td>暂停等待人工批准</td>
+<td>见下面的 interrupt 用法</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">暂停而不是拒绝</h2>
+<p>权限的第三种结果是"停下来问人"——这时会触发 human-in-the-loop 中断，
+批准后才继续。这条路径与 <code>interrupt_on</code> 是同一套机制的两端（第 25 课展开）。</p>
+<h2 id="_5">它管不到的地方</h2>
+<div class="callout">
+<p class="callout-title">权限不适用于 sandbox backend</p>
+<p>官方明确写着：<strong>Permissions do not apply to sandbox backends</strong>，
+因为沙箱支持通过 <code>execute</code> 工具执行任意命令。</p>
+<p>推理一下就很清楚：一个能跑 <code>rm -rf /workspace</code> 的 shell，
+再严格的"路径级读写规则"都拦不住它——它绕过的是工具层，不是文件层。
+<strong>沙箱的正确隔离手段是沙箱本身</strong>（单独的环境、单独的文件系统、单独的网络策略）。</p>
+</div>
+<div class="callout warn">
+<p class="callout-title">声明式不够用时用 policy hooks</p>
+<p>需要比 glob 匹配更复杂的判断（比如按文件内容、按时间、按调用次数），
+就走 backend 的 policy hooks，把逻辑写进代码。</p>
+</div>
+<h2 id="_6">作用域</h2>
+<ul>
+<li><strong>主 agent</strong>：<code>permissions=</code> 直接配置。</li>
+<li><strong>声明式 subagent</strong>：<strong>不继承</strong>父级权限。要让 subagent 更窄，
+  必须在它自己的 <code>permissions</code> 字段里单独配。（注意：一旦设置就是<strong>整体替换</strong>，不是叠加。）</li>
+<li><strong>默认 subagent</strong>：继承主 agent 的权限。</li>
+</ul>
+<h2 id="_7">下一课</h2>
+<p>权限在文件层加了边界。但如果 agent 要<strong>真的跑代码</strong>，文件层边界就不够了。
+下一课：沙箱——把整个执行环境关起来。</p>
+</article>
+<section class="quiz" data-slug="filesystem-permissions">
+<div class="quiz-head"><span>检索练习 · 不要回看上文，先试着回忆</span><span class="score">0 / 3 正确</span></div>
+<div class="quiz-body">
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">01</span>权限规则中没有任何一条匹配时，默认结果是什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>拒绝，并记录一次审计事件</span></li>
+<li><span class="mk">B</span><span>拒绝，并中断等待人工批准</span></li>
+<li><span class="mk">C</span><span>允许</span></li>
+<li><span class="mk">D</span><span>取决于 backend 的实现</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方规则是 first-match-wins，且没有规则匹配时操作被允许。这就是为什么"圈定目录"的配方必须补一条 /** deny 兜底。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">02</span>为什么权限对 sandbox backend 不生效？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>因为沙箱里的路径与主文件系统不同名</span></li>
+<li><span class="mk">B</span><span>因为沙箱使用了独立的权限规则文件</span></li>
+<li><span class="mk">C</span><span>因为沙箱能通过 execute 执行任意命令，绕过工具层</span></li>
+<li><span class="mk">D</span><span>因为沙箱的 backend 协议不包含 permissions 字段</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>沙箱提供 execute 工具，可以运行任意 shell 命令。路径级读写规则拦不住一个能直接操作文件系统的 shell，所以隔离必须由沙箱环境本身提供。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">03</span>声明式 subagent 与父 agent 的权限关系是？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>完全继承父级规则并做交集</span></li>
+<li><span class="mk">B</span><span>完全继承父级规则并做并集</span></li>
+<li><span class="mk">C</span><span>默认继承；一旦设置就是整体替换而非叠加</span></li>
+<li><span class="mk">D</span><span>默认不继承，必须显式配置</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>声明式 subagent 的 permissions 默认继承主 agent；一旦在 subagent 上设置，就整体替换父级的权限集合，而不是两者求交或求并。</div>
+</div>
+</div>
+<div class="quiz-foot"><span class="result"></span><br><button class="reset">重做</button><button class="reveal">显示全部解析</button></div>
+</section>
+<div class="mastery">
+  <label><input type="checkbox" data-slug="filesystem-permissions">
+  <span>本课已掌握
+  <span class="hint">勾选后，左侧目录和首页会标记完成，进度保存在本机浏览器里。
+  能通过上面的自测、并且能不看笔记复述本课的核心机制，再勾。</span></span></label>
+</div>
+<footer class="lesson-foot">
+  <div class="source-box"><span class="lbl">本课事实来源 · 建议通读原文</span><a href="https://docs.langchain.com/oss/python/deepagents/permissions" target="_blank" rel="noopener">Permissions（官方）</a><br><span style="color:#8b909c;font-size:11.5px">https://docs.langchain.com/oss/python/deepagents/permissions</span></div>
+  <div class="ask-teacher">有讲不清楚的地方，直接把问题抛给我——我是这门课的老师，
+  可以就任何一节、任何一行代码展开，也可以按你的问题临时加一课。</div>
+  <div class="prevnext"><a class="prev" href="backend-family.html"><span class="dir">← 上一课</span><span class="ttl">六个内建 Backend 的取舍</span></a><a class="next" href="sandboxes.html"><span class="dir">下一课 →</span><span class="ttl">沙箱：让 agent 跑代码而不伤到宿主机</span></a></div>
+</footer>
+  </div>
+</div>
+</div>
+<script>window.SITE = {"lessons": [{"slug": "agent-harness-mental-model", "num": 1, "title": "Agent Harness 的心智模型", "module": "W1", "tier": "A"}, {"slug": "three-layers-langchain-langgraph-deepagents", "num": 2, "title": "三层分工：LangChain / LangGraph / Deep Agents", "module": "W1", "tier": "A"}, {"slug": "create-deep-agent-anatomy", "num": 3, "title": "create_deep_agent 全景解剖", "module": "W1", "tier": "A"}, {"slug": "middleware-stack", "num": 4, "title": "Middleware 栈：harness 的骨架", "module": "W1", "tier": "A"}, {"slug": "tools-and-mcp", "num": 5, "title": "工具与 MCP：agent 的手", "module": "W2", "tier": "B"}, {"slug": "virtual-filesystem", "num": 6, "title": "虚拟文件系统：harness 的地基", "module": "W2", "tier": "A"}, {"slug": "backend-family", "num": 7, "title": "六个内建 Backend 的取舍", "module": "W2", "tier": "A"}, {"slug": "filesystem-permissions", "num": 8, "title": "声明式权限：像防火墙一样配文件访问", "module": "W2", "tier": "B"}, {"slug": "sandboxes", "num": 9, "title": "沙箱：让 agent 跑代码而不伤到宿主机", "module": "W2", "tier": "B"}, {"slug": "interpreters-programmatic-tool-calling", "num": 10, "title": "解释器与程序化工具调用", "module": "W2", "tier": "A"}, {"slug": "four-context-layers", "num": 11, "title": "上下文的四个层次", "module": "W3", "tier": "A"}, {"slug": "input-context", "num": 12, "title": "输入上下文：prompt 是怎么被拼出来的", "module": "W3", "tier": "B"}, {"slug": "skills-progressive-disclosure", "num": 13, "title": "Skills：渐进式披露", "module": "W3", "tier": "A"}, {"slug": "memory-long-term", "num": 14, "title": "Memory：长期记忆的四个维度", "module": "W3", "tier": "A"}, {"slug": "context-compression", "num": 15, "title": "压缩：Offloading 与 Summarization", "module": "W3", "tier": "A"}, {"slug": "prompt-caching", "num": 16, "title": "Prompt Caching：为什么它决定了栈的顺序", "module": "W3", "tier": "B"}, {"slug": "state-and-runtime-context", "num": 17, "title": "State Schema 与 Runtime Context", "module": "W3", "tier": "A"}, {"slug": "multimodal", "num": 18, "title": "多模态输入与输出", "module": "W3", "tier": "B"}, {"slug": "subagents-fundamentals", "num": 19, "title": "Subagent 原理", "module": "W4", "tier": "A"}, {"slug": "custom-subagents", "num": 20, "title": "自定义 Subagent 的字段设计", "module": "W4", "tier": "B"}, {"slug": "forked-subagents", "num": 21, "title": "Forked Subagents：继承父级上下文", "module": "W4", "tier": "B"}, {"slug": "dynamic-subagents", "num": 22, "title": "Dynamic Subagents：让代码决定开多少个子任务", "module": "W4", "tier": "A"}, {"slug": "async-subagents", "num": 23, "title": "Async Subagents：跨请求长跑的子任务", "module": "W4", "tier": "B"}, {"slug": "task-planning-todos", "num": 24, "title": "任务规划与 write_todos", "module": "W4", "tier": "B"}, {"slug": "human-in-the-loop", "num": 25, "title": "Human-in-the-loop：在关键点按下暂停", "module": "W5", "tier": "A"}, {"slug": "fault-tolerance", "num": 26, "title": "容错：不是所有错误都该被同样对待", "module": "W5", "tier": "B"}, {"slug": "profiles", "num": 27, "title": "Profiles：让同一份代码适配不同模型", "module": "W5", "tier": "A"}, {"slug": "streaming", "num": 28, "title": "流式：把一棵树投影成几条流", "module": "W6", "tier": "B"}, {"slug": "event-streaming-subagents", "num": 29, "title": "stream.subagents：每个子任务一个句柄", "module": "W6", "tier": "A"}, {"slug": "frontend-overview", "num": 30, "title": "前端架构：coordinator-worker", "module": "W6", "tier": "B"}, {"slug": "frontend-todo-list", "num": 31, "title": "前端模式一：Todo List", "module": "W6", "tier": "B"}, {"slug": "frontend-subagent-streaming", "num": 32, "title": "前端模式二：Subagent 卡片", "module": "W6", "tier": "B"}, {"slug": "frontend-sandbox", "num": 33, "title": "前端模式三：IDE 式的沙箱界面", "module": "W6", "tier": "B"}, {"slug": "retrieval-and-rag", "num": 34, "title": "检索与 RAG：三种架构", "module": "W7", "tier": "B"}, {"slug": "deep-research-agent", "num": 35, "title": "成品模式一：Deep Research Agent", "module": "W7", "tier": "B"}, {"slug": "data-analysis-agent", "num": 36, "title": "成品模式二：Data Analysis Agent", "module": "W7", "tier": "B"}, {"slug": "content-builder-agent", "num": 37, "title": "成品模式三：Content Builder Agent", "module": "W7", "tier": "B"}, {"slug": "grading-rubrics", "num": 38, "title": "评分量表：让 agent 自己迭代到达标", "module": "W7", "tier": "B"}, {"slug": "going-to-production", "num": 39, "title": "走向生产", "module": "W7", "tier": "A"}, {"slug": "acp-and-ag-ui", "num": 40, "title": "对外协议：ACP 与 AG-UI", "module": "W7", "tier": "B"}], "refs": [{"slug": "glossary", "title": "术语表"}, {"slug": "stack-order", "title": "中间件栈速查"}, {"slug": "api-cheatsheet", "title": "API 速查"}, {"slug": "decision-map", "title": "选型决策图"}]};</script>
+<script src="../assets/course.js"></script>
+</body>
+</html>

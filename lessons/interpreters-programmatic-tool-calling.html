@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>解释器与程序化工具调用 · Deep Agents 教学站</title>
+<meta name="description" content="深入理解 Deep Agents agent harness 原理的中文教学站">
+<link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+<div class="sidebar-brand"><a href="../index.html">Deep Agents 教学站</a><span class="sub">Agent Harness 原理 · 中文</span></div>
+<div class="nav-group"><div class="nav-group-title">模块 A · 心智模型</div><ul>
+<li><a href="../lessons/agent-harness-mental-model.html" data-slug="agent-harness-mental-model"><span class="num">01</span><span>Agent Harness 的心智模型</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/three-layers-langchain-langgraph-deepagents.html" data-slug="three-layers-langchain-langgraph-deepagents"><span class="num">02</span><span>三层分工：LangChain / LangGraph / Deep Agents</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/create-deep-agent-anatomy.html" data-slug="create-deep-agent-anatomy"><span class="num">03</span><span>create_deep_agent 全景解剖</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/middleware-stack.html" data-slug="middleware-stack"><span class="num">04</span><span>Middleware 栈：harness 的骨架</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 B · 执行环境</div><ul>
+<li><a href="../lessons/tools-and-mcp.html" data-slug="tools-and-mcp"><span class="num">05</span><span>工具与 MCP：agent 的手</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/virtual-filesystem.html" data-slug="virtual-filesystem"><span class="num">06</span><span>虚拟文件系统：harness 的地基</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/backend-family.html" data-slug="backend-family"><span class="num">07</span><span>六个内建 Backend 的取舍</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/filesystem-permissions.html" data-slug="filesystem-permissions"><span class="num">08</span><span>声明式权限：像防火墙一样配文件访问</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/sandboxes.html" data-slug="sandboxes"><span class="num">09</span><span>沙箱：让 agent 跑代码而不伤到宿主机</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/interpreters-programmatic-tool-calling.html" data-slug="interpreters-programmatic-tool-calling" class="active"><span class="num">10</span><span>解释器与程序化工具调用</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 C · 上下文工程</div><ul>
+<li><a href="../lessons/four-context-layers.html" data-slug="four-context-layers"><span class="num">11</span><span>上下文的四个层次</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/input-context.html" data-slug="input-context"><span class="num">12</span><span>输入上下文：prompt 是怎么被拼出来的</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/skills-progressive-disclosure.html" data-slug="skills-progressive-disclosure"><span class="num">13</span><span>Skills：渐进式披露</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/memory-long-term.html" data-slug="memory-long-term"><span class="num">14</span><span>Memory：长期记忆的四个维度</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/context-compression.html" data-slug="context-compression"><span class="num">15</span><span>压缩：Offloading 与 Summarization</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/prompt-caching.html" data-slug="prompt-caching"><span class="num">16</span><span>Prompt Caching：为什么它决定了栈的顺序</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/state-and-runtime-context.html" data-slug="state-and-runtime-context"><span class="num">17</span><span>State Schema 与 Runtime Context</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/multimodal.html" data-slug="multimodal"><span class="num">18</span><span>多模态输入与输出</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 D · 委派</div><ul>
+<li><a href="../lessons/subagents-fundamentals.html" data-slug="subagents-fundamentals"><span class="num">19</span><span>Subagent 原理</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/custom-subagents.html" data-slug="custom-subagents"><span class="num">20</span><span>自定义 Subagent 的字段设计</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/forked-subagents.html" data-slug="forked-subagents"><span class="num">21</span><span>Forked Subagents：继承父级上下文</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/dynamic-subagents.html" data-slug="dynamic-subagents"><span class="num">22</span><span>Dynamic Subagents：让代码决定开多少个子任务</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/async-subagents.html" data-slug="async-subagents"><span class="num">23</span><span>Async Subagents：跨请求长跑的子任务</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/task-planning-todos.html" data-slug="task-planning-todos"><span class="num">24</span><span>任务规划与 write_todos</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 E · 运行时管控</div><ul>
+<li><a href="../lessons/human-in-the-loop.html" data-slug="human-in-the-loop"><span class="num">25</span><span>Human-in-the-loop：在关键点按下暂停</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/fault-tolerance.html" data-slug="fault-tolerance"><span class="num">26</span><span>容错：不是所有错误都该被同样对待</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/profiles.html" data-slug="profiles"><span class="num">27</span><span>Profiles：让同一份代码适配不同模型</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 F · 流式与前端</div><ul>
+<li><a href="../lessons/streaming.html" data-slug="streaming"><span class="num">28</span><span>流式：把一棵树投影成几条流</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/event-streaming-subagents.html" data-slug="event-streaming-subagents"><span class="num">29</span><span>stream.subagents：每个子任务一个句柄</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/frontend-overview.html" data-slug="frontend-overview"><span class="num">30</span><span>前端架构：coordinator-worker</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-todo-list.html" data-slug="frontend-todo-list"><span class="num">31</span><span>前端模式一：Todo List</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-subagent-streaming.html" data-slug="frontend-subagent-streaming"><span class="num">32</span><span>前端模式二：Subagent 卡片</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-sandbox.html" data-slug="frontend-sandbox"><span class="num">33</span><span>前端模式三：IDE 式的沙箱界面</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 G · 应用与生产</div><ul>
+<li><a href="../lessons/retrieval-and-rag.html" data-slug="retrieval-and-rag"><span class="num">34</span><span>检索与 RAG：三种架构</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/deep-research-agent.html" data-slug="deep-research-agent"><span class="num">35</span><span>成品模式一：Deep Research Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/data-analysis-agent.html" data-slug="data-analysis-agent"><span class="num">36</span><span>成品模式二：Data Analysis Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/content-builder-agent.html" data-slug="content-builder-agent"><span class="num">37</span><span>成品模式三：Content Builder Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/grading-rubrics.html" data-slug="grading-rubrics"><span class="num">38</span><span>评分量表：让 agent 自己迭代到达标</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/going-to-production.html" data-slug="going-to-production"><span class="num">39</span><span>走向生产</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/acp-and-ag-ui.html" data-slug="acp-and-ag-ui"><span class="num">40</span><span>对外协议：ACP 与 AG-UI</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">速查手册</div><ul>
+<li><a href="../reference/glossary.html" data-slug="glossary"><span class="num">▸</span><span>术语表</span></a></li>
+<li><a href="../reference/stack-order.html" data-slug="stack-order"><span class="num">▸</span><span>中间件栈速查</span></a></li>
+<li><a href="../reference/api-cheatsheet.html" data-slug="api-cheatsheet"><span class="num">▸</span><span>API 速查</span></a></li>
+<li><a href="../reference/decision-map.html" data-slug="decision-map"><span class="num">▸</span><span>选型决策图</span></a></li>
+</ul></div>
+</aside>
+<div class="main">
+  <div class="topbar"><div class="wrap">
+    <button class="menu-btn" aria-label="切换目录">☰</button>
+    <span class="crumbs"><a href="../index.html">课程地图</a> / <b>模块 B · 执行环境</b> / <b>第 10 课</b></span>
+    <span class="progress-pill">
+      <span class="txt">0%</span>
+      <span class="bar"><i></i></span>
+    </span>
+  </div></div>
+  <div class="wrap">
+<header class="lesson-head">
+  <div class="lesson-kicker">
+    <span>第 10 课</span>
+    <span class="dot">·</span>
+    <span>模块 B · 执行环境</span>
+    <span class="dot">·</span>
+    <span>13 分钟</span>
+    <span class="tier-badge">Tier A · 原理深挖</span>
+  </div>
+  <h1>解释器与程序化工具调用</h1>
+  <p class="lede">这是整份文档里最能体现"harness 思维"的一个机制。它解决的是一个几乎所有 agent 都会撞上的结构性问题：<b>模型一发就是一批工具调用，而这一批在发出的那一刻就冻结了。</b></p>
+</header>
+<article>
+<details class="toc-box"><summary>本页目录</summary>
+<ul>
+<li><a href="#_1">先看问题</a></li>
+<li><a href="#_2">解释器做的事</a></li>
+<li><a href="#ptc">程序化工具调用（PTC）</a></li>
+<li><a href="#dynamic-subagents">它和 dynamic subagents 的关系</a></li>
+<li><a href="#_3">能力对照表</a></li>
+<li><a href="#b">模块 B 结束</a></li>
+</ul>
+
+</details>
+<h2 id="_1">先看问题</h2>
+<p>一个 agent 处理"给 200 个条目各查一次"的任务，会发生什么：</p>
+<div class="flow col">
+  <div class="node"><span class="k">模型发出 N 个并行工具调用</span><span class="v">这一批在 emit 的瞬间就固定了</span></div>
+  <div class="arrow">↓</div>
+  <div class="node"><span class="k">N 个结果全部回到上下文</span><span class="v">每一个都占 token</span></div>
+  <div class="arrow">↓</div>
+  <div class="node"><span class="k">需要循环 / 分支 / 重试？</span><span class="v">只能再要一次模型 turn</span></div>
+  <div class="arrow">↓</div>
+  <div class="node dim"><span class="k">模型自己决定发几次</span><span class="v">于是它通常只采样一部分，而不是覆盖全部</span></div>
+</div>
+
+<p>官方对这一段的描述非常精确，值得逐句读：</p>
+<div class="callout key">
+<p class="callout-title">官方原话</p>
+<p>A model can fire several tool calls in one turn, but that batch is fixed the moment
+it is emitted. Nothing can loop, branch on a result, retry a failure, or feed one call's
+output into the next without another model turn, and every result returns to the model's context.
+The model also decides how many calls to issue, so asking it to dispatch work across hundreds of items
+is unreliable, and it tends to cover a sample rather than every item.</p>
+<p>两个问题被点名了：
+1. <strong>控制流不存在</strong>——批内不能循环、不能分支、不能重试。
+2. <strong>覆盖不可靠</strong>——模型倾向于采样，而不是穷举。</p>
+</div>
+<h2 id="_2">解释器做的事</h2>
+<p><strong>把编排搬进代码。</strong></p>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">deepagents</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_deep_agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_quickjs</span><span class="w"> </span><span class="kn">import</span> <span class="n">CodeInterpreterMiddleware</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">create_deep_agent</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">"openai:gpt-5.5"</span><span class="p">,</span>
+    <span class="n">middleware</span><span class="o">=</span><span class="p">[</span><span class="n">CodeInterpreterMiddleware</span><span class="p">()],</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<div class="code-label">bash</div><div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span><span class="s2">"deepagents[quickjs]"</span>
+</code></pre></div>
+
+<p>它给 agent 加了一个 <code>eval</code> 工具，在一个<strong>作用域受限的 QuickJS 运行时</strong>里执行 JavaScript。
+关键性质：</p>
+<table>
+<thead>
+<tr>
+<th>性质</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>在内存里</strong></td>
+<td>不落盘、不需要环境准备，和沙箱完全不同量级</td>
+</tr>
+<tr>
+<td><strong>中间结果不回流</strong></td>
+<td>只有你显式返回的值进入上下文</td>
+</tr>
+<tr>
+<td><strong>有状态</strong></td>
+<td>中间变量在运行状态里保留，不需要靠对话传递</td>
+</tr>
+<tr>
+<td><strong>无 shell / 无包安装 / 无文件系统 / 无网络</strong></td>
+<td>这是安全边界，也是能力边界</td>
+</tr>
+</tbody>
+</table>
+<div class="callout">
+<p class="callout-title">一句话区分解释器与沙箱</p>
+<p>官方给了一句很好记的对照：</p>
+<p><strong>沙箱是"对环境的代码优先"方式</strong>（跑命令、装依赖、改文件、OS 级执行）；
+<strong>解释器是"对组合的代码优先"方式</strong>（组合工具、保留状态、决定什么信息回到模型）。</p>
+</div>
+<div class="compare">
+<div class="yes">
+<h4>用解释器</h4>
+<ul>
+<li>纯内存的循环、分支、重试</li>
+<li>结构化数据的排序、分组、校验、聚合</li>
+<li>把多个工具调用串起来，中间值不回流</li>
+<li>从代码里派发 subagent（下一项）</li>
+</ul>
+</div>
+<div class="no">
+<h4>用沙箱</h4>
+<ul>
+<li>需要 shell 命令</li>
+<li>需要安装依赖包</li>
+<li>需要跑测试、编译</li>
+<li>需要完整的 OS 文件系统访问</li>
+</ul>
+</div>
+</div>
+
+<h2 id="ptc">程序化工具调用（PTC）</h2>
+<p>解释器本身只是"能算"。真正改变能力的是 <strong>PTC</strong>：允许解释器里的代码去调用<strong>选定的工具</strong>。</p>
+<p>于是控制流回到了代码手里：</p>
+<div class="code-label">javascript</div><div class="highlight"><pre><span></span><code><span class="c1">// 概念示意：模型写一次代码，代码自己循环</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">item</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">items</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">          </span><span class="c1">// ← 循环</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tool</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">q</span><span class="o">:</span><span class="w"> </span><span class="nx">item</span><span class="w"> </span><span class="p">});</span><span class="w">   </span><span class="c1">// ← 工具调用</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span><span class="w"> </span><span class="nx">results</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">title</span><span class="p">);</span><span class="w">   </span><span class="c1">// ← 分支</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">tool</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">q</span><span class="o">:</span><span class="w"> </span><span class="nx">item</span><span class="w"> </span><span class="p">});</span><span class="w">        </span><span class="c1">// ← 重试</span>
+<span class="p">}</span>
+<span class="k">return</span><span class="w"> </span><span class="nx">results</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="w">               </span><span class="c1">// ← 只有这个值回到上下文</span>
+</code></pre></div>
+
+<p>对比一下 token 消耗：</p>
+<div class="flow">
+  <div class="node dim"><span class="k">普通循环</span><span class="v">200 次工具调用 → 200 个结果进上下文</span></div>
+  <div class="arrow">vs</div>
+  <div class="node hi"><span class="k">PTC</span><span class="v">200 次工具调用 → 只有返回值进上下文</span></div>
+</div>
+
+<div class="callout warn">
+<p class="callout-title">这是 beta</p>
+<p>官方在页面上标了 beta，并注明需要 <code>langchain-quickjs&gt;=0.2.0</code> 与 Python 3.11+。
+API 与生命周期行为可能在版本之间变化。学机制可以放心，上生产要有心理准备。</p>
+</div>
+<h2 id="dynamic-subagents">它和 dynamic subagents 的关系</h2>
+<p>解释器让 agent 能从代码里<strong>派发 subagent</strong>——这就是下一大块内容。
+官方把它放在"为什么用解释器"的四个卡片里的第二张：
+Programmatic tool calling 之外就是 Dynamic subagents。</p>
+<div class="flow">
+  <div class="node"><span class="k">解释器</span><span class="v">在内存里跑 JS</span></div>
+  <div class="arrow">→</div>
+  <div class="node"><span class="k">+ PTC</span><span class="v">代码里能调工具</span></div>
+  <div class="arrow">→</div>
+  <div class="node hi"><span class="k">+ Dynamic subagents</span><span class="v">代码里能开子代理（第 22 课）</span></div>
+</div>
+
+<h2 id="_3">能力对照表</h2>
+<p>官方给了一张"我该用哪个"的决策表，值得整段记住：</p>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>用什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一两次简单的外部调用</td>
+<td>普通工具调用</td>
+</tr>
+<tr>
+<td>纯内存 JS：循环、分支、重试、数据变换</td>
+<td>解释器</td>
+</tr>
+<tr>
+<td>大量外部工具调用，且要由代码编排</td>
+<td>解释器 + PTC</td>
+</tr>
+<tr>
+<td>大量独立工作单元 / 多视角 / 对超大输入的递归分析</td>
+<td>解释器 + dynamic subagents</td>
+</tr>
+<tr>
+<td>shell 命令、装包、跑测试、完整 OS 文件访问</td>
+<td>沙箱</td>
+</tr>
+</tbody>
+</table>
+<h2 id="b">模块 B 结束</h2>
+<p>到这里，agent 的"手"已经讲完了：工具、文件系统、权限、沙箱、解释器。
+下一模块进入 harness 存在的<strong>真正理由</strong>——上下文。</p>
+</article>
+<section class="quiz" data-slug="interpreters-programmatic-tool-calling">
+<div class="quiz-head"><span>检索练习 · 不要回看上文，先试着回忆</span><span class="score">0 / 4 正确</span></div>
+<div class="quiz-body">
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">01</span>官方指出普通 tool-calling 循环最根本的结构性限制是什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>工具返回结果没有类型标注</span></li>
+<li><span class="mk">B</span><span>模型无法并行发出多个工具调用</span></li>
+<li><span class="mk">C</span><span>一批工具调用在发出的瞬间就固定了，无法循环或分支</span></li>
+<li><span class="mk">D</span><span>工具调用不能携带超过一个参数</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方原文强调 "that batch is fixed the moment it is emitted"。循环、分支、重试、把一次输出喂给下一次，都需要额外的模型 turn，而每个结果都要回到上下文。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">02</span>解释器与沙箱最核心的分工差异是？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>解释器更快，沙箱更安全</span></li>
+<li><span class="mk">B</span><span>解释器支持 Python，沙箱只支持 JS</span></li>
+<li><span class="mk">C</span><span>解释器用于组合与状态管理，沙箱用于作用于环境</span></li>
+<li><span class="mk">D</span><span>解释器能联网，沙箱不能联网</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方的划分是：沙箱是 code-first 地作用于环境（命令、依赖、文件、OS）；解释器是 code-first 地组合工具、保留状态、控制返回给模型的信息。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">03</span>PTC 节省 token 的机制是什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>它把工具结果压缩后再返回</span></li>
+<li><span class="mk">B</span><span>它把工具结果缓存在沙箱磁盘里</span></li>
+<li><span class="mk">C</span><span>中间结果留在解释器内存，只有显式返回值进入上下文</span></li>
+<li><span class="mk">D</span><span>它把多次工具调用合并成一次请求</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>关键性质是"中间结果不成为模型上下文的一部分"。200 次调用的产物可以只以一个数字或一个短数组的形式回到模型。</div>
+</div>
+<div class="q" data-answer="3">
+<div class="q-text"><span class="qno">04</span>下面哪项任务最应该用沙箱而不是解释器？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>把 500 条记录按分数排序并取前十</span></li>
+<li><span class="mk">B</span><span>在代码里循环重试一个不稳定的 API</span></li>
+<li><span class="mk">C</span><span>把多个工具的返回值合并成一个对象</span></li>
+<li><span class="mk">D</span><span>安装依赖并运行项目测试套件</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>涉及 shell、依赖安装、测试运行、完整 OS 文件系统访问时用沙箱。其余三项都是纯内存编排，属于解释器的领域。</div>
+</div>
+</div>
+<div class="quiz-foot"><span class="result"></span><br><button class="reset">重做</button><button class="reveal">显示全部解析</button></div>
+</section>
+<div class="mastery">
+  <label><input type="checkbox" data-slug="interpreters-programmatic-tool-calling">
+  <span>本课已掌握
+  <span class="hint">勾选后，左侧目录和首页会标记完成，进度保存在本机浏览器里。
+  能通过上面的自测、并且能不看笔记复述本课的核心机制，再勾。</span></span></label>
+</div>
+<footer class="lesson-foot">
+  <div class="source-box"><span class="lbl">本课事实来源 · 建议通读原文</span><a href="https://docs.langchain.com/oss/python/deepagents/interpreters" target="_blank" rel="noopener">Interpreters（官方）</a><br><span style="color:#8b909c;font-size:11.5px">https://docs.langchain.com/oss/python/deepagents/interpreters</span></div>
+  <div class="ask-teacher">有讲不清楚的地方，直接把问题抛给我——我是这门课的老师，
+  可以就任何一节、任何一行代码展开，也可以按你的问题临时加一课。</div>
+  <div class="prevnext"><a class="prev" href="sandboxes.html"><span class="dir">← 上一课</span><span class="ttl">沙箱：让 agent 跑代码而不伤到宿主机</span></a><a class="next" href="four-context-layers.html"><span class="dir">下一课 →</span><span class="ttl">上下文的四个层次</span></a></div>
+</footer>
+  </div>
+</div>
+</div>
+<script>window.SITE = {"lessons": [{"slug": "agent-harness-mental-model", "num": 1, "title": "Agent Harness 的心智模型", "module": "W1", "tier": "A"}, {"slug": "three-layers-langchain-langgraph-deepagents", "num": 2, "title": "三层分工：LangChain / LangGraph / Deep Agents", "module": "W1", "tier": "A"}, {"slug": "create-deep-agent-anatomy", "num": 3, "title": "create_deep_agent 全景解剖", "module": "W1", "tier": "A"}, {"slug": "middleware-stack", "num": 4, "title": "Middleware 栈：harness 的骨架", "module": "W1", "tier": "A"}, {"slug": "tools-and-mcp", "num": 5, "title": "工具与 MCP：agent 的手", "module": "W2", "tier": "B"}, {"slug": "virtual-filesystem", "num": 6, "title": "虚拟文件系统：harness 的地基", "module": "W2", "tier": "A"}, {"slug": "backend-family", "num": 7, "title": "六个内建 Backend 的取舍", "module": "W2", "tier": "A"}, {"slug": "filesystem-permissions", "num": 8, "title": "声明式权限：像防火墙一样配文件访问", "module": "W2", "tier": "B"}, {"slug": "sandboxes", "num": 9, "title": "沙箱：让 agent 跑代码而不伤到宿主机", "module": "W2", "tier": "B"}, {"slug": "interpreters-programmatic-tool-calling", "num": 10, "title": "解释器与程序化工具调用", "module": "W2", "tier": "A"}, {"slug": "four-context-layers", "num": 11, "title": "上下文的四个层次", "module": "W3", "tier": "A"}, {"slug": "input-context", "num": 12, "title": "输入上下文：prompt 是怎么被拼出来的", "module": "W3", "tier": "B"}, {"slug": "skills-progressive-disclosure", "num": 13, "title": "Skills：渐进式披露", "module": "W3", "tier": "A"}, {"slug": "memory-long-term", "num": 14, "title": "Memory：长期记忆的四个维度", "module": "W3", "tier": "A"}, {"slug": "context-compression", "num": 15, "title": "压缩：Offloading 与 Summarization", "module": "W3", "tier": "A"}, {"slug": "prompt-caching", "num": 16, "title": "Prompt Caching：为什么它决定了栈的顺序", "module": "W3", "tier": "B"}, {"slug": "state-and-runtime-context", "num": 17, "title": "State Schema 与 Runtime Context", "module": "W3", "tier": "A"}, {"slug": "multimodal", "num": 18, "title": "多模态输入与输出", "module": "W3", "tier": "B"}, {"slug": "subagents-fundamentals", "num": 19, "title": "Subagent 原理", "module": "W4", "tier": "A"}, {"slug": "custom-subagents", "num": 20, "title": "自定义 Subagent 的字段设计", "module": "W4", "tier": "B"}, {"slug": "forked-subagents", "num": 21, "title": "Forked Subagents：继承父级上下文", "module": "W4", "tier": "B"}, {"slug": "dynamic-subagents", "num": 22, "title": "Dynamic Subagents：让代码决定开多少个子任务", "module": "W4", "tier": "A"}, {"slug": "async-subagents", "num": 23, "title": "Async Subagents：跨请求长跑的子任务", "module": "W4", "tier": "B"}, {"slug": "task-planning-todos", "num": 24, "title": "任务规划与 write_todos", "module": "W4", "tier": "B"}, {"slug": "human-in-the-loop", "num": 25, "title": "Human-in-the-loop：在关键点按下暂停", "module": "W5", "tier": "A"}, {"slug": "fault-tolerance", "num": 26, "title": "容错：不是所有错误都该被同样对待", "module": "W5", "tier": "B"}, {"slug": "profiles", "num": 27, "title": "Profiles：让同一份代码适配不同模型", "module": "W5", "tier": "A"}, {"slug": "streaming", "num": 28, "title": "流式：把一棵树投影成几条流", "module": "W6", "tier": "B"}, {"slug": "event-streaming-subagents", "num": 29, "title": "stream.subagents：每个子任务一个句柄", "module": "W6", "tier": "A"}, {"slug": "frontend-overview", "num": 30, "title": "前端架构：coordinator-worker", "module": "W6", "tier": "B"}, {"slug": "frontend-todo-list", "num": 31, "title": "前端模式一：Todo List", "module": "W6", "tier": "B"}, {"slug": "frontend-subagent-streaming", "num": 32, "title": "前端模式二：Subagent 卡片", "module": "W6", "tier": "B"}, {"slug": "frontend-sandbox", "num": 33, "title": "前端模式三：IDE 式的沙箱界面", "module": "W6", "tier": "B"}, {"slug": "retrieval-and-rag", "num": 34, "title": "检索与 RAG：三种架构", "module": "W7", "tier": "B"}, {"slug": "deep-research-agent", "num": 35, "title": "成品模式一：Deep Research Agent", "module": "W7", "tier": "B"}, {"slug": "data-analysis-agent", "num": 36, "title": "成品模式二：Data Analysis Agent", "module": "W7", "tier": "B"}, {"slug": "content-builder-agent", "num": 37, "title": "成品模式三：Content Builder Agent", "module": "W7", "tier": "B"}, {"slug": "grading-rubrics", "num": 38, "title": "评分量表：让 agent 自己迭代到达标", "module": "W7", "tier": "B"}, {"slug": "going-to-production", "num": 39, "title": "走向生产", "module": "W7", "tier": "A"}, {"slug": "acp-and-ag-ui", "num": 40, "title": "对外协议：ACP 与 AG-UI", "module": "W7", "tier": "B"}], "refs": [{"slug": "glossary", "title": "术语表"}, {"slug": "stack-order", "title": "中间件栈速查"}, {"slug": "api-cheatsheet", "title": "API 速查"}, {"slug": "decision-map", "title": "选型决策图"}]};</script>
+<script src="../assets/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profiles：让同一份代码适配不同模型 · Deep Agents 教学站</title>
+<meta name="description" content="深入理解 Deep Agents agent harness 原理的中文教学站">
+<link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+<div class="sidebar-brand"><a href="../index.html">Deep Agents 教学站</a><span class="sub">Agent Harness 原理 · 中文</span></div>
+<div class="nav-group"><div class="nav-group-title">模块 A · 心智模型</div><ul>
+<li><a href="../lessons/agent-harness-mental-model.html" data-slug="agent-harness-mental-model"><span class="num">01</span><span>Agent Harness 的心智模型</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/three-layers-langchain-langgraph-deepagents.html" data-slug="three-layers-langchain-langgraph-deepagents"><span class="num">02</span><span>三层分工：LangChain / LangGraph / Deep Agents</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/create-deep-agent-anatomy.html" data-slug="create-deep-agent-anatomy"><span class="num">03</span><span>create_deep_agent 全景解剖</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/middleware-stack.html" data-slug="middleware-stack"><span class="num">04</span><span>Middleware 栈：harness 的骨架</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 B · 执行环境</div><ul>
+<li><a href="../lessons/tools-and-mcp.html" data-slug="tools-and-mcp"><span class="num">05</span><span>工具与 MCP：agent 的手</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/virtual-filesystem.html" data-slug="virtual-filesystem"><span class="num">06</span><span>虚拟文件系统：harness 的地基</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/backend-family.html" data-slug="backend-family"><span class="num">07</span><span>六个内建 Backend 的取舍</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/filesystem-permissions.html" data-slug="filesystem-permissions"><span class="num">08</span><span>声明式权限：像防火墙一样配文件访问</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/sandboxes.html" data-slug="sandboxes"><span class="num">09</span><span>沙箱：让 agent 跑代码而不伤到宿主机</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/interpreters-programmatic-tool-calling.html" data-slug="interpreters-programmatic-tool-calling"><span class="num">10</span><span>解释器与程序化工具调用</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 C · 上下文工程</div><ul>
+<li><a href="../lessons/four-context-layers.html" data-slug="four-context-layers"><span class="num">11</span><span>上下文的四个层次</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/input-context.html" data-slug="input-context"><span class="num">12</span><span>输入上下文：prompt 是怎么被拼出来的</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/skills-progressive-disclosure.html" data-slug="skills-progressive-disclosure"><span class="num">13</span><span>Skills：渐进式披露</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/memory-long-term.html" data-slug="memory-long-term"><span class="num">14</span><span>Memory：长期记忆的四个维度</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/context-compression.html" data-slug="context-compression"><span class="num">15</span><span>压缩：Offloading 与 Summarization</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/prompt-caching.html" data-slug="prompt-caching"><span class="num">16</span><span>Prompt Caching：为什么它决定了栈的顺序</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/state-and-runtime-context.html" data-slug="state-and-runtime-context"><span class="num">17</span><span>State Schema 与 Runtime Context</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/multimodal.html" data-slug="multimodal"><span class="num">18</span><span>多模态输入与输出</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 D · 委派</div><ul>
+<li><a href="../lessons/subagents-fundamentals.html" data-slug="subagents-fundamentals"><span class="num">19</span><span>Subagent 原理</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/custom-subagents.html" data-slug="custom-subagents"><span class="num">20</span><span>自定义 Subagent 的字段设计</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/forked-subagents.html" data-slug="forked-subagents"><span class="num">21</span><span>Forked Subagents：继承父级上下文</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/dynamic-subagents.html" data-slug="dynamic-subagents"><span class="num">22</span><span>Dynamic Subagents：让代码决定开多少个子任务</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/async-subagents.html" data-slug="async-subagents"><span class="num">23</span><span>Async Subagents：跨请求长跑的子任务</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/task-planning-todos.html" data-slug="task-planning-todos"><span class="num">24</span><span>任务规划与 write_todos</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 E · 运行时管控</div><ul>
+<li><a href="../lessons/human-in-the-loop.html" data-slug="human-in-the-loop"><span class="num">25</span><span>Human-in-the-loop：在关键点按下暂停</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/fault-tolerance.html" data-slug="fault-tolerance"><span class="num">26</span><span>容错：不是所有错误都该被同样对待</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/profiles.html" data-slug="profiles" class="active"><span class="num">27</span><span>Profiles：让同一份代码适配不同模型</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 F · 流式与前端</div><ul>
+<li><a href="../lessons/streaming.html" data-slug="streaming"><span class="num">28</span><span>流式：把一棵树投影成几条流</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/event-streaming-subagents.html" data-slug="event-streaming-subagents"><span class="num">29</span><span>stream.subagents：每个子任务一个句柄</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/frontend-overview.html" data-slug="frontend-overview"><span class="num">30</span><span>前端架构：coordinator-worker</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-todo-list.html" data-slug="frontend-todo-list"><span class="num">31</span><span>前端模式一：Todo List</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-subagent-streaming.html" data-slug="frontend-subagent-streaming"><span class="num">32</span><span>前端模式二：Subagent 卡片</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-sandbox.html" data-slug="frontend-sandbox"><span class="num">33</span><span>前端模式三：IDE 式的沙箱界面</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 G · 应用与生产</div><ul>
+<li><a href="../lessons/retrieval-and-rag.html" data-slug="retrieval-and-rag"><span class="num">34</span><span>检索与 RAG：三种架构</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/deep-research-agent.html" data-slug="deep-research-agent"><span class="num">35</span><span>成品模式一：Deep Research Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/data-analysis-agent.html" data-slug="data-analysis-agent"><span class="num">36</span><span>成品模式二：Data Analysis Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/content-builder-agent.html" data-slug="content-builder-agent"><span class="num">37</span><span>成品模式三：Content Builder Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/grading-rubrics.html" data-slug="grading-rubrics"><span class="num">38</span><span>评分量表：让 agent 自己迭代到达标</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/going-to-production.html" data-slug="going-to-production"><span class="num">39</span><span>走向生产</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/acp-and-ag-ui.html" data-slug="acp-and-ag-ui"><span class="num">40</span><span>对外协议：ACP 与 AG-UI</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">速查手册</div><ul>
+<li><a href="../reference/glossary.html" data-slug="glossary"><span class="num">▸</span><span>术语表</span></a></li>
+<li><a href="../reference/stack-order.html" data-slug="stack-order"><span class="num">▸</span><span>中间件栈速查</span></a></li>
+<li><a href="../reference/api-cheatsheet.html" data-slug="api-cheatsheet"><span class="num">▸</span><span>API 速查</span></a></li>
+<li><a href="../reference/decision-map.html" data-slug="decision-map"><span class="num">▸</span><span>选型决策图</span></a></li>
+</ul></div>
+</aside>
+<div class="main">
+  <div class="topbar"><div class="wrap">
+    <button class="menu-btn" aria-label="切换目录">☰</button>
+    <span class="crumbs"><a href="../index.html">课程地图</a> / <b>模块 E · 运行时管控</b> / <b>第 27 课</b></span>
+    <span class="progress-pill">
+      <span class="txt">0%</span>
+      <span class="bar"><i></i></span>
+    </span>
+  </div></div>
+  <div class="wrap">
+<header class="lesson-head">
+  <div class="lesson-kicker">
+    <span>第 27 课</span>
+    <span class="dot">·</span>
+    <span>模块 E · 运行时管控</span>
+    <span class="dot">·</span>
+    <span>13 分钟</span>
+    <span class="tier-badge">Tier A · 原理深挖</span>
+  </div>
+  <h1>Profiles：让同一份代码适配不同模型</h1>
+  <p class="lede">模型之间差异很大：有的不支持某些工具，有的需要不同的提示风格，有的要特殊参数。如果把适配逻辑写进 <code>create_deep_agent</code> 调用处，你的代码会变成一堆 <code>if provider == ...</code>。Profile 是官方给的解法。</p>
+</header>
+<article>
+<details class="toc-box"><summary>本页目录</summary>
+<ul>
+<li><a href="#profile">两种 profile，别搞混</a></li>
+<li><a href="#_1">核心价值：把适配从调用处移走</a></li>
+<li><a href="#_2">字段全清单</a></li>
+<li><a href="#_3">查找顺序（传模型对象时）</a></li>
+<li><a href="#_4">注册键：两级</a></li>
+<li><a href="#_5">合并语义</a></li>
+<li><a href="#excluded_middleware">excluded_middleware 的两种写法</a></li>
+<li><a href="#_6">三条必记的硬约束</a></li>
+<li><a href="#e">模块 E 结束</a></li>
+</ul>
+
+</details>
+<h2 id="profile">两种 profile，别搞混</h2>
+<div class="compare">
+<div class="yes">
+<h4>Harness profile（关注 harness）</h4>
+<ul>
+<li>调整系统提示、工具描述</li>
+<li>排除工具或 middleware</li>
+<li>增加 middleware</li>
+<li>配置 general-purpose subagent</li>
+<li><b>会改变 agent 的行为</b></li>
+</ul>
+</div>
+<div class="no">
+<h4>Provider profile（关注构造）</h4>
+<ul>
+<li>temperature、timeout 等默认值</li>
+<li>共享的凭据检查</li>
+<li>运行时计算的设置</li>
+<li><b>不影响 harness</b></li>
+</ul>
+</div>
+</div>
+
+<p>官方对 provider profile 的定位很明确：
+<strong>大多数调用者不需要它。</strong> 它主要给"打包一个集成"的库作者用。</p>
+<p>所以<strong>这一课的重点是 harness profile</strong>。</p>
+<h2 id="_1">核心价值：把适配从调用处移走</h2>
+<p>先看它解决的问题：</p>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="c1"># 没有 profile 的世界</span>
+<span class="k">if</span> <span class="n">model_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"openai"</span><span class="p">):</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">create_deep_agent</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">system_prompt</span><span class="o">=</span><span class="n">prompt</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Respond in under 100 words."</span><span class="p">)</span>
+    <span class="o">...</span>
+<span class="k">elif</span> <span class="s2">"bedrock"</span> <span class="ow">in</span> <span class="n">model_name</span><span class="p">:</span>
+    <span class="o">...</span>
+</code></pre></div>
+
+<p>有了 harness profile，适配变成<strong>注册式</strong>的：</p>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">deepagents</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GeneralPurposeSubagentProfile</span><span class="p">,</span>
+    <span class="n">HarnessProfile</span><span class="p">,</span>
+    <span class="n">register_harness_profile</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">register_harness_profile</span><span class="p">(</span>
+    <span class="s2">"openai:gpt-6-astra"</span><span class="p">,</span>
+    <span class="n">HarnessProfile</span><span class="p">(</span>
+        <span class="n">system_prompt_suffix</span><span class="o">=</span><span class="s2">"Respond in under 100 words."</span><span class="p">,</span>
+        <span class="n">excluded_tools</span><span class="o">=</span><span class="p">{</span><span class="s2">"execute"</span><span class="p">},</span>
+        <span class="n">excluded_middleware</span><span class="o">=</span><span class="p">{</span><span class="s2">"SummarizationMiddleware"</span><span class="p">},</span>
+        <span class="n">general_purpose_subagent</span><span class="o">=</span><span class="n">GeneralPurposeSubagentProfile</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># 调用处完全不知道这些差异存在</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">create_deep_agent</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"openai:gpt-6-astra"</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="callout">
+<p class="callout-title">这是"关注点分离"的教科书案例</p>
+<p><strong>调用处表达意图（我要一个研究 agent）；profile 表达适配（这个模型需要这样照顾）。</strong>
+换模型时，不需要改任何调用代码。</p>
+<p>而且 profile 可以<strong>打包成 plugin 分发</strong>——一个供应商的支持者可以把适配逻辑
+做成一个包，用户装上就生效。</p>
+</div>
+<h2 id="_2">字段全清单</h2>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>base_system_prompt</code></td>
+<td>设置该 profile 的基础指令。对主 agent 来说<strong>跟在调用方指令之后</strong>；对声明式 subagent 来说<strong>替换</strong>它自己写的提示</td>
+</tr>
+<tr>
+<td><code>system_prompt_suffix</code></td>
+<td>追加在最后。对<strong>主 agent、声明式 subagent、自动添加的 general-purpose subagent 都生效</strong></td>
+</tr>
+<tr>
+<td><code>tool_description_overrides</code></td>
+<td>按工具名覆盖工具描述</td>
+</tr>
+<tr>
+<td><code>excluded_tools</code></td>
+<td>移除 harness 级工具（按名字匹配，<strong>后置过滤</strong>）</td>
+</tr>
+<tr>
+<td><code>excluded_middleware</code></td>
+<td>从栈里剥掉指定 middleware（类或字符串名都行）</td>
+</tr>
+<tr>
+<td><code>extra_middleware</code></td>
+<td>给该 profile 适用的每个栈追加 middleware</td>
+</tr>
+<tr>
+<td><code>general_purpose_subagent</code></td>
+<td>禁用、改名、改提示</td>
+</tr>
+</tbody>
+</table>
+<div class="callout key">
+<p class="callout-title">prompt 位置的两条铁律</p>
+<p>官方特意用 Note 框强调：</p>
+<ol>
+<li><strong>调用方提供的 <code>system_prompt</code> 永远在拼装结果的最前面。</strong></li>
+<li><strong><code>system_prompt_suffix</code> 永远在最后。</strong></li>
+<li>无论最终选中哪个模型，这两条都成立。</li>
+</ol>
+<p>而且 <strong>subagent 会重新跑一遍 profile 解析</strong>——它按自己的模型解析，不是继承父级结果。</p>
+</div>
+<h2 id="_3">查找顺序（传模型对象时）</h2>
+<p>当你传的是一个已经构造好的模型实例，harness 要靠它自报的 provider 与 identifier 去查 profile：</p>
+<div class="flow col">
+  <div class="node hi"><span class="idx"></span><span class="k">1. 精确匹配</span><span class="v">provider:identifier</span></div>
+  <div class="arrow">↓ 没有</div>
+  <div class="node"><span class="k">2. 只用 identifier</span><span class="v">仅当 identifier 本身已含冒号</span></div>
+  <div class="arrow">↓ 没有</div>
+  <div class="node"><span class="k">3. provider 默认</span><span class="v">provider 未知时，退回 identifier 前缀的默认</span></div>
+</div>
+
+<p>官方注明：<strong>两个精确候选都优先于 provider 默认。</strong></p>
+<h2 id="_4">注册键：两级</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="c1"># provider 级：对该 provider 的所有模型生效</span>
+<span class="n">register_harness_profile</span><span class="p">(</span>
+    <span class="s2">"my_provider"</span><span class="p">,</span>
+    <span class="n">HarnessProfile</span><span class="p">(</span>
+        <span class="n">excluded_tools</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({</span><span class="s2">"execute"</span><span class="p">}),</span>
+        <span class="n">system_prompt_suffix</span><span class="o">=</span><span class="s2">"Respond in under 500 words."</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># model 级：只对该模型生效，未设字段继承 provider 级</span>
+<span class="n">register_harness_profile</span><span class="p">(</span>
+    <span class="s2">"my_provider:my-model:tag"</span><span class="p">,</span>
+    <span class="n">HarnessProfile</span><span class="p">(</span><span class="n">system_prompt_suffix</span><span class="o">=</span><span class="s2">"Respond in under 100 words."</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<div class="callout warn">
+<p class="callout-title">只有第一个冒号是分隔符</p>
+<p>对键 <code>my_provider:my-model:tag</code>：
+- provider 是 <code>my_provider</code>
+- <strong>完整的 model identifier 是 <code>my-model:tag</code></strong>（后面所有冒号都属于它）</p>
+<p>这个细节在配置 provider 名字里本身带冒号时很关键。</p>
+</div>
+<p>还有一条容易踩的：</p>
+<div class="callout">
+<p class="callout-title">没有通配符键</p>
+<p>官方明确说：<strong>不存在一个匹配所有 provider 的通配键。</strong>
+如果你想让某个调整对所有模型生效，必须在每个用到的 provider 键下各注册一次。</p>
+<p>官方的指导是：<strong>profile 是给"取决于所选模型"的调整用的；
+与模型无关的全局调整应该写在 <code>create_deep_agent</code> 调用处。</strong></p>
+</div>
+<h2 id="_5">合并语义</h2>
+<p>这条很重要，因为<strong>重复注册是"叠加"而不是"替换"</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>合并行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>base_system_prompt</code>、<code>system_prompt_suffix</code></td>
+<td>设了就赢，否则继承</td>
+</tr>
+<tr>
+<td><code>tool_description_overrides</code></td>
+<td>按键合并，同键新值胜</td>
+</tr>
+<tr>
+<td><code>excluded_tools</code>、<code>excluded_middleware</code></td>
+<td><strong>集合并集</strong></td>
+</tr>
+<tr>
+<td><code>extra_middleware</code></td>
+<td>按具体类型合并：新实例替换原有位置的实例，新类型追加</td>
+</tr>
+<tr>
+<td><code>general_purpose_subagent</code></td>
+<td>逐字段合并，未设的继承</td>
+</tr>
+<tr>
+<td><code>init_kwargs</code>（provider）</td>
+<td>字典按键合并</td>
+</tr>
+<tr>
+<td><code>pre_init</code>（provider）</td>
+<td>可调用对象链式执行：先原有，再新的</td>
+</tr>
+<tr>
+<td><code>init_kwargs_factory</code>（provider）</td>
+<td>工厂链式执行并在每次构造模型时合并输出</td>
+</tr>
+</tbody>
+</table>
+<p><strong>"重复注册会合并不是替换"有一个直接推论</strong>：
+你可以<strong>在官方内建 profile 的键上注册</strong>，从而定制它，而不是从零重写。</p>
+<h2 id="excluded_middleware"><code>excluded_middleware</code> 的两种写法</h2>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>类本身，或匹配 <code>AgentMiddleware.name</code> 的字符串</td>
+<td>内建与公开别名，如 <code>"SummarizationMiddleware"</code></td>
+</tr>
+<tr>
+<td><code>module:Class</code> 导入引用</td>
+<td>从配置文件里精确指定某个类</td>
+</tr>
+</tbody>
+</table>
+<div class="callout">
+<p class="callout-title">导入引用会执行 Python 代码</p>
+<p>官方明确警告：导入引用是<strong>惰性解析</strong>的，只能用在你信任的本地配置上
+——<strong>加载一个就会 import 一段 Python 代码。</strong></p>
+</div>
+<h2 id="_6">三条必记的硬约束</h2>
+<div class="callout warn">
+<p class="callout-title">以下 middleware 不能排除</p>
+<p>在 <code>excluded_middleware</code> 里列出 <strong><code>FilesystemMiddleware</code>、<code>SubAgentMiddleware</code>
+或内部权限 middleware</strong>，会直接抛 <code>ValueError</code>——它们是必需脚手架。</p>
+<p>想隐藏它们的工具，用 <code>excluded_tools</code>；想去掉 subagent 能力，
+用 <code>general_purpose_subagent.enabled = False</code>（第 19 课）。</p>
+</div>
+<div class="callout">
+<p class="callout-title"><code>excluded_tools</code> 是后置过滤器</p>
+<p>因为它按名字匹配、并且在<strong>所有 middleware 都注入完工具之后</strong>才执行，
+所以它既能删掉用户传入的工具，也能删掉 harness middleware 加的工具。
+这是它比"在 create_deep_agent 里少传几个工具"更强的地方。</p>
+</div>
+<h2 id="e">模块 E 结束</h2>
+<p>管控层讲完了：中断、容错、profile。
+下一模块换一个视角——<strong>agent 在跑的时候，前端怎么看见它在干什么？</strong></p>
+</article>
+<section class="quiz" data-slug="profiles">
+<div class="quiz-head"><span>检索练习 · 不要回看上文，先试着回忆</span><span class="score">0 / 4 正确</span></div>
+<div class="quiz-body">
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">01</span>在 provider 级与 model 级 profile 同时存在时，合并规则是？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>model 级的整体替换 provider 级</span></li>
+<li><span class="mk">B</span><span>provider 级优先，model 级只能追加 middleware</span></li>
+<li><span class="mk">C</span><span>未设的 model 级字段继承 provider 级，显式设置的值覆盖</span></li>
+<li><span class="mk">D</span><span>两者互不影响，分别独立生效</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方说明：两者在解析时合并。未设置的 model 级字段从 provider 级继承，显式设置的 model 级值覆盖。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">02</span>关于注册键 my_provider:my-model:tag，正确的解析是？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>provider 是 my_provider，model 是 my-model</span></li>
+<li><span class="mk">B</span><span>provider 是 my_provider:my-model，model 是 tag</span></li>
+<li><span class="mk">C</span><span>provider 是 my_provider，model identifier 是 my-model:tag</span></li>
+<li><span class="mk">D</span><span>该键非法，只能有一个冒号</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方明确只有第一个冒号分隔 provider 与模型标识，其余冒号都属于 model identifier。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">03</span>想移除 execute 工具，为什么应该用 excluded_tools 而不是 excluded_middleware？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>因为 excluded_middleware 只能移除 middleware 类</span></li>
+<li><span class="mk">B</span><span>因为 excluded_tools 的性能开销更低</span></li>
+<li><span class="mk">C</span><span>因为 FilesystemMiddleware 是必需脚手架，移除会报错</span></li>
+<li><span class="mk">D</span><span>因为 execute 是由 SubAgentMiddleware 注入的</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方警告在 excluded_middleware 里列 FilesystemMiddleware、SubAgentMiddleware 或内部权限 middleware 会抛 ValueError。隐藏模型可见的工具应该用 excluded_tools。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">04</span>重复在同一个键上注册 profile，结果是？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>新 profile 完全替换旧的</span></li>
+<li><span class="mk">B</span><span>只保留最后一次注册的字段</span></li>
+<li><span class="mk">C</span><span>新的 profile 合并到旧的之上，并非替换</span></li>
+<li><span class="mk">D</span><span>后一次注册会被忽略并告警</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方说明：在已有键上重新注册会把新 profile 合并到之前的之上，而不是替换。这也让定制内建 profile 成为可能。</div>
+</div>
+</div>
+<div class="quiz-foot"><span class="result"></span><br><button class="reset">重做</button><button class="reveal">显示全部解析</button></div>
+</section>
+<div class="mastery">
+  <label><input type="checkbox" data-slug="profiles">
+  <span>本课已掌握
+  <span class="hint">勾选后，左侧目录和首页会标记完成，进度保存在本机浏览器里。
+  能通过上面的自测、并且能不看笔记复述本课的核心机制，再勾。</span></span></label>
+</div>
+<footer class="lesson-foot">
+  <div class="source-box"><span class="lbl">本课事实来源 · 建议通读原文</span><a href="https://docs.langchain.com/oss/python/deepagents/profiles" target="_blank" rel="noopener">Profiles（官方）</a><br><span style="color:#8b909c;font-size:11.5px">https://docs.langchain.com/oss/python/deepagents/profiles</span></div>
+  <div class="ask-teacher">有讲不清楚的地方，直接把问题抛给我——我是这门课的老师，
+  可以就任何一节、任何一行代码展开，也可以按你的问题临时加一课。</div>
+  <div class="prevnext"><a class="prev" href="fault-tolerance.html"><span class="dir">← 上一课</span><span class="ttl">容错：不是所有错误都该被同样对待</span></a><a class="next" href="streaming.html"><span class="dir">下一课 →</span><span class="ttl">流式：把一棵树投影成几条流</span></a></div>
+</footer>
+  </div>
+</div>
+</div>
+<script>window.SITE = {"lessons": [{"slug": "agent-harness-mental-model", "num": 1, "title": "Agent Harness 的心智模型", "module": "W1", "tier": "A"}, {"slug": "three-layers-langchain-langgraph-deepagents", "num": 2, "title": "三层分工：LangChain / LangGraph / Deep Agents", "module": "W1", "tier": "A"}, {"slug": "create-deep-agent-anatomy", "num": 3, "title": "create_deep_agent 全景解剖", "module": "W1", "tier": "A"}, {"slug": "middleware-stack", "num": 4, "title": "Middleware 栈：harness 的骨架", "module": "W1", "tier": "A"}, {"slug": "tools-and-mcp", "num": 5, "title": "工具与 MCP：agent 的手", "module": "W2", "tier": "B"}, {"slug": "virtual-filesystem", "num": 6, "title": "虚拟文件系统：harness 的地基", "module": "W2", "tier": "A"}, {"slug": "backend-family", "num": 7, "title": "六个内建 Backend 的取舍", "module": "W2", "tier": "A"}, {"slug": "filesystem-permissions", "num": 8, "title": "声明式权限：像防火墙一样配文件访问", "module": "W2", "tier": "B"}, {"slug": "sandboxes", "num": 9, "title": "沙箱：让 agent 跑代码而不伤到宿主机", "module": "W2", "tier": "B"}, {"slug": "interpreters-programmatic-tool-calling", "num": 10, "title": "解释器与程序化工具调用", "module": "W2", "tier": "A"}, {"slug": "four-context-layers", "num": 11, "title": "上下文的四个层次", "module": "W3", "tier": "A"}, {"slug": "input-context", "num": 12, "title": "输入上下文：prompt 是怎么被拼出来的", "module": "W3", "tier": "B"}, {"slug": "skills-progressive-disclosure", "num": 13, "title": "Skills：渐进式披露", "module": "W3", "tier": "A"}, {"slug": "memory-long-term", "num": 14, "title": "Memory：长期记忆的四个维度", "module": "W3", "tier": "A"}, {"slug": "context-compression", "num": 15, "title": "压缩：Offloading 与 Summarization", "module": "W3", "tier": "A"}, {"slug": "prompt-caching", "num": 16, "title": "Prompt Caching：为什么它决定了栈的顺序", "module": "W3", "tier": "B"}, {"slug": "state-and-runtime-context", "num": 17, "title": "State Schema 与 Runtime Context", "module": "W3", "tier": "A"}, {"slug": "multimodal", "num": 18, "title": "多模态输入与输出", "module": "W3", "tier": "B"}, {"slug": "subagents-fundamentals", "num": 19, "title": "Subagent 原理", "module": "W4", "tier": "A"}, {"slug": "custom-subagents", "num": 20, "title": "自定义 Subagent 的字段设计", "module": "W4", "tier": "B"}, {"slug": "forked-subagents", "num": 21, "title": "Forked Subagents：继承父级上下文", "module": "W4", "tier": "B"}, {"slug": "dynamic-subagents", "num": 22, "title": "Dynamic Subagents：让代码决定开多少个子任务", "module": "W4", "tier": "A"}, {"slug": "async-subagents", "num": 23, "title": "Async Subagents：跨请求长跑的子任务", "module": "W4", "tier": "B"}, {"slug": "task-planning-todos", "num": 24, "title": "任务规划与 write_todos", "module": "W4", "tier": "B"}, {"slug": "human-in-the-loop", "num": 25, "title": "Human-in-the-loop：在关键点按下暂停", "module": "W5", "tier": "A"}, {"slug": "fault-tolerance", "num": 26, "title": "容错：不是所有错误都该被同样对待", "module": "W5", "tier": "B"}, {"slug": "profiles", "num": 27, "title": "Profiles：让同一份代码适配不同模型", "module": "W5", "tier": "A"}, {"slug": "streaming", "num": 28, "title": "流式：把一棵树投影成几条流", "module": "W6", "tier": "B"}, {"slug": "event-streaming-subagents", "num": 29, "title": "stream.subagents：每个子任务一个句柄", "module": "W6", "tier": "A"}, {"slug": "frontend-overview", "num": 30, "title": "前端架构：coordinator-worker", "module": "W6", "tier": "B"}, {"slug": "frontend-todo-list", "num": 31, "title": "前端模式一：Todo List", "module": "W6", "tier": "B"}, {"slug": "frontend-subagent-streaming", "num": 32, "title": "前端模式二：Subagent 卡片", "module": "W6", "tier": "B"}, {"slug": "frontend-sandbox", "num": 33, "title": "前端模式三：IDE 式的沙箱界面", "module": "W6", "tier": "B"}, {"slug": "retrieval-and-rag", "num": 34, "title": "检索与 RAG：三种架构", "module": "W7", "tier": "B"}, {"slug": "deep-research-agent", "num": 35, "title": "成品模式一：Deep Research Agent", "module": "W7", "tier": "B"}, {"slug": "data-analysis-agent", "num": 36, "title": "成品模式二：Data Analysis Agent", "module": "W7", "tier": "B"}, {"slug": "content-builder-agent", "num": 37, "title": "成品模式三：Content Builder Agent", "module": "W7", "tier": "B"}, {"slug": "grading-rubrics", "num": 38, "title": "评分量表：让 agent 自己迭代到达标", "module": "W7", "tier": "B"}, {"slug": "going-to-production", "num": 39, "title": "走向生产", "module": "W7", "tier": "A"}, {"slug": "acp-and-ag-ui", "num": 40, "title": "对外协议：ACP 与 AG-UI", "module": "W7", "tier": "B"}], "refs": [{"slug": "glossary", "title": "术语表"}, {"slug": "stack-order", "title": "中间件栈速查"}, {"slug": "api-cheatsheet", "title": "API 速查"}, {"slug": "decision-map", "title": "选型决策图"}]};</script>
+<script src="../assets/course.js"></script>
+</body>
+</html>

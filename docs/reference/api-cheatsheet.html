@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API 速查 · Deep Agents 教学站</title>
+<meta name="description" content="深入理解 Deep Agents agent harness 原理的中文教学站">
+<link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+<div class="sidebar-brand"><a href="../index.html">Deep Agents 教学站</a><span class="sub">Agent Harness 原理 · 中文</span></div>
+<div class="nav-group"><div class="nav-group-title">模块 A · 心智模型</div><ul>
+<li><a href="../lessons/agent-harness-mental-model.html" data-slug="agent-harness-mental-model"><span class="num">01</span><span>Agent Harness 的心智模型</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/three-layers-langchain-langgraph-deepagents.html" data-slug="three-layers-langchain-langgraph-deepagents"><span class="num">02</span><span>三层分工：LangChain / LangGraph / Deep Agents</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/create-deep-agent-anatomy.html" data-slug="create-deep-agent-anatomy"><span class="num">03</span><span>create_deep_agent 全景解剖</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/middleware-stack.html" data-slug="middleware-stack"><span class="num">04</span><span>Middleware 栈：harness 的骨架</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 B · 执行环境</div><ul>
+<li><a href="../lessons/tools-and-mcp.html" data-slug="tools-and-mcp"><span class="num">05</span><span>工具与 MCP：agent 的手</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/virtual-filesystem.html" data-slug="virtual-filesystem"><span class="num">06</span><span>虚拟文件系统：harness 的地基</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/backend-family.html" data-slug="backend-family"><span class="num">07</span><span>六个内建 Backend 的取舍</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/filesystem-permissions.html" data-slug="filesystem-permissions"><span class="num">08</span><span>声明式权限：像防火墙一样配文件访问</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/sandboxes.html" data-slug="sandboxes"><span class="num">09</span><span>沙箱：让 agent 跑代码而不伤到宿主机</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/interpreters-programmatic-tool-calling.html" data-slug="interpreters-programmatic-tool-calling"><span class="num">10</span><span>解释器与程序化工具调用</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 C · 上下文工程</div><ul>
+<li><a href="../lessons/four-context-layers.html" data-slug="four-context-layers"><span class="num">11</span><span>上下文的四个层次</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/input-context.html" data-slug="input-context"><span class="num">12</span><span>输入上下文：prompt 是怎么被拼出来的</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/skills-progressive-disclosure.html" data-slug="skills-progressive-disclosure"><span class="num">13</span><span>Skills：渐进式披露</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/memory-long-term.html" data-slug="memory-long-term"><span class="num">14</span><span>Memory：长期记忆的四个维度</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/context-compression.html" data-slug="context-compression"><span class="num">15</span><span>压缩：Offloading 与 Summarization</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/prompt-caching.html" data-slug="prompt-caching"><span class="num">16</span><span>Prompt Caching：为什么它决定了栈的顺序</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/state-and-runtime-context.html" data-slug="state-and-runtime-context"><span class="num">17</span><span>State Schema 与 Runtime Context</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/multimodal.html" data-slug="multimodal"><span class="num">18</span><span>多模态输入与输出</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 D · 委派</div><ul>
+<li><a href="../lessons/subagents-fundamentals.html" data-slug="subagents-fundamentals"><span class="num">19</span><span>Subagent 原理</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/custom-subagents.html" data-slug="custom-subagents"><span class="num">20</span><span>自定义 Subagent 的字段设计</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/forked-subagents.html" data-slug="forked-subagents"><span class="num">21</span><span>Forked Subagents：继承父级上下文</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/dynamic-subagents.html" data-slug="dynamic-subagents"><span class="num">22</span><span>Dynamic Subagents：让代码决定开多少个子任务</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/async-subagents.html" data-slug="async-subagents"><span class="num">23</span><span>Async Subagents：跨请求长跑的子任务</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/task-planning-todos.html" data-slug="task-planning-todos"><span class="num">24</span><span>任务规划与 write_todos</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 E · 运行时管控</div><ul>
+<li><a href="../lessons/human-in-the-loop.html" data-slug="human-in-the-loop"><span class="num">25</span><span>Human-in-the-loop：在关键点按下暂停</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/fault-tolerance.html" data-slug="fault-tolerance"><span class="num">26</span><span>容错：不是所有错误都该被同样对待</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/profiles.html" data-slug="profiles"><span class="num">27</span><span>Profiles：让同一份代码适配不同模型</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 F · 流式与前端</div><ul>
+<li><a href="../lessons/streaming.html" data-slug="streaming"><span class="num">28</span><span>流式：把一棵树投影成几条流</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/event-streaming-subagents.html" data-slug="event-streaming-subagents"><span class="num">29</span><span>stream.subagents：每个子任务一个句柄</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/frontend-overview.html" data-slug="frontend-overview"><span class="num">30</span><span>前端架构：coordinator-worker</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-todo-list.html" data-slug="frontend-todo-list"><span class="num">31</span><span>前端模式一：Todo List</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-subagent-streaming.html" data-slug="frontend-subagent-streaming"><span class="num">32</span><span>前端模式二：Subagent 卡片</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-sandbox.html" data-slug="frontend-sandbox"><span class="num">33</span><span>前端模式三：IDE 式的沙箱界面</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 G · 应用与生产</div><ul>
+<li><a href="../lessons/retrieval-and-rag.html" data-slug="retrieval-and-rag"><span class="num">34</span><span>检索与 RAG：三种架构</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/deep-research-agent.html" data-slug="deep-research-agent"><span class="num">35</span><span>成品模式一：Deep Research Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/data-analysis-agent.html" data-slug="data-analysis-agent"><span class="num">36</span><span>成品模式二：Data Analysis Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/content-builder-agent.html" data-slug="content-builder-agent"><span class="num">37</span><span>成品模式三：Content Builder Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/grading-rubrics.html" data-slug="grading-rubrics"><span class="num">38</span><span>评分量表：让 agent 自己迭代到达标</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/going-to-production.html" data-slug="going-to-production"><span class="num">39</span><span>走向生产</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/acp-and-ag-ui.html" data-slug="acp-and-ag-ui"><span class="num">40</span><span>对外协议：ACP 与 AG-UI</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">速查手册</div><ul>
+<li><a href="../reference/glossary.html" data-slug="glossary"><span class="num">▸</span><span>术语表</span></a></li>
+<li><a href="../reference/stack-order.html" data-slug="stack-order"><span class="num">▸</span><span>中间件栈速查</span></a></li>
+<li><a href="../reference/api-cheatsheet.html" data-slug="api-cheatsheet" class="active"><span class="num">▸</span><span>API 速查</span></a></li>
+<li><a href="../reference/decision-map.html" data-slug="decision-map"><span class="num">▸</span><span>选型决策图</span></a></li>
+</ul></div>
+</aside>
+<div class="main">
+  <div class="topbar"><div class="wrap">
+    <button class="menu-btn" aria-label="切换目录">☰</button>
+    <span class="crumbs"><a href="../index.html">课程地图</a> / <b>速查手册</b> / <b>API 速查</b></span>
+    <span class="progress-pill">
+      <span class="txt">0%</span>
+      <span class="bar"><i></i></span>
+    </span>
+  </div></div>
+  <div class="wrap">
+<header class="lesson-head">
+  <div class="lesson-kicker"><span>速查手册</span><span class="dot">·</span>
+  <span>随手翻，不按顺序读</span><span class="tier-badge b">REFERENCE</span></div>
+  <h1>API 速查</h1>
+  <p class="lede">关键签名、参数归类、内建工具清单。不需要背，写代码时对照用。</p>
+</header>
+<details class="toc-box"><summary>本页目录</summary>
+<ul>
+<li><a href="#create_deep_agent">create_deep_agent</a></li>
+<li><a href="#_1">内建工具</a></li>
+<li><a href="#backends">Backends</a></li>
+<li><a href="#_2">权限</a></li>
+<li><a href="#subagent">Subagent 字段</a></li>
+<li><a href="#human-in-the-loop">Human-in-the-loop</a></li>
+<li><a href="#_3">上下文工程</a></li>
+<li><a href="#state-context">自定义 state / context</a></li>
+<li><a href="#profiles">Profiles</a></li>
+<li><a href="#_4">其他中间件</a></li>
+<li><a href="#_5">流式</a></li>
+<li><a href="#subagent_1">解释器与动态 subagent</a></li>
+<li><a href="#mcp">MCP</a></li>
+</ul>
+
+</details>
+<article><h2 id="create_deep_agent">create_deep_agent</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="n">create_deep_agent</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>                       <span class="c1"># str "provider:model" 或 BaseChatModel 实例</span>
+    <span class="n">tools</span><span class="p">,</span>                       <span class="c1"># Sequence[BaseTool | Callable | dict]</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">system_prompt</span><span class="p">,</span>               <span class="c1"># 静态；永远拼在最前面</span>
+    <span class="n">middleware</span><span class="p">,</span>                  <span class="c1"># 同名替换，其余插在 Patch 之后</span>
+    <span class="n">subagents</span><span class="p">,</span>                   <span class="c1"># Sequence[SubAgent | CompiledSubAgent | AsyncSubAgent]</span>
+    <span class="n">skills</span><span class="p">,</span>                      <span class="c1"># list[str]，虚拟文件系统里的技能目录</span>
+    <span class="n">memory</span><span class="p">,</span>                      <span class="c1"># list[str]，AGENTS.md 路径，总是加载</span>
+    <span class="n">permissions</span><span class="p">,</span>                 <span class="c1"># list[FilesystemPermission]</span>
+    <span class="n">backend</span><span class="p">,</span>                     <span class="c1"># BackendProtocol 实例（不是工厂函数）</span>
+    <span class="n">interrupt_on</span><span class="p">,</span>                <span class="c1"># dict[str, bool | InterruptOnConfig]</span>
+    <span class="n">response_format</span><span class="p">,</span>             <span class="c1"># Pydantic / ToolStrategy / ProviderStrategy / 裸 schema</span>
+    <span class="n">state_schema</span><span class="p">,</span>                <span class="c1"># 必须继承 DeepAgentState</span>
+    <span class="n">context_schema</span><span class="p">,</span>              <span class="c1"># dataclass 或 TypedDict；会传播到 subagent</span>
+    <span class="n">checkpointer</span><span class="p">,</span>                <span class="c1"># 中断与 thread 状态的硬依赖</span>
+    <span class="n">store</span><span class="p">,</span>                       <span class="c1"># 跨 thread 存储</span>
+    <span class="n">debug</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># 返回 CompiledStateGraph（已编译，可直接 invoke / stream）</span>
+</code></pre></div>
+
+<p><strong>参数归类</strong>：执行环境 = <code>tools</code> / <code>backend</code> / <code>permissions</code>；
+上下文 = <code>system_prompt</code> / <code>memory</code> / <code>skills</code>；
+委派 = <code>subagents</code>；管控 = <code>interrupt_on</code> / <code>middleware</code>。</p>
+<h2 id="_1">内建工具</h2>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ls</code> <code>read_file</code> <code>write_file</code> <code>edit_file</code> <code>glob</code> <code>grep</code></td>
+<td>任意 backend</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td>backend 支持才行</td>
+</tr>
+<tr>
+<td><code>execute</code></td>
+<td><strong>仅</strong> sandbox 类 backend</td>
+</tr>
+<tr>
+<td><code>task</code></td>
+<td>存在至少一个同步 subagent</td>
+</tr>
+<tr>
+<td><code>write_todos</code></td>
+<td>传了 <code>TodoListMiddleware</code></td>
+</tr>
+<tr>
+<td><code>compact_conversation</code></td>
+<td>传了 <code>create_summarization_tool_middleware</code></td>
+</tr>
+<tr>
+<td><code>eval</code></td>
+<td>传了 <code>CodeInterpreterMiddleware</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>read_file</code> 支持多模态：图片 <code>.png .jpg .jpeg .gif .webp .heic .heif</code>；
+视频 <code>.mp4 .mpeg .mov .avi .flv .mpg .webm .wmv .3gpp</code>；
+音频 <code>.wav .mp3 .aiff .aac .ogg .flac</code>；文件 <code>.pdf .ppt .pptx</code>。</p>
+<h2 id="backends">Backends</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">deepagents.backends</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">StateBackend</span><span class="p">,</span>          <span class="c1"># 默认；图状态；thread 作用域；无 execute</span>
+    <span class="n">FilesystemBackend</span><span class="p">,</span>     <span class="c1"># 本地磁盘；root_dir 必须绝对路径</span>
+    <span class="n">LocalShellBackend</span><span class="p">,</span>     <span class="c1"># 本地磁盘 + execute；无隔离</span>
+    <span class="n">StoreBackend</span><span class="p">,</span>          <span class="c1"># 跨 thread；namespace 决定作用域</span>
+    <span class="n">ContextHubBackend</span><span class="p">,</span>     <span class="c1"># LangSmith Hub 仓库</span>
+    <span class="n">CompositeBackend</span><span class="p">,</span>      <span class="c1"># 按路径前缀路由</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="c1"># namespace 决定"谁和谁共享"</span>
+<span class="n">StoreBackend</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="k">lambda</span> <span class="n">rt</span><span class="p">:</span> <span class="p">(</span><span class="n">rt</span><span class="o">.</span><span class="n">server_info</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">identity</span><span class="p">,))</span>     <span class="c1"># 用户级</span>
+<span class="n">StoreBackend</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="k">lambda</span> <span class="n">rt</span><span class="p">:</span> <span class="p">(</span><span class="n">rt</span><span class="o">.</span><span class="n">server_info</span><span class="o">.</span><span class="n">assistant_id</span><span class="p">,))</span>      <span class="c1"># agent 级</span>
+<span class="n">StoreBackend</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="k">lambda</span> <span class="n">rt</span><span class="p">:</span> <span class="p">(</span><span class="n">rt</span><span class="o">.</span><span class="n">server_info</span><span class="o">.</span><span class="n">thread_id</span><span class="p">,))</span>         <span class="c1"># thread 级</span>
+</code></pre></div>
+
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="c1"># 组合：易失工作区 + 持久记忆区</span>
+<span class="n">CompositeBackend</span><span class="p">(</span>
+    <span class="n">default</span><span class="o">=</span><span class="n">StateBackend</span><span class="p">(),</span>
+    <span class="n">routes</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">"/memories/"</span><span class="p">:</span> <span class="n">StoreBackend</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="k">lambda</span> <span class="n">rt</span><span class="p">:</span> <span class="p">(</span><span class="s2">"my-agent"</span><span class="p">,)),</span>
+        <span class="s2">"/skills/"</span><span class="p">:</span>   <span class="n">StoreBackend</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="k">lambda</span> <span class="n">rt</span><span class="p">:</span> <span class="p">(</span><span class="s2">"my-agent"</span><span class="p">,)),</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<div class="callout warn">
+<p class="callout-title">0.7 变更</p>
+<p><code>backend=lambda rt: StateBackend(rt)</code>（工厂函数）已废弃，改为直接传实例。</p>
+</div>
+<h2 id="_2">权限</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="n">permissions</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">{</span><span class="s2">"operations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"read"</span><span class="p">,</span> <span class="s2">"write"</span><span class="p">],</span> <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"/workspace/.env"</span><span class="p">],</span> <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"deny"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"operations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"read"</span><span class="p">,</span> <span class="s2">"write"</span><span class="p">],</span> <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"/workspace/**"</span><span class="p">],</span>   <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"allow"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"operations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"read"</span><span class="p">,</span> <span class="s2">"write"</span><span class="p">],</span> <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"/**"</span><span class="p">],</span>             <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"deny"</span><span class="p">},</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p><strong>首匹配胜出；无匹配则允许。</strong> 精确规则在前，宽泛规则在后。
+不适用于 sandbox backend。</p>
+<h2 id="subagent">Subagent 字段</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">"name"</span><span class="p">:</span>            <span class="nb">str</span><span class="p">,</span>                      <span class="c1"># 必填；也是流式路由键</span>
+    <span class="s2">"description"</span><span class="p">:</span>     <span class="nb">str</span><span class="p">,</span>                      <span class="c1"># 必填；决定何时委派</span>
+    <span class="s2">"system_prompt"</span><span class="p">:</span>   <span class="nb">str</span><span class="p">,</span>                      <span class="c1"># isolated 模式必填；不继承</span>
+    <span class="s2">"mode"</span><span class="p">:</span>            <span class="s2">"isolated"</span> <span class="o">|</span> <span class="s2">"fork"</span><span class="p">,</span>      <span class="c1"># 默认 isolated</span>
+    <span class="s2">"tools"</span><span class="p">:</span>           <span class="nb">list</span><span class="p">,</span>                     <span class="c1"># 默认继承；指定即整体覆盖</span>
+    <span class="s2">"model"</span><span class="p">:</span>           <span class="nb">str</span> <span class="o">|</span> <span class="n">BaseChatModel</span><span class="p">,</span>      <span class="c1"># 默认继承</span>
+    <span class="s2">"middleware"</span><span class="p">:</span>      <span class="nb">list</span><span class="p">,</span>                     <span class="c1"># 不继承</span>
+    <span class="s2">"interrupt_on"</span><span class="p">:</span>    <span class="nb">dict</span><span class="p">,</span>                     <span class="c1"># 默认继承</span>
+    <span class="s2">"skills"</span><span class="p">:</span>          <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>                <span class="c1"># 不继承（仅 general-purpose 继承）</span>
+    <span class="s2">"response_format"</span><span class="p">:</span> <span class="n">ResponseFormat</span><span class="p">,</span>           <span class="c1"># 结构化输出</span>
+    <span class="s2">"permissions"</span><span class="p">:</span>     <span class="nb">list</span><span class="p">[</span><span class="n">FilesystemPermission</span><span class="p">],</span>  <span class="c1"># 默认继承；指定即整体替换</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="n">CompiledSubAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=...</span><span class="p">,</span> <span class="n">description</span><span class="o">=...</span><span class="p">,</span> <span class="n">runnable</span><span class="o">=</span><span class="n">compiled_graph</span><span class="p">,</span> <span class="n">mode</span><span class="o">=...</span><span class="p">)</span>
+<span class="c1"># 自定义 LangGraph 图的 state 必须有 "messages" 键</span>
+</code></pre></div>
+
+<h2 id="human-in-the-loop">Human-in-the-loop</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="n">interrupt_on</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">"edit_file"</span><span class="p">:</span>  <span class="kc">True</span><span class="p">,</span>                                  <span class="c1"># 四种决策全开</span>
+    <span class="s2">"write_file"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>                                 <span class="c1"># 关闭</span>
+    <span class="s2">"execute"</span><span class="p">:</span>    <span class="p">{</span><span class="s2">"allowed_decisions"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"approve"</span><span class="p">,</span> <span class="s2">"reject"</span><span class="p">]},</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>四种决策：<code>approve</code> / <code>edit</code> / <code>reject</code> / <code>respond</code>。
+<strong>必须有 checkpointer；恢复时 thread_id 必须一致。</strong></p>
+<h2 id="_3">上下文工程</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">deepagents.middleware.summarization</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_summarization_tool_middleware</span>
+<span class="n">middleware</span><span class="o">=</span><span class="p">[</span><span class="n">create_summarization_tool_middleware</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">backend</span><span class="p">)]</span>   <span class="c1"># 按需压缩</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>阈值</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offloading 触发</td>
+<td>20,000 token（工具输入与结果各自）</td>
+</tr>
+<tr>
+<td>summarization 触发</td>
+<td>模型 <code>max_input_tokens</code> 的 85%</td>
+</tr>
+<tr>
+<td>summarization 保留</td>
+<td>10% token 作为最近上下文</td>
+</tr>
+<tr>
+<td>兜底</td>
+<td>170,000 token 触发 / 保留 6 条消息</td>
+</tr>
+<tr>
+<td>输入截断触发</td>
+<td>上下文越过 85% 时截断较早的 tool call</td>
+</tr>
+</tbody>
+</table>
+<h2 id="state-context">自定义 state / context</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">deepagents</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeepAgentState</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyState</span><span class="p">(</span><span class="n">DeepAgentState</span><span class="p">):</span>     <span class="c1"># 必须继承</span>
+    <span class="n">counter</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">urls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_it</span><span class="p">(</span><span class="n">runtime</span><span class="p">:</span> <span class="n">ToolRuntime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""..."""</span>
+    <span class="k">return</span> <span class="n">runtime</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="s2">"counter"</span><span class="p">]</span>        <span class="c1"># state：可变、被 checkpoint</span>
+
+<span class="nd">@tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">use_ctx</span><span class="p">(</span><span class="n">q</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">runtime</span><span class="p">:</span> <span class="n">ToolRuntime</span><span class="p">[</span><span class="n">Context</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""..."""</span>
+    <span class="k">return</span> <span class="n">call</span><span class="p">(</span><span class="n">runtime</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>   <span class="c1"># context：不可变、传播到 subagent</span>
+</code></pre></div>
+
+<h2 id="profiles">Profiles</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">deepagents</span><span class="w"> </span><span class="kn">import</span> <span class="n">HarnessProfile</span><span class="p">,</span> <span class="n">GeneralPurposeSubagentProfile</span><span class="p">,</span> <span class="n">register_harness_profile</span>
+
+<span class="n">register_harness_profile</span><span class="p">(</span><span class="s2">"openai:gpt-6-astra"</span><span class="p">,</span> <span class="n">HarnessProfile</span><span class="p">(</span>
+    <span class="n">base_system_prompt</span><span class="o">=...</span><span class="p">,</span>
+    <span class="n">system_prompt_suffix</span><span class="o">=...</span><span class="p">,</span>
+    <span class="n">tool_description_overrides</span><span class="o">=</span><span class="p">{</span><span class="o">...</span><span class="p">},</span>
+    <span class="n">excluded_tools</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({</span><span class="s2">"execute"</span><span class="p">}),</span>
+    <span class="n">excluded_middleware</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({</span><span class="s2">"SummarizationMiddleware"</span><span class="p">}),</span>
+    <span class="n">extra_middleware</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">],</span>
+    <span class="n">general_purpose_subagent</span><span class="o">=</span><span class="n">GeneralPurposeSubagentProfile</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">))</span>
+</code></pre></div>
+
+<p><strong>键</strong>：<code>"openai"</code>（provider 级）或 <code>"openai:gpt-6-astra"</code>（model 级，只有第一个冒号是分隔符）。
+<strong>无通配键。</strong> 重复注册是<strong>合并</strong>（<code>excluded_*</code> 取并集）。</p>
+<h2 id="_4">其他中间件</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">langchain.agents.middleware</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TodoListMiddleware</span><span class="p">,</span>          <span class="c1"># write_todos（v0.7 起 opt-in）</span>
+    <span class="n">ModelRetryMiddleware</span><span class="p">,</span>        <span class="c1"># 模型调用重试（指数退避）</span>
+    <span class="n">ToolRetryMiddleware</span><span class="p">,</span>         <span class="c1"># 工具重试（可按工具名与异常类型限定）</span>
+    <span class="n">ToolErrorMiddleware</span><span class="p">,</span>         <span class="c1"># 把异常转成错误 ToolMessage 交给模型</span>
+    <span class="n">ModelFallbackMiddleware</span><span class="p">,</span>     <span class="c1"># 供应商故障时降级</span>
+    <span class="n">ModelCallLimitMiddleware</span><span class="p">,</span>    <span class="c1"># 模型调用次数上限</span>
+    <span class="n">ToolCallLimitMiddleware</span><span class="p">,</span>     <span class="c1"># 工具调用次数上限</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepagents</span><span class="w"> </span><span class="kn">import</span> <span class="n">RubricMiddleware</span>    <span class="c1"># 评分量表迭代</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_quickjs</span><span class="w"> </span><span class="kn">import</span> <span class="n">CodeInterpreterMiddleware</span>   <span class="c1"># 解释器 / 动态 subagent</span>
+</code></pre></div>
+
+<h2 id="_5">流式</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="c1"># 通用流式（看 namespace 用 subgraphs=True）</span>
+<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">agent</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">stream_mode</span><span class="o">=</span><span class="s2">"updates"</span><span class="p">,</span> <span class="n">subgraphs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">namespace</span><span class="p">,</span> <span class="n">update</span> <span class="o">=</span> <span class="n">chunk</span>
+
+<span class="c1"># 子代理投影（注意版参数）</span>
+<span class="n">stream</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">stream_events</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">"v3"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">subagents</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">sub</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">sub</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">sub</span><span class="o">.</span><span class="n">messages</span><span class="p">:</span> <span class="o">...</span>
+</code></pre></div>
+
+<p>句柄字段：<code>name</code> <code>messages</code> <code>subagents</code> <code>output</code> <code>path</code> <code>status</code> <code>tool_calls</code>。
+状态：<code>started</code> / <code>completed</code> / <code>failed</code> / <code>interrupted</code>。
+<strong>惰性打开</strong>：只读 <code>status</code> 不会打开消息流。</p>
+<h2 id="subagent_1">解释器与动态 subagent</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="n">agent</span> <span class="o">=</span> <span class="n">create_deep_agent</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=...</span><span class="p">,</span>
+    <span class="n">subagents</span><span class="o">=</span><span class="p">[{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"reviewer"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">"system_prompt"</span><span class="p">:</span> <span class="o">...</span><span class="p">}],</span>
+    <span class="n">middleware</span><span class="o">=</span><span class="p">[</span><span class="n">CodeInterpreterMiddleware</span><span class="p">()],</span>       <span class="c1"># subagents=False 可关闭代码派发</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<div class="code-label">javascript</div><div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">task</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">description</span><span class="o">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">subagentType</span><span class="o">:</span><span class="w"> </span><span class="s2">"reviewer"</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">responseSchema</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s2">"object"</span><span class="p">,</span><span class="w"> </span><span class="nx">properties</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="p">});</span>
+<span class="c1">// 有 responseSchema 时结果已是定型对象，无需 JSON.parse</span>
+</code></pre></div>
+
+<p>关掉：<code>CodeInterpreterMiddleware(subagents=False)</code>。
+装依赖：<code>pip install -U "deepagents[quickjs]"</code>（需 Python 3.11+，<code>langchain-quickjs&gt;=0.2.0</code>）。</p>
+<h2 id="mcp">MCP</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">langchain.mcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">MCPAdapter</span>
+
+<span class="k">async</span> <span class="k">with</span> <span class="n">MCPAdapter</span><span class="p">({</span><span class="s2">"mcpServers"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"my_server"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"url"</span><span class="p">:</span> <span class="s2">"http://localhost:8000/mcp"</span><span class="p">}}})</span> <span class="k">as</span> <span class="n">adapter</span><span class="p">:</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="k">await</span> <span class="n">adapter</span><span class="o">.</span><span class="n">list_tools</span><span class="p">()</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">create_deep_agent</span><span class="p">(</span><span class="n">model</span><span class="o">=...</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">)</span>
+</code></pre></div>
+
+<p>装依赖：<code>pip install "langchain[mcp]"</code>。</p></article>
+
+<footer class="lesson-foot"><div class="ask-teacher">这份手册会随着课程推进不断补条目。发现缺了什么，直接告诉老师。</div><div class="prevnext"><a href="../index.html"><span class="dir">← 返回</span><span class="ttl">课程地图</span></a></div></footer>
+  </div>
+</div>
+</div>
+<script>window.SITE = {"lessons": [{"slug": "agent-harness-mental-model", "num": 1, "title": "Agent Harness 的心智模型", "module": "W1", "tier": "A"}, {"slug": "three-layers-langchain-langgraph-deepagents", "num": 2, "title": "三层分工：LangChain / LangGraph / Deep Agents", "module": "W1", "tier": "A"}, {"slug": "create-deep-agent-anatomy", "num": 3, "title": "create_deep_agent 全景解剖", "module": "W1", "tier": "A"}, {"slug": "middleware-stack", "num": 4, "title": "Middleware 栈：harness 的骨架", "module": "W1", "tier": "A"}, {"slug": "tools-and-mcp", "num": 5, "title": "工具与 MCP：agent 的手", "module": "W2", "tier": "B"}, {"slug": "virtual-filesystem", "num": 6, "title": "虚拟文件系统：harness 的地基", "module": "W2", "tier": "A"}, {"slug": "backend-family", "num": 7, "title": "六个内建 Backend 的取舍", "module": "W2", "tier": "A"}, {"slug": "filesystem-permissions", "num": 8, "title": "声明式权限：像防火墙一样配文件访问", "module": "W2", "tier": "B"}, {"slug": "sandboxes", "num": 9, "title": "沙箱：让 agent 跑代码而不伤到宿主机", "module": "W2", "tier": "B"}, {"slug": "interpreters-programmatic-tool-calling", "num": 10, "title": "解释器与程序化工具调用", "module": "W2", "tier": "A"}, {"slug": "four-context-layers", "num": 11, "title": "上下文的四个层次", "module": "W3", "tier": "A"}, {"slug": "input-context", "num": 12, "title": "输入上下文：prompt 是怎么被拼出来的", "module": "W3", "tier": "B"}, {"slug": "skills-progressive-disclosure", "num": 13, "title": "Skills：渐进式披露", "module": "W3", "tier": "A"}, {"slug": "memory-long-term", "num": 14, "title": "Memory：长期记忆的四个维度", "module": "W3", "tier": "A"}, {"slug": "context-compression", "num": 15, "title": "压缩：Offloading 与 Summarization", "module": "W3", "tier": "A"}, {"slug": "prompt-caching", "num": 16, "title": "Prompt Caching：为什么它决定了栈的顺序", "module": "W3", "tier": "B"}, {"slug": "state-and-runtime-context", "num": 17, "title": "State Schema 与 Runtime Context", "module": "W3", "tier": "A"}, {"slug": "multimodal", "num": 18, "title": "多模态输入与输出", "module": "W3", "tier": "B"}, {"slug": "subagents-fundamentals", "num": 19, "title": "Subagent 原理", "module": "W4", "tier": "A"}, {"slug": "custom-subagents", "num": 20, "title": "自定义 Subagent 的字段设计", "module": "W4", "tier": "B"}, {"slug": "forked-subagents", "num": 21, "title": "Forked Subagents：继承父级上下文", "module": "W4", "tier": "B"}, {"slug": "dynamic-subagents", "num": 22, "title": "Dynamic Subagents：让代码决定开多少个子任务", "module": "W4", "tier": "A"}, {"slug": "async-subagents", "num": 23, "title": "Async Subagents：跨请求长跑的子任务", "module": "W4", "tier": "B"}, {"slug": "task-planning-todos", "num": 24, "title": "任务规划与 write_todos", "module": "W4", "tier": "B"}, {"slug": "human-in-the-loop", "num": 25, "title": "Human-in-the-loop：在关键点按下暂停", "module": "W5", "tier": "A"}, {"slug": "fault-tolerance", "num": 26, "title": "容错：不是所有错误都该被同样对待", "module": "W5", "tier": "B"}, {"slug": "profiles", "num": 27, "title": "Profiles：让同一份代码适配不同模型", "module": "W5", "tier": "A"}, {"slug": "streaming", "num": 28, "title": "流式：把一棵树投影成几条流", "module": "W6", "tier": "B"}, {"slug": "event-streaming-subagents", "num": 29, "title": "stream.subagents：每个子任务一个句柄", "module": "W6", "tier": "A"}, {"slug": "frontend-overview", "num": 30, "title": "前端架构：coordinator-worker", "module": "W6", "tier": "B"}, {"slug": "frontend-todo-list", "num": 31, "title": "前端模式一：Todo List", "module": "W6", "tier": "B"}, {"slug": "frontend-subagent-streaming", "num": 32, "title": "前端模式二：Subagent 卡片", "module": "W6", "tier": "B"}, {"slug": "frontend-sandbox", "num": 33, "title": "前端模式三：IDE 式的沙箱界面", "module": "W6", "tier": "B"}, {"slug": "retrieval-and-rag", "num": 34, "title": "检索与 RAG：三种架构", "module": "W7", "tier": "B"}, {"slug": "deep-research-agent", "num": 35, "title": "成品模式一：Deep Research Agent", "module": "W7", "tier": "B"}, {"slug": "data-analysis-agent", "num": 36, "title": "成品模式二：Data Analysis Agent", "module": "W7", "tier": "B"}, {"slug": "content-builder-agent", "num": 37, "title": "成品模式三：Content Builder Agent", "module": "W7", "tier": "B"}, {"slug": "grading-rubrics", "num": 38, "title": "评分量表：让 agent 自己迭代到达标", "module": "W7", "tier": "B"}, {"slug": "going-to-production", "num": 39, "title": "走向生产", "module": "W7", "tier": "A"}, {"slug": "acp-and-ag-ui", "num": 40, "title": "对外协议：ACP 与 AG-UI", "module": "W7", "tier": "B"}], "refs": [{"slug": "glossary", "title": "术语表"}, {"slug": "stack-order", "title": "中间件栈速查"}, {"slug": "api-cheatsheet", "title": "API 速查"}, {"slug": "decision-map", "title": "选型决策图"}]};</script>
+<script src="../assets/course.js"></script>
+</body>
+</html>

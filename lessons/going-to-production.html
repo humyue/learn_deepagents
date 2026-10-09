@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走向生产 · Deep Agents 教学站</title>
+<meta name="description" content="深入理解 Deep Agents agent harness 原理的中文教学站">
+<link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+<div class="sidebar-brand"><a href="../index.html">Deep Agents 教学站</a><span class="sub">Agent Harness 原理 · 中文</span></div>
+<div class="nav-group"><div class="nav-group-title">模块 A · 心智模型</div><ul>
+<li><a href="../lessons/agent-harness-mental-model.html" data-slug="agent-harness-mental-model"><span class="num">01</span><span>Agent Harness 的心智模型</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/three-layers-langchain-langgraph-deepagents.html" data-slug="three-layers-langchain-langgraph-deepagents"><span class="num">02</span><span>三层分工：LangChain / LangGraph / Deep Agents</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/create-deep-agent-anatomy.html" data-slug="create-deep-agent-anatomy"><span class="num">03</span><span>create_deep_agent 全景解剖</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/middleware-stack.html" data-slug="middleware-stack"><span class="num">04</span><span>Middleware 栈：harness 的骨架</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 B · 执行环境</div><ul>
+<li><a href="../lessons/tools-and-mcp.html" data-slug="tools-and-mcp"><span class="num">05</span><span>工具与 MCP：agent 的手</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/virtual-filesystem.html" data-slug="virtual-filesystem"><span class="num">06</span><span>虚拟文件系统：harness 的地基</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/backend-family.html" data-slug="backend-family"><span class="num">07</span><span>六个内建 Backend 的取舍</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/filesystem-permissions.html" data-slug="filesystem-permissions"><span class="num">08</span><span>声明式权限：像防火墙一样配文件访问</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/sandboxes.html" data-slug="sandboxes"><span class="num">09</span><span>沙箱：让 agent 跑代码而不伤到宿主机</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/interpreters-programmatic-tool-calling.html" data-slug="interpreters-programmatic-tool-calling"><span class="num">10</span><span>解释器与程序化工具调用</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 C · 上下文工程</div><ul>
+<li><a href="../lessons/four-context-layers.html" data-slug="four-context-layers"><span class="num">11</span><span>上下文的四个层次</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/input-context.html" data-slug="input-context"><span class="num">12</span><span>输入上下文：prompt 是怎么被拼出来的</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/skills-progressive-disclosure.html" data-slug="skills-progressive-disclosure"><span class="num">13</span><span>Skills：渐进式披露</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/memory-long-term.html" data-slug="memory-long-term"><span class="num">14</span><span>Memory：长期记忆的四个维度</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/context-compression.html" data-slug="context-compression"><span class="num">15</span><span>压缩：Offloading 与 Summarization</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/prompt-caching.html" data-slug="prompt-caching"><span class="num">16</span><span>Prompt Caching：为什么它决定了栈的顺序</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/state-and-runtime-context.html" data-slug="state-and-runtime-context"><span class="num">17</span><span>State Schema 与 Runtime Context</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/multimodal.html" data-slug="multimodal"><span class="num">18</span><span>多模态输入与输出</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 D · 委派</div><ul>
+<li><a href="../lessons/subagents-fundamentals.html" data-slug="subagents-fundamentals"><span class="num">19</span><span>Subagent 原理</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/custom-subagents.html" data-slug="custom-subagents"><span class="num">20</span><span>自定义 Subagent 的字段设计</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/forked-subagents.html" data-slug="forked-subagents"><span class="num">21</span><span>Forked Subagents：继承父级上下文</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/dynamic-subagents.html" data-slug="dynamic-subagents"><span class="num">22</span><span>Dynamic Subagents：让代码决定开多少个子任务</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/async-subagents.html" data-slug="async-subagents"><span class="num">23</span><span>Async Subagents：跨请求长跑的子任务</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/task-planning-todos.html" data-slug="task-planning-todos"><span class="num">24</span><span>任务规划与 write_todos</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 E · 运行时管控</div><ul>
+<li><a href="../lessons/human-in-the-loop.html" data-slug="human-in-the-loop"><span class="num">25</span><span>Human-in-the-loop：在关键点按下暂停</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/fault-tolerance.html" data-slug="fault-tolerance"><span class="num">26</span><span>容错：不是所有错误都该被同样对待</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/profiles.html" data-slug="profiles"><span class="num">27</span><span>Profiles：让同一份代码适配不同模型</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 F · 流式与前端</div><ul>
+<li><a href="../lessons/streaming.html" data-slug="streaming"><span class="num">28</span><span>流式：把一棵树投影成几条流</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/event-streaming-subagents.html" data-slug="event-streaming-subagents"><span class="num">29</span><span>stream.subagents：每个子任务一个句柄</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/frontend-overview.html" data-slug="frontend-overview"><span class="num">30</span><span>前端架构：coordinator-worker</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-todo-list.html" data-slug="frontend-todo-list"><span class="num">31</span><span>前端模式一：Todo List</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-subagent-streaming.html" data-slug="frontend-subagent-streaming"><span class="num">32</span><span>前端模式二：Subagent 卡片</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-sandbox.html" data-slug="frontend-sandbox"><span class="num">33</span><span>前端模式三：IDE 式的沙箱界面</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 G · 应用与生产</div><ul>
+<li><a href="../lessons/retrieval-and-rag.html" data-slug="retrieval-and-rag"><span class="num">34</span><span>检索与 RAG：三种架构</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/deep-research-agent.html" data-slug="deep-research-agent"><span class="num">35</span><span>成品模式一：Deep Research Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/data-analysis-agent.html" data-slug="data-analysis-agent"><span class="num">36</span><span>成品模式二：Data Analysis Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/content-builder-agent.html" data-slug="content-builder-agent"><span class="num">37</span><span>成品模式三：Content Builder Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/grading-rubrics.html" data-slug="grading-rubrics"><span class="num">38</span><span>评分量表：让 agent 自己迭代到达标</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/going-to-production.html" data-slug="going-to-production" class="active"><span class="num">39</span><span>走向生产</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/acp-and-ag-ui.html" data-slug="acp-and-ag-ui"><span class="num">40</span><span>对外协议：ACP 与 AG-UI</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">速查手册</div><ul>
+<li><a href="../reference/glossary.html" data-slug="glossary"><span class="num">▸</span><span>术语表</span></a></li>
+<li><a href="../reference/stack-order.html" data-slug="stack-order"><span class="num">▸</span><span>中间件栈速查</span></a></li>
+<li><a href="../reference/api-cheatsheet.html" data-slug="api-cheatsheet"><span class="num">▸</span><span>API 速查</span></a></li>
+<li><a href="../reference/decision-map.html" data-slug="decision-map"><span class="num">▸</span><span>选型决策图</span></a></li>
+</ul></div>
+</aside>
+<div class="main">
+  <div class="topbar"><div class="wrap">
+    <button class="menu-btn" aria-label="切换目录">☰</button>
+    <span class="crumbs"><a href="../index.html">课程地图</a> / <b>模块 G · 应用与生产</b> / <b>第 39 课</b></span>
+    <span class="progress-pill">
+      <span class="txt">0%</span>
+      <span class="bar"><i></i></span>
+    </span>
+  </div></div>
+  <div class="wrap">
+<header class="lesson-head">
+  <div class="lesson-kicker">
+    <span>第 39 课</span>
+    <span class="dot">·</span>
+    <span>模块 G · 应用与生产</span>
+    <span class="dot">·</span>
+    <span>14 分钟</span>
+    <span class="tier-badge">Tier A · 原理深挖</span>
+  </div>
+  <h1>走向生产</h1>
+  <p class="lede">这一课是全课程的收敛点。官方给出的生产化路径有一个非常清晰的骨架：<b>先把三个原语的边界想清楚，再逐项补上持久化、隔离与管控。</b></p>
+</header>
+<article>
+<details class="toc-box"><summary>本页目录</summary>
+<ul>
+<li><a href="#_1">先建立三个原语</a></li>
+<li><a href="#_2">部署路径</a></li>
+<li><a href="#_3">生产上要补的六课</a><ul>
+<li><a href="#invoking-the-agent">一、调用方式（Invoking the agent）</a></li>
+<li><a href="#multi-tenancy">二、多租户（Multi-tenancy）</a></li>
+<li><a href="#async">三、异步（Async）</a></li>
+<li><a href="#durability">四、持久性（Durability）</a></li>
+<li><a href="#_4">五、记忆的作用域与配置</a></li>
+<li><a href="#_5">六、执行环境</a></li>
+</ul>
+</li>
+<li><a href="#guardrails">护栏（Guardrails）</a></li>
+<li><a href="#_6">前端</a></li>
+<li><a href="#_7">一份生产检查清单</a></li>
+<li><a href="#_8">下一课</a></li>
+</ul>
+
+</details>
+<h2 id="_1">先建立三个原语</h2>
+<p>官方在生产指南的开头就定义了三个概念。<strong>它们是所有生产决策的坐标系</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>原语</th>
+<th>定义</th>
+<th>默认行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Thread</strong></td>
+<td>一次对话</td>
+<td>消息历史与草稿文件<strong>按 thread 作用域</strong>，默认不跨 thread 传递</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td>与 agent 交互的人</td>
+<td>记忆与文件可以是<strong>用户私有</strong>或<strong>跨用户共享</strong>；身份与授权来自你的 auth 层</td>
+</tr>
+<tr>
+<td><strong>Assistant</strong></td>
+<td>一个配置好的 agent 实例</td>
+<td>记忆与文件可以绑定到<strong>一个 assistant</strong>，或<strong>所有 assistant 共享</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="callout">
+<p class="callout-title">这三行几乎决定了全部生产架构</p>
+<p>回头看第 07 课的 <code>StoreBackend</code> namespace：</p>
+<p><code>python
+namespace=lambda rt: (rt.server_info.user.identity,)     # → User
+namespace=lambda rt: (rt.server_info.assistant_id,)      # → Assistant
+namespace=lambda rt: (rt.server_info.thread_id,)         # → Thread</code></p>
+<p><strong>生产文档里的"作用域"讨论，落到代码就是这一个 lambda。</strong>
+先把"谁该看到什么"想清楚，剩下的都是配置。</p>
+<p><div class="flow"><div class="node"><span class="k">产品问题</span><span class="v">这个记忆该给谁看？</span></div><div class="arrow">→</div><div class="node hi"><span class="k">工程答案</span><span class="v">namespace 里放什么</span></div></div></p>
+</div>
+<h2 id="_2">部署路径</h2>
+<p>官方推荐的路径是 <strong>Managed Deep Agents</strong>：
+一个 CLI-first 的托管运行时，用于在 LangSmith 里创建、运行、运维 deep agents。</p>
+<p>关键判断标准：它<strong>跑的是同一套 Deep Agents harness</strong>，
+区别只是你以"一组文件构成的项目"来声明 agent，而不是自己编译。</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Managed Deep Agents</strong></td>
+<td>推荐路径；托管基础设施、认证、webhook、cron</td>
+</tr>
+<tr>
+<td><strong>LangSmith Deployment</strong></td>
+<td>需要自定义应用代码、自定义路由、高级认证的团队</td>
+</tr>
+</tbody>
+</table>
+<div class="callout key">
+<p class="callout-title">两条路都会替你准备什么</p>
+<p>官方说明：无论哪条路，都会为你 provision 好这些基础设施——</p>
+<ul>
+<li><strong>threads</strong></li>
+<li><strong>runs</strong></li>
+<li><strong>store</strong>（长期记忆的底座）</li>
+<li><strong>checkpointer</strong>（短期记忆的底座）</li>
+</ul>
+<p>这正是第 14 课那张"短期 vs 长期"对照表里提到的两个底座。
+<strong>在生产上，你不需要自己搭它们。</strong></p>
+<p>LangSmith Deployment 额外还给你认证、webhooks、cron 任务与可观测性，
+并且可以把 agent 通过 MCP 或 A2A 暴露出去。</p>
+</div>
+<h2 id="_3">生产上要补的六课</h2>
+<p>官方把 "Production considerations" 拆成几块，逐块都有具体的工程含义。</p>
+<h3 id="invoking-the-agent">一、调用方式（Invoking the agent）</h3>
+<p>从本地 <code>agent.invoke(...)</code> 变成"通过 API 调用一个部署好的服务"。
+这带来认证、并发、超时这些常规服务化问题。</p>
+<h3 id="multi-tenancy">二、多租户（Multi-tenancy）</h3>
+<p>这是<strong>最需要提前设计</strong>的一块。官方给了示例，包括"在 agent 的工具内部"如何取身份：</p>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="c1"># Inside your agent's tool:</span>
+<span class="c1"># 从运行时取身份，而不是信任模型传入的参数</span>
+</code></pre></div>
+
+<div class="callout">
+<p class="callout-title">和第 14 课那条经验是同一条</p>
+<p>检索历史对话时，<code>user_id</code> 从 <code>runtime</code> 取而不是作为函数参数——
+因为<strong>模型可以伪造参数，但不能伪造运行时</strong>。</p>
+<p>多租户场景下，这条规则的代价会放大：一个被伪造的 <code>user_id</code>
+意味着<strong>跨租户数据泄露</strong>。</p>
+</div>
+<h3 id="async">三、异步（Async）</h3>
+<p>长任务不阻塞请求。这与第 23 课的 async subagent 是同一类需求的两个层次。</p>
+<h3 id="durability">四、持久性（Durability）</h3>
+<p>LangGraph 的 durable execution 保证长任务可恢复。
+第 04 课里 <code>PatchToolCallsMiddleware</code> 存在的理由就在这里——
+<strong>恢复是常态，所以"修复被打断的历史"必须是内建能力。</strong></p>
+<h3 id="_4">五、记忆的作用域与配置</h3>
+<p>官方生产指南里 "Memory" 一节专门讲 <strong>Scoping</strong> 与 <strong>Configuration</strong>。
+这就是前面 Thread / User / Assistant 三元组的落地。</p>
+<table>
+<thead>
+<tr>
+<th>决策</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>记忆绑定到 user</td>
+<td>个性化、隐私隔离</td>
+</tr>
+<tr>
+<td>记忆绑定到 assistant</td>
+<td>agent 有统一身份，跨用户学习</td>
+</tr>
+<tr>
+<td>记忆绑定到 thread</td>
+<td>退化为会话内记忆</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">六、执行环境</h3>
+<p>官方把执行环境拆成 <strong>Filesystem</strong> 与 <strong>Sandboxes</strong> 两块。</p>
+<div class="compare">
+<div class="yes">
+<h4>Filesystem</h4>
+<ul>
+<li>文件资源的组织与隔离</li>
+<li>对应第 07 课的 backend 选择</li>
+<li>关键：与租户边界对齐</li>
+</ul>
+</div>
+<div class="no">
+<h4>Sandboxes</h4>
+<ul>
+<li>代码执行的隔离</li>
+<li>对应第 09 课</li>
+<li>关键：生命周期、TTL、成本</li>
+</ul>
+</div>
+</div>
+
+<div class="callout warn">
+<p class="callout-title">沙箱的生命周期表在生产文档里最详细</p>
+<p>官方把完整的生命周期表、async graph factory 注意事项、TTL 行为、
+LangGraph Deployment 接线方式都放在生产文档里——而不是沙箱页面。</p>
+<p>信号很明确：<strong>沙箱在开发时是个功能，在生产时是个资源管理问题。</strong>
+每个活着的沙箱都在花钱，必须有人负责关掉它。</p>
+</div>
+<h2 id="guardrails">护栏（Guardrails）</h2>
+<p>官方把护栏归成三类：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>手段</th>
+<th>对应课程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>权限</strong></td>
+<td>声明式文件访问控制</td>
+<td>第 08 课</td>
+</tr>
+<tr>
+<td><strong>容错</strong></td>
+<td>重试、降级、限额</td>
+<td>第 26 课</td>
+</tr>
+<tr>
+<td><strong>数据隐私</strong></td>
+<td>不让敏感数据进入不该进的地方</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<div class="callout">
+<p class="callout-title">数据隐私这一条要单独想</p>
+<p>它没有对应的"中间件"。它要求你在设计阶段就回答：</p>
+<ul>
+<li>哪些数据<strong>可以</strong>被写进记忆文件？（记忆会跨会话保留）</li>
+<li>哪些数据<strong>可以</strong>进沙箱？（沙箱里有代码在跑）</li>
+<li>哪些数据<strong>可以</strong>发给模型供应商？（这决定了 prompt 里能放什么）</li>
+</ul>
+<p><strong>这三条是产品与合规决策，不是技术决策。</strong> harness 帮不了你。</p>
+</div>
+<h2 id="_6">前端</h2>
+<p>官方最后一节是 Frontend，指向第 30–33 课讲的那四个模式。</p>
+<p><strong>注意它被放在最后</strong>——这个顺序本身是一个建议：
+<strong>先把作用域、持久化、隔离、护栏想清楚，再考虑界面。</strong></p>
+<h2 id="_7">一份生产检查清单</h2>
+<p>把这一课浓缩成可以逐项打勾的清单：</p>
+<div class="stack">
+  <div class="layer req"><span class="idx">1</span><span class="nm">作用域</span><span class="ds">每份记忆与文件的 namespace 想清楚了吗（thread / user / assistant）</span></div>
+  <div class="layer req"><span class="idx">2</span><span class="nm">身份</span><span class="ds">身份是否从 runtime 取，而不是作为工具参数</span></div>
+  <div class="layer req"><span class="idx">3</span><span class="nm">持久化</span><span class="ds">checkpointer 与 store 都已就位，thread_id 管理正确</span></div>
+  <div class="layer req"><span class="idx">4</span><span class="nm">执行环境</span><span class="ds">backend 选择与租户边界对齐；沙箱有 TTL 与关闭策略</span></div>
+  <div class="layer req"><span class="idx">5</span><span class="nm">护栏</span><span class="ds">权限规则、重试与限额、敏感数据流向都已审过</span></div>
+  <div class="layer opt"><span class="idx">6</span><span class="nm">可观测</span><span class="ds">tracing 已开，能按 thread 串起委派树</span></div>
+  <div class="layer opt"><span class="idx">7</span><span class="nm">前端</span><span class="ds">委派可见、进度可见、待批准可见</span></div>
+</div>
+
+<h2 id="_8">下一课</h2>
+<p>最后一课：<strong>让外部世界接进来</strong>——编辑器与前端协议。</p>
+</article>
+<section class="quiz" data-slug="going-to-production">
+<div class="quiz-head"><span>检索练习 · 不要回看上文，先试着回忆</span><span class="score">0 / 4 正确</span></div>
+<div class="quiz-body">
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">01</span>官方定义的三个生产原语是什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>model、tool、backend</span></li>
+<li><span class="mk">B</span><span>agent、graph、node</span></li>
+<li><span class="mk">C</span><span>thread、user、assistant</span></li>
+<li><span class="mk">D</span><span>store、checkpointer、sandbox</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方在生产指南开篇定义 thread（一次对话）、user（与 agent 交互的人）、assistant（配置好的 agent 实例），并说明记忆与文件在这三个维度上的作用域。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">02</span>为什么检索历史对话的工具应该从 runtime 取 user_id 而不是作为参数？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>因为参数传递会增加 token 开销</span></li>
+<li><span class="mk">B</span><span>因为 runtime 中的 user_id 是加密的</span></li>
+<li><span class="mk">C</span><span>因为模型可以伪造参数，但不能伪造运行时，涉及跨租户数据安全</span></li>
+<li><span class="mk">D</span><span>因为工具参数不支持字符串类型</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>作用域应由运行时决定。在多租户生产环境下，被伪造的 user_id 意味着跨租户数据泄露，因此官方示例从 runtime.server_info.user.identity 取值。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">03</span>无论选哪条部署路径，平台都会为你准备哪四样基础设施？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>沙箱、向量库、队列、缓存</span></li>
+<li><span class="mk">B</span><span>前端、API 网关、CDN、日志</span></li>
+<li><span class="mk">C</span><span>threads、runs、store、checkpointer</span></li>
+<li><span class="mk">D</span><span>embedding 模型、reranker、索引、评测集</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方说明两种部署路径都会 provision threads、runs、store 与 checkpointer，因此你不需要自己搭建短期记忆与长期记忆的底座。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">04</span>官方把沙箱的完整生命周期表放在生产文档而非沙箱页面，说明了什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>沙箱在生产环境才被启用</span></li>
+<li><span class="mk">B</span><span>沙箱的 API 在生产环境会变化</span></li>
+<li><span class="mk">C</span><span>沙箱在开发时是功能，在生产时是资源管理问题</span></li>
+<li><span class="mk">D</span><span>只有生产环境支持沙箱的 TTL</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>生命周期的完整表格、TTL 行为与部署接线都放在生产指南，因为每个存活的沙箱都消耗资源与成本，必须有明确的关闭与 TTL 策略。</div>
+</div>
+</div>
+<div class="quiz-foot"><span class="result"></span><br><button class="reset">重做</button><button class="reveal">显示全部解析</button></div>
+</section>
+<div class="mastery">
+  <label><input type="checkbox" data-slug="going-to-production">
+  <span>本课已掌握
+  <span class="hint">勾选后，左侧目录和首页会标记完成，进度保存在本机浏览器里。
+  能通过上面的自测、并且能不看笔记复述本课的核心机制，再勾。</span></span></label>
+</div>
+<footer class="lesson-foot">
+  <div class="source-box"><span class="lbl">本课事实来源 · 建议通读原文</span><a href="https://docs.langchain.com/oss/python/deepagents/going-to-production" target="_blank" rel="noopener">Going to production（官方）</a><br><span style="color:#8b909c;font-size:11.5px">https://docs.langchain.com/oss/python/deepagents/going-to-production</span></div>
+  <div class="ask-teacher">有讲不清楚的地方，直接把问题抛给我——我是这门课的老师，
+  可以就任何一节、任何一行代码展开，也可以按你的问题临时加一课。</div>
+  <div class="prevnext"><a class="prev" href="grading-rubrics.html"><span class="dir">← 上一课</span><span class="ttl">评分量表：让 agent 自己迭代到达标</span></a><a class="next" href="acp-and-ag-ui.html"><span class="dir">下一课 →</span><span class="ttl">对外协议：ACP 与 AG-UI</span></a></div>
+</footer>
+  </div>
+</div>
+</div>
+<script>window.SITE = {"lessons": [{"slug": "agent-harness-mental-model", "num": 1, "title": "Agent Harness 的心智模型", "module": "W1", "tier": "A"}, {"slug": "three-layers-langchain-langgraph-deepagents", "num": 2, "title": "三层分工：LangChain / LangGraph / Deep Agents", "module": "W1", "tier": "A"}, {"slug": "create-deep-agent-anatomy", "num": 3, "title": "create_deep_agent 全景解剖", "module": "W1", "tier": "A"}, {"slug": "middleware-stack", "num": 4, "title": "Middleware 栈：harness 的骨架", "module": "W1", "tier": "A"}, {"slug": "tools-and-mcp", "num": 5, "title": "工具与 MCP：agent 的手", "module": "W2", "tier": "B"}, {"slug": "virtual-filesystem", "num": 6, "title": "虚拟文件系统：harness 的地基", "module": "W2", "tier": "A"}, {"slug": "backend-family", "num": 7, "title": "六个内建 Backend 的取舍", "module": "W2", "tier": "A"}, {"slug": "filesystem-permissions", "num": 8, "title": "声明式权限：像防火墙一样配文件访问", "module": "W2", "tier": "B"}, {"slug": "sandboxes", "num": 9, "title": "沙箱：让 agent 跑代码而不伤到宿主机", "module": "W2", "tier": "B"}, {"slug": "interpreters-programmatic-tool-calling", "num": 10, "title": "解释器与程序化工具调用", "module": "W2", "tier": "A"}, {"slug": "four-context-layers", "num": 11, "title": "上下文的四个层次", "module": "W3", "tier": "A"}, {"slug": "input-context", "num": 12, "title": "输入上下文：prompt 是怎么被拼出来的", "module": "W3", "tier": "B"}, {"slug": "skills-progressive-disclosure", "num": 13, "title": "Skills：渐进式披露", "module": "W3", "tier": "A"}, {"slug": "memory-long-term", "num": 14, "title": "Memory：长期记忆的四个维度", "module": "W3", "tier": "A"}, {"slug": "context-compression", "num": 15, "title": "压缩：Offloading 与 Summarization", "module": "W3", "tier": "A"}, {"slug": "prompt-caching", "num": 16, "title": "Prompt Caching：为什么它决定了栈的顺序", "module": "W3", "tier": "B"}, {"slug": "state-and-runtime-context", "num": 17, "title": "State Schema 与 Runtime Context", "module": "W3", "tier": "A"}, {"slug": "multimodal", "num": 18, "title": "多模态输入与输出", "module": "W3", "tier": "B"}, {"slug": "subagents-fundamentals", "num": 19, "title": "Subagent 原理", "module": "W4", "tier": "A"}, {"slug": "custom-subagents", "num": 20, "title": "自定义 Subagent 的字段设计", "module": "W4", "tier": "B"}, {"slug": "forked-subagents", "num": 21, "title": "Forked Subagents：继承父级上下文", "module": "W4", "tier": "B"}, {"slug": "dynamic-subagents", "num": 22, "title": "Dynamic Subagents：让代码决定开多少个子任务", "module": "W4", "tier": "A"}, {"slug": "async-subagents", "num": 23, "title": "Async Subagents：跨请求长跑的子任务", "module": "W4", "tier": "B"}, {"slug": "task-planning-todos", "num": 24, "title": "任务规划与 write_todos", "module": "W4", "tier": "B"}, {"slug": "human-in-the-loop", "num": 25, "title": "Human-in-the-loop：在关键点按下暂停", "module": "W5", "tier": "A"}, {"slug": "fault-tolerance", "num": 26, "title": "容错：不是所有错误都该被同样对待", "module": "W5", "tier": "B"}, {"slug": "profiles", "num": 27, "title": "Profiles：让同一份代码适配不同模型", "module": "W5", "tier": "A"}, {"slug": "streaming", "num": 28, "title": "流式：把一棵树投影成几条流", "module": "W6", "tier": "B"}, {"slug": "event-streaming-subagents", "num": 29, "title": "stream.subagents：每个子任务一个句柄", "module": "W6", "tier": "A"}, {"slug": "frontend-overview", "num": 30, "title": "前端架构：coordinator-worker", "module": "W6", "tier": "B"}, {"slug": "frontend-todo-list", "num": 31, "title": "前端模式一：Todo List", "module": "W6", "tier": "B"}, {"slug": "frontend-subagent-streaming", "num": 32, "title": "前端模式二：Subagent 卡片", "module": "W6", "tier": "B"}, {"slug": "frontend-sandbox", "num": 33, "title": "前端模式三：IDE 式的沙箱界面", "module": "W6", "tier": "B"}, {"slug": "retrieval-and-rag", "num": 34, "title": "检索与 RAG：三种架构", "module": "W7", "tier": "B"}, {"slug": "deep-research-agent", "num": 35, "title": "成品模式一：Deep Research Agent", "module": "W7", "tier": "B"}, {"slug": "data-analysis-agent", "num": 36, "title": "成品模式二：Data Analysis Agent", "module": "W7", "tier": "B"}, {"slug": "content-builder-agent", "num": 37, "title": "成品模式三：Content Builder Agent", "module": "W7", "tier": "B"}, {"slug": "grading-rubrics", "num": 38, "title": "评分量表：让 agent 自己迭代到达标", "module": "W7", "tier": "B"}, {"slug": "going-to-production", "num": 39, "title": "走向生产", "module": "W7", "tier": "A"}, {"slug": "acp-and-ag-ui", "num": 40, "title": "对外协议：ACP 与 AG-UI", "module": "W7", "tier": "B"}], "refs": [{"slug": "glossary", "title": "术语表"}, {"slug": "stack-order", "title": "中间件栈速查"}, {"slug": "api-cheatsheet", "title": "API 速查"}, {"slug": "decision-map", "title": "选型决策图"}]};</script>
+<script src="../assets/course.js"></script>
+</body>
+</html>

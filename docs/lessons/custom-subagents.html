@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自定义 Subagent 的字段设计 · Deep Agents 教学站</title>
+<meta name="description" content="深入理解 Deep Agents agent harness 原理的中文教学站">
+<link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+<div class="sidebar-brand"><a href="../index.html">Deep Agents 教学站</a><span class="sub">Agent Harness 原理 · 中文</span></div>
+<div class="nav-group"><div class="nav-group-title">模块 A · 心智模型</div><ul>
+<li><a href="../lessons/agent-harness-mental-model.html" data-slug="agent-harness-mental-model"><span class="num">01</span><span>Agent Harness 的心智模型</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/three-layers-langchain-langgraph-deepagents.html" data-slug="three-layers-langchain-langgraph-deepagents"><span class="num">02</span><span>三层分工：LangChain / LangGraph / Deep Agents</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/create-deep-agent-anatomy.html" data-slug="create-deep-agent-anatomy"><span class="num">03</span><span>create_deep_agent 全景解剖</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/middleware-stack.html" data-slug="middleware-stack"><span class="num">04</span><span>Middleware 栈：harness 的骨架</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 B · 执行环境</div><ul>
+<li><a href="../lessons/tools-and-mcp.html" data-slug="tools-and-mcp"><span class="num">05</span><span>工具与 MCP：agent 的手</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/virtual-filesystem.html" data-slug="virtual-filesystem"><span class="num">06</span><span>虚拟文件系统：harness 的地基</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/backend-family.html" data-slug="backend-family"><span class="num">07</span><span>六个内建 Backend 的取舍</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/filesystem-permissions.html" data-slug="filesystem-permissions"><span class="num">08</span><span>声明式权限：像防火墙一样配文件访问</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/sandboxes.html" data-slug="sandboxes"><span class="num">09</span><span>沙箱：让 agent 跑代码而不伤到宿主机</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/interpreters-programmatic-tool-calling.html" data-slug="interpreters-programmatic-tool-calling"><span class="num">10</span><span>解释器与程序化工具调用</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 C · 上下文工程</div><ul>
+<li><a href="../lessons/four-context-layers.html" data-slug="four-context-layers"><span class="num">11</span><span>上下文的四个层次</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/input-context.html" data-slug="input-context"><span class="num">12</span><span>输入上下文：prompt 是怎么被拼出来的</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/skills-progressive-disclosure.html" data-slug="skills-progressive-disclosure"><span class="num">13</span><span>Skills：渐进式披露</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/memory-long-term.html" data-slug="memory-long-term"><span class="num">14</span><span>Memory：长期记忆的四个维度</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/context-compression.html" data-slug="context-compression"><span class="num">15</span><span>压缩：Offloading 与 Summarization</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/prompt-caching.html" data-slug="prompt-caching"><span class="num">16</span><span>Prompt Caching：为什么它决定了栈的顺序</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/state-and-runtime-context.html" data-slug="state-and-runtime-context"><span class="num">17</span><span>State Schema 与 Runtime Context</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/multimodal.html" data-slug="multimodal"><span class="num">18</span><span>多模态输入与输出</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 D · 委派</div><ul>
+<li><a href="../lessons/subagents-fundamentals.html" data-slug="subagents-fundamentals"><span class="num">19</span><span>Subagent 原理</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/custom-subagents.html" data-slug="custom-subagents" class="active"><span class="num">20</span><span>自定义 Subagent 的字段设计</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/forked-subagents.html" data-slug="forked-subagents"><span class="num">21</span><span>Forked Subagents：继承父级上下文</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/dynamic-subagents.html" data-slug="dynamic-subagents"><span class="num">22</span><span>Dynamic Subagents：让代码决定开多少个子任务</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/async-subagents.html" data-slug="async-subagents"><span class="num">23</span><span>Async Subagents：跨请求长跑的子任务</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/task-planning-todos.html" data-slug="task-planning-todos"><span class="num">24</span><span>任务规划与 write_todos</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 E · 运行时管控</div><ul>
+<li><a href="../lessons/human-in-the-loop.html" data-slug="human-in-the-loop"><span class="num">25</span><span>Human-in-the-loop：在关键点按下暂停</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/fault-tolerance.html" data-slug="fault-tolerance"><span class="num">26</span><span>容错：不是所有错误都该被同样对待</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/profiles.html" data-slug="profiles"><span class="num">27</span><span>Profiles：让同一份代码适配不同模型</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 F · 流式与前端</div><ul>
+<li><a href="../lessons/streaming.html" data-slug="streaming"><span class="num">28</span><span>流式：把一棵树投影成几条流</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/event-streaming-subagents.html" data-slug="event-streaming-subagents"><span class="num">29</span><span>stream.subagents：每个子任务一个句柄</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/frontend-overview.html" data-slug="frontend-overview"><span class="num">30</span><span>前端架构：coordinator-worker</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-todo-list.html" data-slug="frontend-todo-list"><span class="num">31</span><span>前端模式一：Todo List</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-subagent-streaming.html" data-slug="frontend-subagent-streaming"><span class="num">32</span><span>前端模式二：Subagent 卡片</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-sandbox.html" data-slug="frontend-sandbox"><span class="num">33</span><span>前端模式三：IDE 式的沙箱界面</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 G · 应用与生产</div><ul>
+<li><a href="../lessons/retrieval-and-rag.html" data-slug="retrieval-and-rag"><span class="num">34</span><span>检索与 RAG：三种架构</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/deep-research-agent.html" data-slug="deep-research-agent"><span class="num">35</span><span>成品模式一：Deep Research Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/data-analysis-agent.html" data-slug="data-analysis-agent"><span class="num">36</span><span>成品模式二：Data Analysis Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/content-builder-agent.html" data-slug="content-builder-agent"><span class="num">37</span><span>成品模式三：Content Builder Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/grading-rubrics.html" data-slug="grading-rubrics"><span class="num">38</span><span>评分量表：让 agent 自己迭代到达标</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/going-to-production.html" data-slug="going-to-production"><span class="num">39</span><span>走向生产</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/acp-and-ag-ui.html" data-slug="acp-and-ag-ui"><span class="num">40</span><span>对外协议：ACP 与 AG-UI</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">速查手册</div><ul>
+<li><a href="../reference/glossary.html" data-slug="glossary"><span class="num">▸</span><span>术语表</span></a></li>
+<li><a href="../reference/stack-order.html" data-slug="stack-order"><span class="num">▸</span><span>中间件栈速查</span></a></li>
+<li><a href="../reference/api-cheatsheet.html" data-slug="api-cheatsheet"><span class="num">▸</span><span>API 速查</span></a></li>
+<li><a href="../reference/decision-map.html" data-slug="decision-map"><span class="num">▸</span><span>选型决策图</span></a></li>
+</ul></div>
+</aside>
+<div class="main">
+  <div class="topbar"><div class="wrap">
+    <button class="menu-btn" aria-label="切换目录">☰</button>
+    <span class="crumbs"><a href="../index.html">课程地图</a> / <b>模块 D · 委派</b> / <b>第 20 课</b></span>
+    <span class="progress-pill">
+      <span class="txt">0%</span>
+      <span class="bar"><i></i></span>
+    </span>
+  </div></div>
+  <div class="wrap">
+<header class="lesson-head">
+  <div class="lesson-kicker">
+    <span>第 20 课</span>
+    <span class="dot">·</span>
+    <span>模块 D · 委派</span>
+    <span class="dot">·</span>
+    <span>11 分钟</span>
+    <span class="tier-badge b">Tier B · 集成速览</span>
+  </div>
+  <h1>自定义 Subagent 的字段设计</h1>
+  <p class="lede">定义一个 subagent 是写一个字典。<b>真正的难点不是语法，而是每个字段继承还是不继承。</b>这一课用一张表把继承关系钉死，避免你在调试时怀疑人生。</p>
+</header>
+<article>
+<details class="toc-box"><summary>本页目录</summary>
+<ul>
+<li><a href="#subagent">最小可用的 subagent</a></li>
+<li><a href="#_1">继承表（最重要的一张表）</a></li>
+<li><a href="#description">description 是最重要的一个字段</a></li>
+<li><a href="#tools">tools 要尽量少</a></li>
+<li><a href="#response_format">response_format：让子任务返回结构化结果</a></li>
+<li><a href="#subagent_1">用不同模型跑不同 subagent</a></li>
+<li><a href="#compiledsubagent">CompiledSubAgent：预编译的图</a></li>
+<li><a href="#_2">结构化输出与状态继承的陷阱</a></li>
+<li><a href="#_3">下一课</a></li>
+</ul>
+
+</details>
+<h2 id="subagent">最小可用的 subagent</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="n">research_subagent</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"research-agent"</span><span class="p">,</span>
+    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Used to research more in depth questions"</span><span class="p">,</span>
+    <span class="s2">"system_prompt"</span><span class="p">:</span> <span class="s2">"You are a great researcher"</span><span class="p">,</span>
+    <span class="s2">"tools"</span><span class="p">:</span> <span class="p">[</span><span class="n">internet_search</span><span class="p">],</span>
+    <span class="s2">"model"</span><span class="p">:</span> <span class="s2">"openai:gpt-5.5"</span><span class="p">,</span>     <span class="c1"># 可选，默认用主 agent 的模型</span>
+<span class="p">}</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">create_deep_agent</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">"google_genai:gemini-3.6-flash"</span><span class="p">,</span>
+    <span class="n">subagents</span><span class="o">=</span><span class="p">[</span><span class="n">research_subagent</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>三个必填字段：<code>name</code>、<code>description</code>、<code>system_prompt</code>（后者对默认的 <code>isolated</code> 模式是必需的）。</p>
+<h2 id="_1">继承表（最重要的一张表）</h2>
+<p>这是官方文档里信息密度最高的一张表。<strong>"不继承"的项是坑的高发区</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>默认行为</th>
+<th>关键提醒</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>必填</td>
+<td>成为 <code>AIMessage</code> 的 metadata 与流式的标签</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>必填</td>
+<td><strong>主 agent 靠它决定何时委派</strong></td>
+</tr>
+<tr>
+<td><code>system_prompt</code></td>
+<td>isolated 模式必填</td>
+<td><strong>不继承</strong>主 agent；自定义 isolated subagent 必须自己写</td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td><code>"isolated"</code></td>
+<td>或 <code>"fork"</code>（继承父级对话，见下一课）</td>
+</tr>
+<tr>
+<td><code>tools</code></td>
+<td><strong>继承主 agent</strong></td>
+<td>一旦指定就是<strong>整体覆盖</strong>，不是追加</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td><strong>继承主 agent</strong></td>
+<td>可为不同任务配不同模型</td>
+</tr>
+<tr>
+<td><code>middleware</code></td>
+<td><strong>不继承</strong></td>
+<td>合入"同步 subagent 栈"</td>
+</tr>
+<tr>
+<td><code>interrupt_on</code></td>
+<td><strong>继承主 agent</strong></td>
+<td>subagent 的值覆盖默认</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td><strong>不继承</strong></td>
+<td>只有 general-purpose subagent 继承主 agent 的 skills</td>
+</tr>
+<tr>
+<td><code>response_format</code></td>
+<td>无</td>
+<td>设置后父 agent 收到的是 JSON 而不是自由文本</td>
+</tr>
+<tr>
+<td><code>permissions</code></td>
+<td><strong>继承主 agent</strong></td>
+<td>一旦设置就是<strong>整体替换</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="callout">
+<p class="callout-title">三类字段，三种语义</p>
+<ul>
+<li><strong>继承主 agent</strong>：<code>tools</code>、<code>model</code>、<code>interrupt_on</code>、<code>permissions</code></li>
+<li><strong>不继承</strong>：<code>system_prompt</code>、<code>middleware</code>、<code>skills</code></li>
+<li><strong>覆盖而非追加</strong>：<code>tools</code>、<code>permissions</code></li>
+</ul>
+<p>把这三类分清楚，调试时就不会问"为什么我的 subagent 没有继承那个配置"。</p>
+</div>
+<h2 id="description"><code>description</code> 是最重要的一个字段</h2>
+<p>因为<strong>主 agent 靠它决定要不要委派</strong>。官方给的指导是
+"Be specific and action-oriented"。</p>
+<div class="compare">
+<div class="yes">
+<h4>好的 description</h4>
+<ul>
+<li>"Reviews code for security issues, citing lines and severity"</li>
+<li>说了做什么 + 产出什么</li>
+</ul>
+</div>
+<div class="no">
+<h4>差的 description</h4>
+<ul>
+<li>"A helpful agent"</li>
+<li>没有可匹配的信号</li>
+</ul>
+</div>
+</div>
+
+<p>这和 skills 的 <code>description</code> 是同一个道理（第 13 课）：
+<strong>在"渐进式披露"的系统里，那一行文字就是全部的检索键。</strong></p>
+<h2 id="tools"><code>tools</code> 要尽量少</h2>
+<p>官方在最佳实践里专门列了 "Minimize tool sets"，并给了正反例：</p>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="c1"># ✅ Good: 聚焦的工具集</span>
+<span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="n">read_file</span><span class="p">,</span> <span class="n">grep</span><span class="p">]</span>
+
+<span class="c1"># ❌ Bad: 工具太多</span>
+<span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="n">read_file</span><span class="p">,</span> <span class="n">write_file</span><span class="p">,</span> <span class="n">edit_file</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">grep</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span>
+       <span class="n">internet_search</span><span class="p">,</span> <span class="n">fetch_url</span><span class="p">,</span> <span class="n">run_sql</span><span class="p">,</span> <span class="n">send_email</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+
+<p>理由不是"安全"，而是<strong>准确率</strong>：候选工具越多，选错的概率越高。</p>
+<h2 id="response_format"><code>response_format</code>：让子任务返回结构化结果</h2>
+<p>设置之后，父 agent 收到的不是一段自由文本，而是符合 schema 的 JSON。
+官方支持的形态：Pydantic 模型、<code>ToolStrategy(...)</code>、<code>ProviderStrategy(...)</code>、或裸 schema 类型。</p>
+<div class="callout">
+<p class="callout-title">这是"单次交接"的强化版</p>
+<p>subagent 的一个软肋是"返回的是自然语言，父 agent 还得解析"。
+<code>response_format</code> 把这个交接点变成<strong>契约</strong>：
+字段名、类型都由你定，父 agent 拿到的是可编程的数据。
+需要"子任务结果要参与后续逻辑判断"时，这是首选。</p>
+</div>
+<h2 id="subagent_1">用不同模型跑不同 subagent</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="n">subagents</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"cheap-scanner"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span>
+     <span class="s2">"system_prompt"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">:</span> <span class="s2">"openai:gpt-5-mini"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"deep-analyst"</span><span class="p">,</span>  <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span>
+     <span class="s2">"system_prompt"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">:</span> <span class="s2">"anthropic:claude-sonnet-5"</span><span class="p">},</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p>官方在最佳实践里明确写了 <strong>"Choose models by task"</strong>。
+典型分工：扫描/分类用便宜快的，分析/写作用强的。</p>
+<h2 id="compiledsubagent"><code>CompiledSubAgent</code>：预编译的图</h2>
+<p>当子任务本身就是一个完整的工作流，直接嵌一张已经编译好的 LangGraph 图：</p>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">deepagents</span><span class="w"> </span><span class="kn">import</span> <span class="n">CompiledSubAgent</span><span class="p">,</span> <span class="n">create_deep_agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain.agents</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_agent</span>
+
+<span class="n">custom_graph</span> <span class="o">=</span> <span class="n">create_agent</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">"openai:gpt-5.5"</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="n">specialized_tools</span><span class="p">,</span>
+    <span class="n">system_prompt</span><span class="o">=</span><span class="s2">"You are a specialized agent for data analysis..."</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">subagents</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">CompiledSubAgent</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">"data-analyst"</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Analyzes datasets and produces reports"</span><span class="p">,</span>
+        <span class="n">runnable</span><span class="o">=</span><span class="n">custom_graph</span><span class="p">,</span>          <span class="c1"># 必须已经 .compile()</span>
+    <span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>SubAgent</code>（字典）</th>
+<th><code>CompiledSubAgent</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定义方式</td>
+<td>声明式字段</td>
+<td>一个编译好的 <code>Runnable</code></td>
+</tr>
+<tr>
+<td>灵活性</td>
+<td>中</td>
+<td>高（你可以画任意图）</td>
+</tr>
+<tr>
+<td>继承父级 <code>state_schema</code></td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>系统提示</td>
+<td>由字段给出</td>
+<td>图自带</td>
+</tr>
+<tr>
+<td>适用</td>
+<td>绝大多数场景</td>
+<td>复杂/既有工作流</td>
+</tr>
+</tbody>
+</table>
+<div class="callout warn">
+<p class="callout-title">自定义 LangGraph 图必须有个 state key 叫 messages</p>
+<p>官方明确要求：如果你自己画图，<strong>图里必须有名为 <code>"messages"</code> 的状态键</strong>。
+subagent 的交接协议建立在消息历史上，没有这个键就无法把结果交回父 agent。</p>
+</div>
+<h2 id="_2">结构化输出与状态继承的陷阱</h2>
+<p>回顾第 17 课的一个结论：</p>
+<table>
+<thead>
+<tr>
+<th>subagent 类型</th>
+<th>继承父级 <code>state_schema</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>声明式 <code>SubAgent</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>CompiledSubAgent</code></td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<p>所以如果你的父 agent 用了自定义 state，而某个 <code>CompiledSubAgent</code> 也需要这些字段，
+<strong>你必须用兼容的 schema 自己编译那张图</strong>。这是"灵活性换来的责任"。</p>
+<h2 id="_3">下一课</h2>
+<p><code>mode</code> 字段还有一个值没讲：<strong><code>"fork"</code></strong>。
+它把 subagent 从"全新上下文"变成"继承父级对话"——一个看似小的改动，解决了一个具体难题。</p>
+</article>
+<section class="quiz" data-slug="custom-subagents">
+<div class="quiz-head"><span>检索练习 · 不要回看上文，先试着回忆</span><span class="score">0 / 4 正确</span></div>
+<div class="quiz-body">
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">01</span>关于 subagent 的 tools 字段，正确的理解是？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>它总是追加在主 agent 的工具之后</span></li>
+<li><span class="mk">B</span><span>它默认不继承，需要显式指定</span></li>
+<li><span class="mk">C</span><span>它默认继承主 agent，一旦指定就整体覆盖</span></li>
+<li><span class="mk">D</span><span>它只控制文件系统工具，不影响自定义工具</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方表格写明：tools 默认从主 agent 继承，但当指定时完全覆盖继承来的工具集，而不是合并。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">02</span>哪个字段默认**不**从主 agent 继承？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>interrupt_on 与 permissions</span></li>
+<li><span class="mk">B</span><span>tools 与 model</span></li>
+<li><span class="mk">C</span><span>system_prompt、middleware 与 skills</span></li>
+<li><span class="mk">D</span><span>name 与 description</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方表格中标注"Does not inherit from main agent"的是 system_prompt（isolated 模式下）、middleware 与 skills。tools、model、interrupt_on、permissions 都默认继承。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">03</span>自己用 LangGraph 画一个图当作 subagent，官方要求它至少具备什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>一个名为 task 的入口节点</span></li>
+<li><span class="mk">B</span><span>一个 CompiledSubAgent 装饰器</span></li>
+<li><span class="mk">C</span><span>一个名为 messages 的状态键</span></li>
+<li><span class="mk">D</span><span>一个 response_format 定义</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方明确要求自定义 LangGraph 图的 state 里要有名为 "messages" 的键。交接协议建立在消息历史上。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">04</span>为什么官方建议 subagent 的工具集要尽量小？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>因为工具越多启动越慢</span></li>
+<li><span class="mk">B</span><span>因为工具越多权限越难配置</span></li>
+<li><span class="mk">C</span><span>因为候选工具越多，模型选错的概率越高</span></li>
+<li><span class="mk">D</span><span>因为每个工具都会创建一次模型调用</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方在最佳实践中以正反例说明 minimize tool sets，理由是选择正确工具的概率随候选集增大而下降，这是候选集规模问题而不是模型能力问题。</div>
+</div>
+</div>
+<div class="quiz-foot"><span class="result"></span><br><button class="reset">重做</button><button class="reveal">显示全部解析</button></div>
+</section>
+<div class="mastery">
+  <label><input type="checkbox" data-slug="custom-subagents">
+  <span>本课已掌握
+  <span class="hint">勾选后，左侧目录和首页会标记完成，进度保存在本机浏览器里。
+  能通过上面的自测、并且能不看笔记复述本课的核心机制，再勾。</span></span></label>
+</div>
+<footer class="lesson-foot">
+  <div class="source-box"><span class="lbl">本课事实来源 · 建议通读原文</span><a href="https://docs.langchain.com/oss/python/deepagents/subagents#custom-subagents" target="_blank" rel="noopener">Subagents · Custom subagents（官方）</a><br><span style="color:#8b909c;font-size:11.5px">https://docs.langchain.com/oss/python/deepagents/subagents#custom-subagents</span></div>
+  <div class="ask-teacher">有讲不清楚的地方，直接把问题抛给我——我是这门课的老师，
+  可以就任何一节、任何一行代码展开，也可以按你的问题临时加一课。</div>
+  <div class="prevnext"><a class="prev" href="subagents-fundamentals.html"><span class="dir">← 上一课</span><span class="ttl">Subagent 原理</span></a><a class="next" href="forked-subagents.html"><span class="dir">下一课 →</span><span class="ttl">Forked Subagents：继承父级上下文</span></a></div>
+</footer>
+  </div>
+</div>
+</div>
+<script>window.SITE = {"lessons": [{"slug": "agent-harness-mental-model", "num": 1, "title": "Agent Harness 的心智模型", "module": "W1", "tier": "A"}, {"slug": "three-layers-langchain-langgraph-deepagents", "num": 2, "title": "三层分工：LangChain / LangGraph / Deep Agents", "module": "W1", "tier": "A"}, {"slug": "create-deep-agent-anatomy", "num": 3, "title": "create_deep_agent 全景解剖", "module": "W1", "tier": "A"}, {"slug": "middleware-stack", "num": 4, "title": "Middleware 栈：harness 的骨架", "module": "W1", "tier": "A"}, {"slug": "tools-and-mcp", "num": 5, "title": "工具与 MCP：agent 的手", "module": "W2", "tier": "B"}, {"slug": "virtual-filesystem", "num": 6, "title": "虚拟文件系统：harness 的地基", "module": "W2", "tier": "A"}, {"slug": "backend-family", "num": 7, "title": "六个内建 Backend 的取舍", "module": "W2", "tier": "A"}, {"slug": "filesystem-permissions", "num": 8, "title": "声明式权限：像防火墙一样配文件访问", "module": "W2", "tier": "B"}, {"slug": "sandboxes", "num": 9, "title": "沙箱：让 agent 跑代码而不伤到宿主机", "module": "W2", "tier": "B"}, {"slug": "interpreters-programmatic-tool-calling", "num": 10, "title": "解释器与程序化工具调用", "module": "W2", "tier": "A"}, {"slug": "four-context-layers", "num": 11, "title": "上下文的四个层次", "module": "W3", "tier": "A"}, {"slug": "input-context", "num": 12, "title": "输入上下文：prompt 是怎么被拼出来的", "module": "W3", "tier": "B"}, {"slug": "skills-progressive-disclosure", "num": 13, "title": "Skills：渐进式披露", "module": "W3", "tier": "A"}, {"slug": "memory-long-term", "num": 14, "title": "Memory：长期记忆的四个维度", "module": "W3", "tier": "A"}, {"slug": "context-compression", "num": 15, "title": "压缩：Offloading 与 Summarization", "module": "W3", "tier": "A"}, {"slug": "prompt-caching", "num": 16, "title": "Prompt Caching：为什么它决定了栈的顺序", "module": "W3", "tier": "B"}, {"slug": "state-and-runtime-context", "num": 17, "title": "State Schema 与 Runtime Context", "module": "W3", "tier": "A"}, {"slug": "multimodal", "num": 18, "title": "多模态输入与输出", "module": "W3", "tier": "B"}, {"slug": "subagents-fundamentals", "num": 19, "title": "Subagent 原理", "module": "W4", "tier": "A"}, {"slug": "custom-subagents", "num": 20, "title": "自定义 Subagent 的字段设计", "module": "W4", "tier": "B"}, {"slug": "forked-subagents", "num": 21, "title": "Forked Subagents：继承父级上下文", "module": "W4", "tier": "B"}, {"slug": "dynamic-subagents", "num": 22, "title": "Dynamic Subagents：让代码决定开多少个子任务", "module": "W4", "tier": "A"}, {"slug": "async-subagents", "num": 23, "title": "Async Subagents：跨请求长跑的子任务", "module": "W4", "tier": "B"}, {"slug": "task-planning-todos", "num": 24, "title": "任务规划与 write_todos", "module": "W4", "tier": "B"}, {"slug": "human-in-the-loop", "num": 25, "title": "Human-in-the-loop：在关键点按下暂停", "module": "W5", "tier": "A"}, {"slug": "fault-tolerance", "num": 26, "title": "容错：不是所有错误都该被同样对待", "module": "W5", "tier": "B"}, {"slug": "profiles", "num": 27, "title": "Profiles：让同一份代码适配不同模型", "module": "W5", "tier": "A"}, {"slug": "streaming", "num": 28, "title": "流式：把一棵树投影成几条流", "module": "W6", "tier": "B"}, {"slug": "event-streaming-subagents", "num": 29, "title": "stream.subagents：每个子任务一个句柄", "module": "W6", "tier": "A"}, {"slug": "frontend-overview", "num": 30, "title": "前端架构：coordinator-worker", "module": "W6", "tier": "B"}, {"slug": "frontend-todo-list", "num": 31, "title": "前端模式一：Todo List", "module": "W6", "tier": "B"}, {"slug": "frontend-subagent-streaming", "num": 32, "title": "前端模式二：Subagent 卡片", "module": "W6", "tier": "B"}, {"slug": "frontend-sandbox", "num": 33, "title": "前端模式三：IDE 式的沙箱界面", "module": "W6", "tier": "B"}, {"slug": "retrieval-and-rag", "num": 34, "title": "检索与 RAG：三种架构", "module": "W7", "tier": "B"}, {"slug": "deep-research-agent", "num": 35, "title": "成品模式一：Deep Research Agent", "module": "W7", "tier": "B"}, {"slug": "data-analysis-agent", "num": 36, "title": "成品模式二：Data Analysis Agent", "module": "W7", "tier": "B"}, {"slug": "content-builder-agent", "num": 37, "title": "成品模式三：Content Builder Agent", "module": "W7", "tier": "B"}, {"slug": "grading-rubrics", "num": 38, "title": "评分量表：让 agent 自己迭代到达标", "module": "W7", "tier": "B"}, {"slug": "going-to-production", "num": 39, "title": "走向生产", "module": "W7", "tier": "A"}, {"slug": "acp-and-ag-ui", "num": 40, "title": "对外协议：ACP 与 AG-UI", "module": "W7", "tier": "B"}], "refs": [{"slug": "glossary", "title": "术语表"}, {"slug": "stack-order", "title": "中间件栈速查"}, {"slug": "api-cheatsheet", "title": "API 速查"}, {"slug": "decision-map", "title": "选型决策图"}]};</script>
+<script src="../assets/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>评分量表：让 agent 自己迭代到达标 · Deep Agents 教学站</title>
+<meta name="description" content="深入理解 Deep Agents agent harness 原理的中文教学站">
+<link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+<div class="sidebar-brand"><a href="../index.html">Deep Agents 教学站</a><span class="sub">Agent Harness 原理 · 中文</span></div>
+<div class="nav-group"><div class="nav-group-title">模块 A · 心智模型</div><ul>
+<li><a href="../lessons/agent-harness-mental-model.html" data-slug="agent-harness-mental-model"><span class="num">01</span><span>Agent Harness 的心智模型</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/three-layers-langchain-langgraph-deepagents.html" data-slug="three-layers-langchain-langgraph-deepagents"><span class="num">02</span><span>三层分工：LangChain / LangGraph / Deep Agents</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/create-deep-agent-anatomy.html" data-slug="create-deep-agent-anatomy"><span class="num">03</span><span>create_deep_agent 全景解剖</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/middleware-stack.html" data-slug="middleware-stack"><span class="num">04</span><span>Middleware 栈：harness 的骨架</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 B · 执行环境</div><ul>
+<li><a href="../lessons/tools-and-mcp.html" data-slug="tools-and-mcp"><span class="num">05</span><span>工具与 MCP：agent 的手</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/virtual-filesystem.html" data-slug="virtual-filesystem"><span class="num">06</span><span>虚拟文件系统：harness 的地基</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/backend-family.html" data-slug="backend-family"><span class="num">07</span><span>六个内建 Backend 的取舍</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/filesystem-permissions.html" data-slug="filesystem-permissions"><span class="num">08</span><span>声明式权限：像防火墙一样配文件访问</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/sandboxes.html" data-slug="sandboxes"><span class="num">09</span><span>沙箱：让 agent 跑代码而不伤到宿主机</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/interpreters-programmatic-tool-calling.html" data-slug="interpreters-programmatic-tool-calling"><span class="num">10</span><span>解释器与程序化工具调用</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 C · 上下文工程</div><ul>
+<li><a href="../lessons/four-context-layers.html" data-slug="four-context-layers"><span class="num">11</span><span>上下文的四个层次</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/input-context.html" data-slug="input-context"><span class="num">12</span><span>输入上下文：prompt 是怎么被拼出来的</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/skills-progressive-disclosure.html" data-slug="skills-progressive-disclosure"><span class="num">13</span><span>Skills：渐进式披露</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/memory-long-term.html" data-slug="memory-long-term"><span class="num">14</span><span>Memory：长期记忆的四个维度</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/context-compression.html" data-slug="context-compression"><span class="num">15</span><span>压缩：Offloading 与 Summarization</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/prompt-caching.html" data-slug="prompt-caching"><span class="num">16</span><span>Prompt Caching：为什么它决定了栈的顺序</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/state-and-runtime-context.html" data-slug="state-and-runtime-context"><span class="num">17</span><span>State Schema 与 Runtime Context</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/multimodal.html" data-slug="multimodal"><span class="num">18</span><span>多模态输入与输出</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 D · 委派</div><ul>
+<li><a href="../lessons/subagents-fundamentals.html" data-slug="subagents-fundamentals"><span class="num">19</span><span>Subagent 原理</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/custom-subagents.html" data-slug="custom-subagents"><span class="num">20</span><span>自定义 Subagent 的字段设计</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/forked-subagents.html" data-slug="forked-subagents"><span class="num">21</span><span>Forked Subagents：继承父级上下文</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/dynamic-subagents.html" data-slug="dynamic-subagents"><span class="num">22</span><span>Dynamic Subagents：让代码决定开多少个子任务</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/async-subagents.html" data-slug="async-subagents"><span class="num">23</span><span>Async Subagents：跨请求长跑的子任务</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/task-planning-todos.html" data-slug="task-planning-todos"><span class="num">24</span><span>任务规划与 write_todos</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 E · 运行时管控</div><ul>
+<li><a href="../lessons/human-in-the-loop.html" data-slug="human-in-the-loop"><span class="num">25</span><span>Human-in-the-loop：在关键点按下暂停</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/fault-tolerance.html" data-slug="fault-tolerance"><span class="num">26</span><span>容错：不是所有错误都该被同样对待</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/profiles.html" data-slug="profiles"><span class="num">27</span><span>Profiles：让同一份代码适配不同模型</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 F · 流式与前端</div><ul>
+<li><a href="../lessons/streaming.html" data-slug="streaming"><span class="num">28</span><span>流式：把一棵树投影成几条流</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/event-streaming-subagents.html" data-slug="event-streaming-subagents"><span class="num">29</span><span>stream.subagents：每个子任务一个句柄</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/frontend-overview.html" data-slug="frontend-overview"><span class="num">30</span><span>前端架构：coordinator-worker</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-todo-list.html" data-slug="frontend-todo-list"><span class="num">31</span><span>前端模式一：Todo List</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-subagent-streaming.html" data-slug="frontend-subagent-streaming"><span class="num">32</span><span>前端模式二：Subagent 卡片</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-sandbox.html" data-slug="frontend-sandbox"><span class="num">33</span><span>前端模式三：IDE 式的沙箱界面</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 G · 应用与生产</div><ul>
+<li><a href="../lessons/retrieval-and-rag.html" data-slug="retrieval-and-rag"><span class="num">34</span><span>检索与 RAG：三种架构</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/deep-research-agent.html" data-slug="deep-research-agent"><span class="num">35</span><span>成品模式一：Deep Research Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/data-analysis-agent.html" data-slug="data-analysis-agent"><span class="num">36</span><span>成品模式二：Data Analysis Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/content-builder-agent.html" data-slug="content-builder-agent"><span class="num">37</span><span>成品模式三：Content Builder Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/grading-rubrics.html" data-slug="grading-rubrics" class="active"><span class="num">38</span><span>评分量表：让 agent 自己迭代到达标</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/going-to-production.html" data-slug="going-to-production"><span class="num">39</span><span>走向生产</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/acp-and-ag-ui.html" data-slug="acp-and-ag-ui"><span class="num">40</span><span>对外协议：ACP 与 AG-UI</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">速查手册</div><ul>
+<li><a href="../reference/glossary.html" data-slug="glossary"><span class="num">▸</span><span>术语表</span></a></li>
+<li><a href="../reference/stack-order.html" data-slug="stack-order"><span class="num">▸</span><span>中间件栈速查</span></a></li>
+<li><a href="../reference/api-cheatsheet.html" data-slug="api-cheatsheet"><span class="num">▸</span><span>API 速查</span></a></li>
+<li><a href="../reference/decision-map.html" data-slug="decision-map"><span class="num">▸</span><span>选型决策图</span></a></li>
+</ul></div>
+</aside>
+<div class="main">
+  <div class="topbar"><div class="wrap">
+    <button class="menu-btn" aria-label="切换目录">☰</button>
+    <span class="crumbs"><a href="../index.html">课程地图</a> / <b>模块 G · 应用与生产</b> / <b>第 38 课</b></span>
+    <span class="progress-pill">
+      <span class="txt">0%</span>
+      <span class="bar"><i></i></span>
+    </span>
+  </div></div>
+  <div class="wrap">
+<header class="lesson-head">
+  <div class="lesson-kicker">
+    <span>第 38 课</span>
+    <span class="dot">·</span>
+    <span>模块 G · 应用与生产</span>
+    <span class="dot">·</span>
+    <span>11 分钟</span>
+    <span class="tier-badge b">Tier B · 集成速览</span>
+  </div>
+  <h1>评分量表：让 agent 自己迭代到达标</h1>
+  <p class="lede">前面所有机制都在解决"agent 能不能做完"。这一课解决另一个问题：<b>怎么让它知道"做好了"是什么意思。</b></p>
+</header>
+<article>
+<details class="toc-box"><summary>本页目录</summary>
+<ul>
+<li><a href="#_1">问题：模型不知道自己合格了没有</a></li>
+<li><a href="#_2">启用方式</a></li>
+<li><a href="#_3">评判循环</a></li>
+<li><a href="#rubric">在调用时传 rubric</a></li>
+<li><a href="#rubric_1">Rubric 的判定结果</a></li>
+<li><a href="#_4">观察迭代过程</a></li>
+<li><a href="#_5">跨调用持久化</a></li>
+<li><a href="#python">官方示例：生成经过审查的 Python 代码</a></li>
+<li><a href="#_6">与其它质量机制的对比</a></li>
+<li><a href="#_7">下一课</a></li>
+</ul>
+
+</details>
+<h2 id="_1">问题：模型不知道自己合格了没有</h2>
+<p>一个 agent 写完一段代码，它凭什么认为写完了？</p>
+<ul>
+<li>没有任何检查 → 它觉得"差不多"，直接返回</li>
+<li>只有人检查 → 迭代周期变成小时级</li>
+<li><strong>有一个自动的评判标准</strong> → 它可以自己循环到达标</li>
+</ul>
+<p><strong>Rubric（评分量表）就是那个标准。</strong></p>
+<h2 id="_2">启用方式</h2>
+<div class="code-label">python</div><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">deepagents</span><span class="w"> </span><span class="kn">import</span> <span class="n">RubricMiddleware</span><span class="p">,</span> <span class="n">create_deep_agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.checkpoint.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">InMemorySaver</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">create_deep_agent</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">"openai:gpt-5.5"</span><span class="p">,</span>
+    <span class="n">middleware</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">RubricMiddleware</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">"anthropic:claude-haiku-4-5"</span><span class="p">,</span>   <span class="c1"># 评判用的模型</span>
+            <span class="n">max_iterations</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>                      <span class="c1"># 最多迭代几轮</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">checkpointer</span><span class="o">=</span><span class="n">InMemorySaver</span><span class="p">(),</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<div class="callout">
+<p class="callout-title">两个参数透露了全部设计</p>
+<ul>
+<li><strong><code>model=</code></strong>：评判用<strong>单独的模型</strong>。这意味着评判者可以和生产者不同
+  ——常见做法是用更便宜/更快的模型做评判（这里的例子用了一个较小的模型）。</li>
+<li><strong><code>max_iterations=</code></strong>：循环有上界。<strong>必须有上界</strong>，否则一个永远不达标的
+  agent 会无限迭代下去，烧掉大量 token。</li>
+</ul>
+<p>这和 fault tolerance 里的调用限额（第 26 课）是同一个思路：
+<strong>任何自动循环都需要一个成本上界。</strong></p>
+</div>
+<div class="callout key">
+<p class="callout-title">需要 checkpointer</p>
+<p>官方示例里带了 <code>checkpointer=InMemorySaver()</code>。
+因为多轮迭代意味着状态要在轮次之间保持——这和中断需要 checkpointer
+是同一个原因（第 25 课）。</p>
+</div>
+<h2 id="_3">评判循环</h2>
+<div class="flow col">
+  <div class="node"><span class="k">① 生成</span><span class="v">主 agent 产出内容（代码、文本…）</span></div>
+  <div class="arrow">↓</div>
+  <div class="node hi"><span class="k">② 评分</span><span class="v">按 rubric 判定：达标了吗？</span></div>
+  <div class="arrow">↓ 未达标</div>
+  <div class="node"><span class="k">③ 带着反馈重做</span><span class="v">把"哪里不达标"传回给主 agent</span></div>
+  <div class="arrow">↓ 最多 max_iterations 轮</div>
+  <div class="node dim"><span class="k">④ 交出结果</span><span class="v">达标，或达到迭代上限</span></div>
+</div>
+
+<h2 id="rubric">在调用时传 rubric</h2>
+<p>官方有一节 "Pass rubric on invocation"。这说明一个重要事实：</p>
+<div class="callout">
+<p class="callout-title">rubric 不一定要写死在 middleware 里</p>
+<p>它是<strong>按调用传入</strong>的。这意味着：</p>
+<ul>
+<li>同一个 agent 可以应对不同任务的验收标准</li>
+<li>标准可以由上游系统决定（比如工单系统里带的质量要求）</li>
+<li>你不需要为每种任务各建一个 agent</li>
+</ul>
+<p>这是"配置与调用分离"的又一个实例——和第 27 课的 profile 思路一致。</p>
+</div>
+<h2 id="rubric_1">Rubric 的判定结果</h2>
+<p>官方有 "Rubric verdicts" 一节。概念上会有几种判定结果，而不同的判定对应不同的后续动作：</p>
+<table>
+<thead>
+<tr>
+<th>判定</th>
+<th>后续</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>达标</td>
+<td>结束循环，交出产出</td>
+</tr>
+<tr>
+<td>不达标（可改进）</td>
+<td>带着反馈再迭代一轮</td>
+</tr>
+<tr>
+<td>达到迭代上限</td>
+<td>停止，交出当前最好结果</td>
+</tr>
+</tbody>
+</table>
+<div class="callout warn">
+<p class="callout-title">达到上限时也要有产出</p>
+<p>这一点容易被忽略：<strong>迭代到上限却还没达标时，不能什么都不返回。</strong>
+你应该拿到"当前最好的版本 + 为什么没达标"，
+这样人才能接着处理。</p>
+<p><code>max_iterations</code> 的语义是<strong>"最多试几次"</strong>，不是"必须达标"。</p>
+</div>
+<h2 id="_4">观察迭代过程</h2>
+<p>官方有一节 "Observe iteration progress"，还有 "Grader pass events"。</p>
+<p>这说明评判过程是<strong>可观测的</strong>：</p>
+<div class="flow">
+  <div class="node"><span class="k">迭代进度</span><span class="v">第几轮、当前判定</span></div>
+  <div class="arrow">·</div>
+  <div class="node"><span class="k">grader pass 事件</span><span class="v">评判这一步在流里是可见的</span></div>
+</div>
+
+<p><strong>为什么这很重要？</strong> 因为评判模型本身也会有误差。
+如果用户看到"agent 来回改了三次"，他们需要能查清是<strong>产出真的不合格</strong>，
+还是<strong>评判标准过严</strong>。</p>
+<div class="callout">
+<p class="callout-title">把 grader 当作需要调试的组件</p>
+<p>不要在第一次使用 rubric 时就期待它准确。
+像调试任何分类器一样调试它：看它的判定理由、找误判的案例、
+修正 rubric 的措辞。</p>
+<p>官方给出 grader pass 事件，本质上就是把评判这一步<strong>放到可观测表面上</strong>。</p>
+</div>
+<h2 id="_5">跨调用持久化</h2>
+<p>官方有一节 "Persist rubrics across invocations"。</p>
+<p>这解决了多轮交互的现实问题：用户说"再改改"，你需要让<strong>同一个标准</strong>继续生效，
+而不是每一轮都重新声明。</p>
+<h2 id="python">官方示例：生成经过审查的 Python 代码</h2>
+<p>官方的完整示例是 "generate vetted Python code"——这个名字很精确：</p>
+<table>
+<thead>
+<tr>
+<th>词</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>vetted</strong></td>
+<td>经过审查的，不是"生成完就交"</td>
+</tr>
+<tr>
+<td><strong>Python code</strong></td>
+<td>代码是最适合用 rubric 的领域</td>
+</tr>
+</tbody>
+</table>
+<p><strong>为什么代码特别适合？</strong> 因为检查标准是<strong>可机械化的</strong>：</p>
+<ul>
+<li>能跑通吗？</li>
+<li>有类型问题吗？</li>
+<li>覆盖了边界情况吗？</li>
+<li>有安全漏洞吗？</li>
+</ul>
+<div class="callout">
+<p class="callout-title">这解释了 rubric 的适用边界</p>
+<p><strong>Rubric 适合"验收标准可以被明确陈述"的产出。</strong></p>
+<ul>
+<li>代码 → 很适合（可执行、可检查）</li>
+<li>结构化数据 → 很适合（schema 可验证）</li>
+<li>研究报告 → 中等（有部分可查：引用是否存在）</li>
+<li>创意写作 → 较难（"好不好"很难写清）</li>
+</ul>
+<p>如果一个任务的验收标准你自己都说不清楚，rubric 不会帮上忙。
+<strong>这不是技术限制，是问题性质。</strong></p>
+</div>
+<h2 id="_6">与其它质量机制的对比</h2>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>作用</th>
+<th>时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rubric</strong></td>
+<td>迭代到达标</td>
+<td>产出后、交付前</td>
+</tr>
+<tr>
+<td><strong>Human-in-the-loop</strong></td>
+<td>人做最终判断</td>
+<td>关键动作前</td>
+</tr>
+<tr>
+<td><strong>Adversarial verification</strong>（第 22 课）</td>
+<td>专门找问题</td>
+<td>产出后</td>
+</tr>
+<tr>
+<td><strong>LangSmith 评估</strong></td>
+<td>离线批量测量</td>
+<td>开发期</td>
+</tr>
+</tbody>
+</table>
+<div class="callout key">
+<p class="callout-title">最后一行值得注意</p>
+<p>官方在 quickstart 的 next steps 里建议用
+<a href="https://docs.langchain.com/langsmith/evaluation-quickstart">LangSmith evaluation</a>
+跑自动化测试、用数据集衡量 agent 表现。</p>
+<p><strong>Rubric 是运行时的质量循环；evaluation 是开发期的质量度量。</strong>
+前者让单次任务达标，后者让你知道改动有没有让整体变好。</p>
+</div>
+<h2 id="_7">下一课</h2>
+<p>还剩最后两块：<strong>怎么把它送进生产</strong>，以及<strong>怎么让外部工具/编辑器接进来</strong>。
+先讲生产。</p>
+</article>
+<section class="quiz" data-slug="grading-rubrics">
+<div class="quiz-head"><span>检索练习 · 不要回看上文，先试着回忆</span><span class="score">0 / 4 正确</span></div>
+<div class="quiz-body">
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">01</span>RubricMiddleware 的 max_iterations 参数为什么是必需的？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>因为评判模型只支持有限次调用</span></li>
+<li><span class="mk">B</span><span>因为超过三轮后质量不再提升</span></li>
+<li><span class="mk">C</span><span>因为任何自动循环都需要成本上界，否则可能无限迭代</span></li>
+<li><span class="mk">D</span><span>因为 checkpointer 无法保存更多轮次的状态</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>自动评判循环若永远不达标会持续消耗 token，必须有上界。这与调用限额中间件给成本设上界是同一思路。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">02</span>评判使用单独的 model 参数，这带来的主要灵活性是什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>评判模型可以访问主模型看不到的工具</span></li>
+<li><span class="mk">B</span><span>评判模型可以绕过 checkpointer</span></li>
+<li><span class="mk">C</span><span>评判者与生产者可以是不同模型，例如用更便宜的模型做评判</span></li>
+<li><span class="mk">D</span><span>评判模型可以并行运行多个实例</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>RubricMiddleware 接受独立的 model，官方示例用了一个较小的模型（claude-haiku）来评分，使生产者与评判者解耦。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">03</span>达到 max_iterations 但内容仍未达标时，正确的预期是？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>抛出异常并终止整个运行</span></li>
+<li><span class="mk">B</span><span>自动放宽标准使其通过</span></li>
+<li><span class="mk">C</span><span>停止迭代并交出当前最好结果与未达标原因</span></li>
+<li><span class="mk">D</span><span>无限继续迭代直到达标</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>max_iterations 的语义是"最多试几次"。到上限时仍应产出当前版本并保留未达标的信息，交给人继续处理。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">04</span>为什么官方的完整示例选择"生成经过审查的 Python 代码"？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>因为 Python 是 Deep Agents 唯一支持的沙箱语言</span></li>
+<li><span class="mk">B</span><span>因为代码生成的 token 成本最低</span></li>
+<li><span class="mk">C</span><span>因为代码的验收标准可以被明确陈述与机械检查</span></li>
+<li><span class="mk">D</span><span>因为代码不需要人类审批</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>Rubric 的适用边界是"验收标准能否被明确陈述"。代码可执行、可做类型检查、可查安全漏洞，因此最适合作为 rubric 示例；而创意写作这类"好不好"难以表述的任务则不适用。</div>
+</div>
+</div>
+<div class="quiz-foot"><span class="result"></span><br><button class="reset">重做</button><button class="reveal">显示全部解析</button></div>
+</section>
+<div class="mastery">
+  <label><input type="checkbox" data-slug="grading-rubrics">
+  <span>本课已掌握
+  <span class="hint">勾选后，左侧目录和首页会标记完成，进度保存在本机浏览器里。
+  能通过上面的自测、并且能不看笔记复述本课的核心机制，再勾。</span></span></label>
+</div>
+<footer class="lesson-foot">
+  <div class="source-box"><span class="lbl">本课事实来源 · 建议通读原文</span><a href="https://docs.langchain.com/oss/python/deepagents/rubric" target="_blank" rel="noopener">Grading rubrics（官方）</a><br><span style="color:#8b909c;font-size:11.5px">https://docs.langchain.com/oss/python/deepagents/rubric</span></div>
+  <div class="ask-teacher">有讲不清楚的地方，直接把问题抛给我——我是这门课的老师，
+  可以就任何一节、任何一行代码展开，也可以按你的问题临时加一课。</div>
+  <div class="prevnext"><a class="prev" href="content-builder-agent.html"><span class="dir">← 上一课</span><span class="ttl">成品模式三：Content Builder Agent</span></a><a class="next" href="going-to-production.html"><span class="dir">下一课 →</span><span class="ttl">走向生产</span></a></div>
+</footer>
+  </div>
+</div>
+</div>
+<script>window.SITE = {"lessons": [{"slug": "agent-harness-mental-model", "num": 1, "title": "Agent Harness 的心智模型", "module": "W1", "tier": "A"}, {"slug": "three-layers-langchain-langgraph-deepagents", "num": 2, "title": "三层分工：LangChain / LangGraph / Deep Agents", "module": "W1", "tier": "A"}, {"slug": "create-deep-agent-anatomy", "num": 3, "title": "create_deep_agent 全景解剖", "module": "W1", "tier": "A"}, {"slug": "middleware-stack", "num": 4, "title": "Middleware 栈：harness 的骨架", "module": "W1", "tier": "A"}, {"slug": "tools-and-mcp", "num": 5, "title": "工具与 MCP：agent 的手", "module": "W2", "tier": "B"}, {"slug": "virtual-filesystem", "num": 6, "title": "虚拟文件系统：harness 的地基", "module": "W2", "tier": "A"}, {"slug": "backend-family", "num": 7, "title": "六个内建 Backend 的取舍", "module": "W2", "tier": "A"}, {"slug": "filesystem-permissions", "num": 8, "title": "声明式权限：像防火墙一样配文件访问", "module": "W2", "tier": "B"}, {"slug": "sandboxes", "num": 9, "title": "沙箱：让 agent 跑代码而不伤到宿主机", "module": "W2", "tier": "B"}, {"slug": "interpreters-programmatic-tool-calling", "num": 10, "title": "解释器与程序化工具调用", "module": "W2", "tier": "A"}, {"slug": "four-context-layers", "num": 11, "title": "上下文的四个层次", "module": "W3", "tier": "A"}, {"slug": "input-context", "num": 12, "title": "输入上下文：prompt 是怎么被拼出来的", "module": "W3", "tier": "B"}, {"slug": "skills-progressive-disclosure", "num": 13, "title": "Skills：渐进式披露", "module": "W3", "tier": "A"}, {"slug": "memory-long-term", "num": 14, "title": "Memory：长期记忆的四个维度", "module": "W3", "tier": "A"}, {"slug": "context-compression", "num": 15, "title": "压缩：Offloading 与 Summarization", "module": "W3", "tier": "A"}, {"slug": "prompt-caching", "num": 16, "title": "Prompt Caching：为什么它决定了栈的顺序", "module": "W3", "tier": "B"}, {"slug": "state-and-runtime-context", "num": 17, "title": "State Schema 与 Runtime Context", "module": "W3", "tier": "A"}, {"slug": "multimodal", "num": 18, "title": "多模态输入与输出", "module": "W3", "tier": "B"}, {"slug": "subagents-fundamentals", "num": 19, "title": "Subagent 原理", "module": "W4", "tier": "A"}, {"slug": "custom-subagents", "num": 20, "title": "自定义 Subagent 的字段设计", "module": "W4", "tier": "B"}, {"slug": "forked-subagents", "num": 21, "title": "Forked Subagents：继承父级上下文", "module": "W4", "tier": "B"}, {"slug": "dynamic-subagents", "num": 22, "title": "Dynamic Subagents：让代码决定开多少个子任务", "module": "W4", "tier": "A"}, {"slug": "async-subagents", "num": 23, "title": "Async Subagents：跨请求长跑的子任务", "module": "W4", "tier": "B"}, {"slug": "task-planning-todos", "num": 24, "title": "任务规划与 write_todos", "module": "W4", "tier": "B"}, {"slug": "human-in-the-loop", "num": 25, "title": "Human-in-the-loop：在关键点按下暂停", "module": "W5", "tier": "A"}, {"slug": "fault-tolerance", "num": 26, "title": "容错：不是所有错误都该被同样对待", "module": "W5", "tier": "B"}, {"slug": "profiles", "num": 27, "title": "Profiles：让同一份代码适配不同模型", "module": "W5", "tier": "A"}, {"slug": "streaming", "num": 28, "title": "流式：把一棵树投影成几条流", "module": "W6", "tier": "B"}, {"slug": "event-streaming-subagents", "num": 29, "title": "stream.subagents：每个子任务一个句柄", "module": "W6", "tier": "A"}, {"slug": "frontend-overview", "num": 30, "title": "前端架构：coordinator-worker", "module": "W6", "tier": "B"}, {"slug": "frontend-todo-list", "num": 31, "title": "前端模式一：Todo List", "module": "W6", "tier": "B"}, {"slug": "frontend-subagent-streaming", "num": 32, "title": "前端模式二：Subagent 卡片", "module": "W6", "tier": "B"}, {"slug": "frontend-sandbox", "num": 33, "title": "前端模式三：IDE 式的沙箱界面", "module": "W6", "tier": "B"}, {"slug": "retrieval-and-rag", "num": 34, "title": "检索与 RAG：三种架构", "module": "W7", "tier": "B"}, {"slug": "deep-research-agent", "num": 35, "title": "成品模式一：Deep Research Agent", "module": "W7", "tier": "B"}, {"slug": "data-analysis-agent", "num": 36, "title": "成品模式二：Data Analysis Agent", "module": "W7", "tier": "B"}, {"slug": "content-builder-agent", "num": 37, "title": "成品模式三：Content Builder Agent", "module": "W7", "tier": "B"}, {"slug": "grading-rubrics", "num": 38, "title": "评分量表：让 agent 自己迭代到达标", "module": "W7", "tier": "B"}, {"slug": "going-to-production", "num": 39, "title": "走向生产", "module": "W7", "tier": "A"}, {"slug": "acp-and-ag-ui", "num": 40, "title": "对外协议：ACP 与 AG-UI", "module": "W7", "tier": "B"}], "refs": [{"slug": "glossary", "title": "术语表"}, {"slug": "stack-order", "title": "中间件栈速查"}, {"slug": "api-cheatsheet", "title": "API 速查"}, {"slug": "decision-map", "title": "选型决策图"}]};</script>
+<script src="../assets/course.js"></script>
+</body>
+</html>

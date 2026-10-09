@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>检索与 RAG：三种架构 · Deep Agents 教学站</title>
+<meta name="description" content="深入理解 Deep Agents agent harness 原理的中文教学站">
+<link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+<div class="sidebar-brand"><a href="../index.html">Deep Agents 教学站</a><span class="sub">Agent Harness 原理 · 中文</span></div>
+<div class="nav-group"><div class="nav-group-title">模块 A · 心智模型</div><ul>
+<li><a href="../lessons/agent-harness-mental-model.html" data-slug="agent-harness-mental-model"><span class="num">01</span><span>Agent Harness 的心智模型</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/three-layers-langchain-langgraph-deepagents.html" data-slug="three-layers-langchain-langgraph-deepagents"><span class="num">02</span><span>三层分工：LangChain / LangGraph / Deep Agents</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/create-deep-agent-anatomy.html" data-slug="create-deep-agent-anatomy"><span class="num">03</span><span>create_deep_agent 全景解剖</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/middleware-stack.html" data-slug="middleware-stack"><span class="num">04</span><span>Middleware 栈：harness 的骨架</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 B · 执行环境</div><ul>
+<li><a href="../lessons/tools-and-mcp.html" data-slug="tools-and-mcp"><span class="num">05</span><span>工具与 MCP：agent 的手</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/virtual-filesystem.html" data-slug="virtual-filesystem"><span class="num">06</span><span>虚拟文件系统：harness 的地基</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/backend-family.html" data-slug="backend-family"><span class="num">07</span><span>六个内建 Backend 的取舍</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/filesystem-permissions.html" data-slug="filesystem-permissions"><span class="num">08</span><span>声明式权限：像防火墙一样配文件访问</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/sandboxes.html" data-slug="sandboxes"><span class="num">09</span><span>沙箱：让 agent 跑代码而不伤到宿主机</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/interpreters-programmatic-tool-calling.html" data-slug="interpreters-programmatic-tool-calling"><span class="num">10</span><span>解释器与程序化工具调用</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 C · 上下文工程</div><ul>
+<li><a href="../lessons/four-context-layers.html" data-slug="four-context-layers"><span class="num">11</span><span>上下文的四个层次</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/input-context.html" data-slug="input-context"><span class="num">12</span><span>输入上下文：prompt 是怎么被拼出来的</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/skills-progressive-disclosure.html" data-slug="skills-progressive-disclosure"><span class="num">13</span><span>Skills：渐进式披露</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/memory-long-term.html" data-slug="memory-long-term"><span class="num">14</span><span>Memory：长期记忆的四个维度</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/context-compression.html" data-slug="context-compression"><span class="num">15</span><span>压缩：Offloading 与 Summarization</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/prompt-caching.html" data-slug="prompt-caching"><span class="num">16</span><span>Prompt Caching：为什么它决定了栈的顺序</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/state-and-runtime-context.html" data-slug="state-and-runtime-context"><span class="num">17</span><span>State Schema 与 Runtime Context</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/multimodal.html" data-slug="multimodal"><span class="num">18</span><span>多模态输入与输出</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 D · 委派</div><ul>
+<li><a href="../lessons/subagents-fundamentals.html" data-slug="subagents-fundamentals"><span class="num">19</span><span>Subagent 原理</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/custom-subagents.html" data-slug="custom-subagents"><span class="num">20</span><span>自定义 Subagent 的字段设计</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/forked-subagents.html" data-slug="forked-subagents"><span class="num">21</span><span>Forked Subagents：继承父级上下文</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/dynamic-subagents.html" data-slug="dynamic-subagents"><span class="num">22</span><span>Dynamic Subagents：让代码决定开多少个子任务</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/async-subagents.html" data-slug="async-subagents"><span class="num">23</span><span>Async Subagents：跨请求长跑的子任务</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/task-planning-todos.html" data-slug="task-planning-todos"><span class="num">24</span><span>任务规划与 write_todos</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 E · 运行时管控</div><ul>
+<li><a href="../lessons/human-in-the-loop.html" data-slug="human-in-the-loop"><span class="num">25</span><span>Human-in-the-loop：在关键点按下暂停</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/fault-tolerance.html" data-slug="fault-tolerance"><span class="num">26</span><span>容错：不是所有错误都该被同样对待</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/profiles.html" data-slug="profiles"><span class="num">27</span><span>Profiles：让同一份代码适配不同模型</span><span class="tier">A</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 F · 流式与前端</div><ul>
+<li><a href="../lessons/streaming.html" data-slug="streaming"><span class="num">28</span><span>流式：把一棵树投影成几条流</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/event-streaming-subagents.html" data-slug="event-streaming-subagents"><span class="num">29</span><span>stream.subagents：每个子任务一个句柄</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/frontend-overview.html" data-slug="frontend-overview"><span class="num">30</span><span>前端架构：coordinator-worker</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-todo-list.html" data-slug="frontend-todo-list"><span class="num">31</span><span>前端模式一：Todo List</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-subagent-streaming.html" data-slug="frontend-subagent-streaming"><span class="num">32</span><span>前端模式二：Subagent 卡片</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/frontend-sandbox.html" data-slug="frontend-sandbox"><span class="num">33</span><span>前端模式三：IDE 式的沙箱界面</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">模块 G · 应用与生产</div><ul>
+<li><a href="../lessons/retrieval-and-rag.html" data-slug="retrieval-and-rag" class="active"><span class="num">34</span><span>检索与 RAG：三种架构</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/deep-research-agent.html" data-slug="deep-research-agent"><span class="num">35</span><span>成品模式一：Deep Research Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/data-analysis-agent.html" data-slug="data-analysis-agent"><span class="num">36</span><span>成品模式二：Data Analysis Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/content-builder-agent.html" data-slug="content-builder-agent"><span class="num">37</span><span>成品模式三：Content Builder Agent</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/grading-rubrics.html" data-slug="grading-rubrics"><span class="num">38</span><span>评分量表：让 agent 自己迭代到达标</span><span class="tier">B</span></a></li>
+<li><a href="../lessons/going-to-production.html" data-slug="going-to-production"><span class="num">39</span><span>走向生产</span><span class="tier">A</span></a></li>
+<li><a href="../lessons/acp-and-ag-ui.html" data-slug="acp-and-ag-ui"><span class="num">40</span><span>对外协议：ACP 与 AG-UI</span><span class="tier">B</span></a></li>
+</ul></div>
+<div class="nav-group"><div class="nav-group-title">速查手册</div><ul>
+<li><a href="../reference/glossary.html" data-slug="glossary"><span class="num">▸</span><span>术语表</span></a></li>
+<li><a href="../reference/stack-order.html" data-slug="stack-order"><span class="num">▸</span><span>中间件栈速查</span></a></li>
+<li><a href="../reference/api-cheatsheet.html" data-slug="api-cheatsheet"><span class="num">▸</span><span>API 速查</span></a></li>
+<li><a href="../reference/decision-map.html" data-slug="decision-map"><span class="num">▸</span><span>选型决策图</span></a></li>
+</ul></div>
+</aside>
+<div class="main">
+  <div class="topbar"><div class="wrap">
+    <button class="menu-btn" aria-label="切换目录">☰</button>
+    <span class="crumbs"><a href="../index.html">课程地图</a> / <b>模块 G · 应用与生产</b> / <b>第 34 课</b></span>
+    <span class="progress-pill">
+      <span class="txt">0%</span>
+      <span class="bar"><i></i></span>
+    </span>
+  </div></div>
+  <div class="wrap">
+<header class="lesson-head">
+  <div class="lesson-kicker">
+    <span>第 34 课</span>
+    <span class="dot">·</span>
+    <span>模块 G · 应用与生产</span>
+    <span class="dot">·</span>
+    <span>11 分钟</span>
+    <span class="tier-badge b">Tier B · 集成速览</span>
+  </div>
+  <h1>检索与 RAG：三种架构</h1>
+  <p class="lede">RAG 在 Deep Agents 里不是一个功能，而是三种<b>架构选择</b>。选错的代价很具体：要么牺牲延迟可预测性，要么牺牲灵活性。这一课给这三种选择一个清晰的坐标系。</p>
+</header>
+<article>
+<details class="toc-box"><summary>本页目录</summary>
+<ul>
+<li><a href="#rag">从检索到 RAG</a></li>
+<li><a href="#_1">一个重要的前置判断</a></li>
+<li><a href="#_2">三种架构</a></li>
+<li><a href="#_3">一个容易被忽略的性质：延迟可预测性</a></li>
+<li><a href="#agentic-rag">一个关键洞察：Agentic RAG 只需要工具</a></li>
+<li><a href="#_4">检索流水线</a></li>
+<li><a href="#_5">官方给的完整教程</a></li>
+<li><a href="#_6">选型建议</a></li>
+<li><a href="#_7">下一课</a></li>
+</ul>
+
+</details>
+<h2 id="rag">从检索到 RAG</h2>
+<p>官方把两个概念分得很清楚：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Retrieval（检索）</strong></td>
+<td>让 LLM 在运行时访问相关上下文</td>
+</tr>
+<tr>
+<td><strong>RAG</strong></td>
+<td>把<strong>检索与生成整合</strong>起来，产生有依据的、上下文感知的回答</td>
+</tr>
+</tbody>
+</table>
+<p><strong>检索是能力，RAG 是一个架构。</strong></p>
+<h2 id="_1">一个重要的前置判断</h2>
+<div class="callout">
+<p class="callout-title">已有知识库？不要重建</p>
+<p>官方明确说明：如果你已经有知识库（SQL 数据库、文档数据库、CRM、内部文档系统），
+<strong>你不需要重建它</strong>。两种接法：</p>
+<ol>
+<li><strong>作为工具接进 Agentic RAG</strong> —— 让 agent 自己决定何时查</li>
+<li><strong>先查好再喂给 LLM（2-Step RAG）</strong> —— 检索结果作为上下文</li>
+</ol>
+<p>这条判断省掉了大量无谓工作。<strong>RAG 的核心不是向量库，是"把外部知识送到模型面前"这个动作。</strong></p>
+</div>
+<h2 id="_2">三种架构</h2>
+<table>
+<thead>
+<tr>
+<th>架构</th>
+<th>控制</th>
+<th>灵活性</th>
+<th>延迟</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2-Step RAG</strong></td>
+<td>高</td>
+<td>低</td>
+<td>快</td>
+<td>FAQ、文档机器人</td>
+</tr>
+<tr>
+<td><strong>Agentic RAG</strong></td>
+<td>低</td>
+<td>高</td>
+<td>可变</td>
+<td>有多个工具的研究助手</td>
+</tr>
+<tr>
+<td><strong>Hybrid</strong></td>
+<td>中</td>
+<td>中</td>
+<td>可变</td>
+<td>需要质量校验的领域问答</td>
+</tr>
+</tbody>
+</table>
+<p>官方定义是：</p>
+<ul>
+<li><strong>2-Step</strong>：检索<strong>总是</strong>发生在生成之前。简单、可预测。</li>
+<li><strong>Agentic</strong>：一个 LLM 驱动的 agent 在推理过程中决定<strong>何时</strong>与<strong>如何</strong>检索。</li>
+<li><strong>Hybrid</strong>：结合两者特征，并带有<strong>验证步骤</strong>。</li>
+</ul>
+<div class="flow col">
+  <div class="node"><span class="k">2-Step</span><span class="v">问题 → 检索 → 生成 → 回答</span></div>
+  <div class="node hi"><span class="k">Agentic</span><span class="v">问题 → agent 推理（决定查不查、查几次）→ 回答</span></div>
+  <div class="node"><span class="k">Hybrid</span><span class="v">两者 + 校验环节</span></div>
+</div>
+
+<h2 id="_3">一个容易被忽略的性质：延迟可预测性</h2>
+<p>官方特意用 Info 框强调：</p>
+<blockquote>
+<p>Latency is generally <strong>more predictable</strong> in <strong>2-Step RAG</strong>, as the <strong>maximum number
+of LLM calls is known and capped</strong>.</p>
+</blockquote>
+<p>这是 2-Step 唯一但极其重要的优势：<strong>你能给出 SLA</strong>。</p>
+<p>Agentic RAG 的模型调用次数是模型自己决定的——可能 1 次，也可能 15 次。
+对一个需要"3 秒内响应"的产品，这不可接受。</p>
+<div class="callout key">
+<p class="callout-title">但延迟的瓶颈不总是模型</p>
+<p>官方也补了一句：这个可预测性分析<strong>假设 LLM 推理时间是主导因素</strong>。
+真实世界的延迟还受检索步骤影响——API 响应时间、网络延迟、数据库查询。
+所以"2-Step 一定快"也不是绝对的，<strong>要看你自己的瓶颈在哪。</strong></p>
+</div>
+<h2 id="agentic-rag">一个关键洞察：Agentic RAG 只需要工具</h2>
+<p>这是本课最实用的一句话：</p>
+<div class="callout key">
+<p class="callout-title">官方原话</p>
+<p>The only thing an agent needs to enable RAG behavior is access to
+<strong>one or more tools that can fetch external knowledge</strong>, such as documentation loaders,
+web APIs, or database queries.</p>
+<p>也就是说：<strong>你不需要"启用 RAG 模式"。</strong></p>
+<p>在 Deep Agents 里，把一个检索函数当作普通工具传给 <code>tools=</code>，
+agent 就自然获得了 agentic RAG 的行为。</p>
+</div>
+<div class="flow">
+  <div class="node"><span class="k">你的检索函数</span><span class="v">search_docs / query_db / fetch_url</span></div>
+  <div class="arrow">→</div>
+  <div class="node"><span class="k">作为 tool 传入</span><span class="v">tools=[search_docs]</span></div>
+  <div class="arrow">→</div>
+  <div class="node hi"><span class="k">Agentic RAG</span><span class="v">agent 自己决定何时查、查几次</span></div>
+</div>
+
+<h2 id="_4">检索流水线</h2>
+<p>官方的 "Retrieval pipeline" 一节列了构建块。典型组成：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>组件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加载</td>
+<td>document loaders</td>
+</tr>
+<tr>
+<td>切分</td>
+<td>splitters（决定 chunk 粒度）</td>
+</tr>
+<tr>
+<td>向量化</td>
+<td>embeddings 模型</td>
+</tr>
+<tr>
+<td>存储</td>
+<td>vector store</td>
+</tr>
+<tr>
+<td>检索</td>
+<td>相似度搜索 / 混合搜索</td>
+</tr>
+<tr>
+<td>生成</td>
+<td>LLM + 检索到的上下文</td>
+</tr>
+</tbody>
+</table>
+<div class="callout">
+<p class="callout-title">在 harness 语境下，这一段最值得关注的是"切分"</p>
+<p>因为 chunk 粒度决定了<strong>每次检索往上下文里塞多少 token</strong>。</p>
+<p>chunk 太大 → 检索一次就吃掉大量窗口
+chunk 太小 → 检索多次，同样累加</p>
+<p>这与第 15 课的 offloading 是同一个问题的两种形态：
+<strong>都是"如何把外部知识以可控粒度送进上下文"。</strong></p>
+</div>
+<h2 id="_5">官方给的完整教程</h2>
+<p>官方指向一个可跑通的教程，它演示了两件事：</p>
+<ol>
+<li>用 LangChain 的 loaders + embeddings + vector store 建一个可搜索的知识库</li>
+<li>在它之上实现一个最小 RAG 工作流</li>
+</ol>
+<p>而 <code>rag</code> 页面的完整示例更进一步：<strong>索引 LangChain 自己的文档</strong>，
+再建一个能查这份文档的 deep agent。
+这基本上就是"给 agent 一本手册"的标准做法。</p>
+<h2 id="_6">选型建议</h2>
+<table>
+<thead>
+<tr>
+<th>你的情况</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有明确的知识库、问题域窄、要低延迟</td>
+<td><strong>2-Step</strong></td>
+</tr>
+<tr>
+<td>有多个知识源、问题类型多变</td>
+<td><strong>Agentic</strong>（把每个源做成一个工具）</td>
+</tr>
+<tr>
+<td>答案质量要求高、能接受额外调用</td>
+<td><strong>Hybrid</strong>（加校验环节）</td>
+</tr>
+<tr>
+<td>已经有现成知识库</td>
+<td><strong>不要重建</strong>，接成工具或先查后喂</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_7">下一课</h2>
+<p>三个成品模式里的第一个：<strong>deep research agent</strong>。
+它基本上是本课程前面所有机制的一次综合演练。</p>
+</article>
+<section class="quiz" data-slug="retrieval-and-rag">
+<div class="quiz-head"><span>检索练习 · 不要回看上文，先试着回忆</span><span class="score">0 / 4 正确</span></div>
+<div class="quiz-body">
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">01</span>Agentic RAG 在 Deep Agents 里开启需要什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>一个专用的 RAG middleware</span></li>
+<li><span class="mk">B</span><span>一个 VectorStoreBackend 配置</span></li>
+<li><span class="mk">C</span><span>只需要把一个能获取外部知识的函数作为工具传入</span></li>
+<li><span class="mk">D</span><span>一个 response_format 定义的引用 schema</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方明确说：让 agent 具备 RAG 行为唯一需要的就是访问一个或多个能获取外部知识的工具（文档加载器、Web API、数据库查询）。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">02</span>2-Step RAG 相对 Agentic RAG 的核心优势是什么？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>答案质量更高</span></li>
+<li><span class="mk">B</span><span>可以访问更多知识源</span></li>
+<li><span class="mk">C</span><span>最大模型调用次数已知且有上界，因此延迟更可预测</span></li>
+<li><span class="mk">D</span><span>不需要任何向量存储</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方在对比表中标注 2-Step 控制力高、延迟快，并在说明里指出其延迟更可预测，因为 LLM 调用次数上限是已知的。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">03</span>已经有内部文档系统时，官方的建议是？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>先用它重建一个向量库以保证一致性</span></li>
+<li><span class="mk">B</span><span>必须迁移到 LangChain 的 vector store 才能使用</span></li>
+<li><span class="mk">C</span><span>不需要重建，把它接成工具或先查好再作为上下文</span></li>
+<li><span class="mk">D</span><span>只能用 2-Step RAG 架构</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>官方明确指出：如果已经有知识库（SQL、文档库、CRM、内部文档系统），不需要重建，可以接成工具用于 Agentic RAG，或查询后把内容作为上下文提供给 LLM。</div>
+</div>
+<div class="q" data-answer="2">
+<div class="q-text"><span class="qno">04</span>在 harness 语境下，检索流水线里"切分粒度"为什么特别重要？</div>
+<ul class="opts">
+<li><span class="mk">A</span><span>它决定了嵌入模型的维度</span></li>
+<li><span class="mk">B</span><span>它决定了向量库的索引类型</span></li>
+<li><span class="mk">C</span><span>它决定了每次检索会往上下文里塞多少 token</span></li>
+<li><span class="mk">D</span><span>它决定了文档加载器能否解析 PDF</span></li>
+</ul>
+<div class="explain"><b>解析 · </b>chunk 粒度直接控制单次检索注入上下文的 token 量，这与 offloading 要解决的是同一类问题：以可控粒度把外部信息送进有限窗口。</div>
+</div>
+</div>
+<div class="quiz-foot"><span class="result"></span><br><button class="reset">重做</button><button class="reveal">显示全部解析</button></div>
+</section>
+<div class="mastery">
+  <label><input type="checkbox" data-slug="retrieval-and-rag">
+  <span>本课已掌握
+  <span class="hint">勾选后，左侧目录和首页会标记完成，进度保存在本机浏览器里。
+  能通过上面的自测、并且能不看笔记复述本课的核心机制，再勾。</span></span></label>
+</div>
+<footer class="lesson-foot">
+  <div class="source-box"><span class="lbl">本课事实来源 · 建议通读原文</span><a href="https://docs.langchain.com/oss/python/deepagents/retrieval" target="_blank" rel="noopener">Retrieval · RAG architectures（官方）</a><br><span style="color:#8b909c;font-size:11.5px">https://docs.langchain.com/oss/python/deepagents/retrieval</span></div>
+  <div class="ask-teacher">有讲不清楚的地方，直接把问题抛给我——我是这门课的老师，
+  可以就任何一节、任何一行代码展开，也可以按你的问题临时加一课。</div>
+  <div class="prevnext"><a class="prev" href="frontend-sandbox.html"><span class="dir">← 上一课</span><span class="ttl">前端模式三：IDE 式的沙箱界面</span></a><a class="next" href="deep-research-agent.html"><span class="dir">下一课 →</span><span class="ttl">成品模式一：Deep Research Agent</span></a></div>
+</footer>
+  </div>
+</div>
+</div>
+<script>window.SITE = {"lessons": [{"slug": "agent-harness-mental-model", "num": 1, "title": "Agent Harness 的心智模型", "module": "W1", "tier": "A"}, {"slug": "three-layers-langchain-langgraph-deepagents", "num": 2, "title": "三层分工：LangChain / LangGraph / Deep Agents", "module": "W1", "tier": "A"}, {"slug": "create-deep-agent-anatomy", "num": 3, "title": "create_deep_agent 全景解剖", "module": "W1", "tier": "A"}, {"slug": "middleware-stack", "num": 4, "title": "Middleware 栈：harness 的骨架", "module": "W1", "tier": "A"}, {"slug": "tools-and-mcp", "num": 5, "title": "工具与 MCP：agent 的手", "module": "W2", "tier": "B"}, {"slug": "virtual-filesystem", "num": 6, "title": "虚拟文件系统：harness 的地基", "module": "W2", "tier": "A"}, {"slug": "backend-family", "num": 7, "title": "六个内建 Backend 的取舍", "module": "W2", "tier": "A"}, {"slug": "filesystem-permissions", "num": 8, "title": "声明式权限：像防火墙一样配文件访问", "module": "W2", "tier": "B"}, {"slug": "sandboxes", "num": 9, "title": "沙箱：让 agent 跑代码而不伤到宿主机", "module": "W2", "tier": "B"}, {"slug": "interpreters-programmatic-tool-calling", "num": 10, "title": "解释器与程序化工具调用", "module": "W2", "tier": "A"}, {"slug": "four-context-layers", "num": 11, "title": "上下文的四个层次", "module": "W3", "tier": "A"}, {"slug": "input-context", "num": 12, "title": "输入上下文：prompt 是怎么被拼出来的", "module": "W3", "tier": "B"}, {"slug": "skills-progressive-disclosure", "num": 13, "title": "Skills：渐进式披露", "module": "W3", "tier": "A"}, {"slug": "memory-long-term", "num": 14, "title": "Memory：长期记忆的四个维度", "module": "W3", "tier": "A"}, {"slug": "context-compression", "num": 15, "title": "压缩：Offloading 与 Summarization", "module": "W3", "tier": "A"}, {"slug": "prompt-caching", "num": 16, "title": "Prompt Caching：为什么它决定了栈的顺序", "module": "W3", "tier": "B"}, {"slug": "state-and-runtime-context", "num": 17, "title": "State Schema 与 Runtime Context", "module": "W3", "tier": "A"}, {"slug": "multimodal", "num": 18, "title": "多模态输入与输出", "module": "W3", "tier": "B"}, {"slug": "subagents-fundamentals", "num": 19, "title": "Subagent 原理", "module": "W4", "tier": "A"}, {"slug": "custom-subagents", "num": 20, "title": "自定义 Subagent 的字段设计", "module": "W4", "tier": "B"}, {"slug": "forked-subagents", "num": 21, "title": "Forked Subagents：继承父级上下文", "module": "W4", "tier": "B"}, {"slug": "dynamic-subagents", "num": 22, "title": "Dynamic Subagents：让代码决定开多少个子任务", "module": "W4", "tier": "A"}, {"slug": "async-subagents", "num": 23, "title": "Async Subagents：跨请求长跑的子任务", "module": "W4", "tier": "B"}, {"slug": "task-planning-todos", "num": 24, "title": "任务规划与 write_todos", "module": "W4", "tier": "B"}, {"slug": "human-in-the-loop", "num": 25, "title": "Human-in-the-loop：在关键点按下暂停", "module": "W5", "tier": "A"}, {"slug": "fault-tolerance", "num": 26, "title": "容错：不是所有错误都该被同样对待", "module": "W5", "tier": "B"}, {"slug": "profiles", "num": 27, "title": "Profiles：让同一份代码适配不同模型", "module": "W5", "tier": "A"}, {"slug": "streaming", "num": 28, "title": "流式：把一棵树投影成几条流", "module": "W6", "tier": "B"}, {"slug": "event-streaming-subagents", "num": 29, "title": "stream.subagents：每个子任务一个句柄", "module": "W6", "tier": "A"}, {"slug": "frontend-overview", "num": 30, "title": "前端架构：coordinator-worker", "module": "W6", "tier": "B"}, {"slug": "frontend-todo-list", "num": 31, "title": "前端模式一：Todo List", "module": "W6", "tier": "B"}, {"slug": "frontend-subagent-streaming", "num": 32, "title": "前端模式二：Subagent 卡片", "module": "W6", "tier": "B"}, {"slug": "frontend-sandbox", "num": 33, "title": "前端模式三：IDE 式的沙箱界面", "module": "W6", "tier": "B"}, {"slug": "retrieval-and-rag", "num": 34, "title": "检索与 RAG：三种架构", "module": "W7", "tier": "B"}, {"slug": "deep-research-agent", "num": 35, "title": "成品模式一：Deep Research Agent", "module": "W7", "tier": "B"}, {"slug": "data-analysis-agent", "num": 36, "title": "成品模式二：Data Analysis Agent", "module": "W7", "tier": "B"}, {"slug": "content-builder-agent", "num": 37, "title": "成品模式三：Content Builder Agent", "module": "W7", "tier": "B"}, {"slug": "grading-rubrics", "num": 38, "title": "评分量表：让 agent 自己迭代到达标", "module": "W7", "tier": "B"}, {"slug": "going-to-production", "num": 39, "title": "走向生产", "module": "W7", "tier": "A"}, {"slug": "acp-and-ag-ui", "num": 40, "title": "对外协议：ACP 与 AG-UI", "module": "W7", "tier": "B"}], "refs": [{"slug": "glossary", "title": "术语表"}, {"slug": "stack-order", "title": "中间件栈速查"}, {"slug": "api-cheatsheet", "title": "API 速查"}, {"slug": "decision-map", "title": "选型决策图"}]};</script>
+<script src="../assets/course.js"></script>
+</body>
+</html>
